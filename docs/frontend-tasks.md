@@ -27,33 +27,33 @@ This document outlines all tasks needed to build the frontend for the Indices We
 ## Frontend React Application
 
 ### Project Setup & Configuration
-- [ ] Initialize React project with TypeScript
-- [ ] Set up project structure (components, pages, services, utils)
-- [ ] Configure routing with React Router
-- [ ] Set up Axios or Fetch API for backend communication
-- [ ] Configure environment variables for API endpoints
+- [x] Initialize React project with TypeScript
+- [x] Set up project structure (components, pages, services, utils)
+- [x] Configure routing with React Router
+- [x] Set up Axios or Fetch API for backend communication
+- [x] Configure environment variables for API endpoints
 
 ### Core Components Development
-- [ ] Create reusable DataTable component with sorting functionality
-- [ ] Create ColumnToggle component for show/hide columns
+- [x] Create reusable DataTable component with sorting functionality
+- [x] Create ColumnToggle component for show/hide columns
 - [ ] Create IndexCard component for displaying individual index data
 - [ ] Create LoadingSpinner component for async operations
 - [ ] Create ErrorMessage component for error handling
 
 ### Main Indices Page
-- [ ] Build main indices list page with data table
-- [ ] Implement sorting on all columns (price, daily, weekly, monthly, yearly changes)
-- [ ] Add column configuration panel at the top
-- [ ] Implement enable/disable functionality for each column
-- [ ] Add real-time data refresh capability
-- [ ] Add manual refresh button
+- [x] Build main indices list page with data table
+- [x] Implement sorting on all columns (price, daily, weekly, monthly, yearly changes)
+- [x] Add column configuration panel at the top
+- [x] Implement enable/disable functionality for each column
+- [x] Add real-time data refresh capability
+- [x] Add manual refresh button
 
 ### Column Configuration System
-- [ ] Create column configuration state management
-- [ ] Implement local storage for user preferences
-- [ ] Add checkboxes for each column toggle
-- [ ] Create preset column configurations (basic, detailed, momentum)
-- [ ] Add "Reset to Default" option
+- [x] Create column configuration state management
+- [x] Implement local storage for user preferences
+- [x] Add checkboxes for each column toggle
+- [x] Create preset column configurations (basic, detailed, momentum)
+- [x] Add "Reset to Default" option
 
 ### Momentum Metrics Integration
 - [ ] Add 3W (3-week) cumulative return column
