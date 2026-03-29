@@ -1,0 +1,180 @@
+# Frontend Development Tasks
+
+## Overview
+This document outlines all tasks needed to build the frontend for the Indices Web Application using React and FastAPI backend.
+
+## Backend API Development
+
+### Database Connection & Setup
+- [x] Set up FastAPI backend structure
+- [x] Create database connection utilities for SQLite
+- [x] Configure CORS for React frontend communication
+- [x] Set up API server to run on port 5050
+
+### Core API Endpoints
+- [x] Create `/api/indices` endpoint to fetch all indices with current data
+- [x] Create `/api/indices/{index_id}` endpoint for individual index details
+- [x] Create `/api/performance/weekly` endpoint for weekly top performers
+- [x] Create `/api/performance/monthly` endpoint for monthly top performers
+- [ ] Create `/api/momentum/{index_id}` endpoint for momentum metrics
+
+### Data Processing APIs
+- [ ] Implement calculation logic for 3W cumulative return
+- [ ] Implement calculation logic for 3M cumulative return
+- [ ] Create API endpoints for momentum metrics
+- [ ] Add pagination support for large datasets
+
+## Frontend React Application
+
+### Project Setup & Configuration
+- [ ] Initialize React project with TypeScript
+- [ ] Set up project structure (components, pages, services, utils)
+- [ ] Configure routing with React Router
+- [ ] Set up Axios or Fetch API for backend communication
+- [ ] Configure environment variables for API endpoints
+
+### Core Components Development
+- [ ] Create reusable DataTable component with sorting functionality
+- [ ] Create ColumnToggle component for show/hide columns
+- [ ] Create IndexCard component for displaying individual index data
+- [ ] Create LoadingSpinner component for async operations
+- [ ] Create ErrorMessage component for error handling
+
+### Main Indices Page
+- [ ] Build main indices list page with data table
+- [ ] Implement sorting on all columns (price, daily, weekly, monthly, yearly changes)
+- [ ] Add column configuration panel at the top
+- [ ] Implement enable/disable functionality for each column
+- [ ] Add real-time data refresh capability
+- [ ] Add manual refresh button
+
+### Column Configuration System
+- [ ] Create column configuration state management
+- [ ] Implement local storage for user preferences
+- [ ] Add checkboxes for each column toggle
+- [ ] Create preset column configurations (basic, detailed, momentum)
+- [ ] Add "Reset to Default" option
+
+### Momentum Metrics Integration
+- [ ] Add 3W (3-week) cumulative return column
+- [ ] Add 3M (3-month) cumulative return column
+- [ ] Implement momentum calculation logic
+- [ ] Add visual indicators for momentum (up/down arrows, colors)
+- [ ] Create momentum trend visualization
+
+### Dashboard Pages
+
+#### Weekly Dashboard
+- [ ] Create weekly performance dashboard page
+- [ ] Implement top 3 weekly indices display
+- [ ] Add sorting by 3W cumulative return
+- [ ] Create visual charts for weekly performance
+- [ ] Add weekly performance summary statistics
+
+#### Monthly Dashboard
+- [ ] Create monthly performance dashboard page
+- [ ] Implement top 3 monthly indices display
+- [ ] Add sorting by 3M cumulative return
+- [ ] Create visual charts for monthly performance
+- [ ] Add monthly performance summary statistics
+
+
+### Performance & Optimization
+- [ ] Add error boundaries for better error handling
+
+### Configuration & Settings
+- [ ] Create settings page for user preferences
+- [ ] Add auto-refresh interval configuration
+- [ ] Add export functionality (CSV, Excel)
+
+### Deployment & Documentation
+- [ ] Configure production build process
+- [ ] Set up environment-specific configurations
+
+## Technical Specifications
+
+### API Response Format
+```json
+{
+  "indices": [
+    {
+      "id": 1,
+      "name": "Nifty 50 BeES",
+      "symbol": "NIFTYBEES",
+      "current_price": 245.67,
+      "daily_change": 2.34,
+      "weekly_change": 5.67,
+      "monthly_change": 12.45,
+      "yearly_change": 18.92,
+      "3w_cumulative_return": 8.45,
+      "3m_cumulative_return": 15.23
+    }
+  ]
+}
+```
+
+### Column Configuration Object
+```json
+{
+  "columns": {
+    "name": true,
+    "symbol": true,
+    "current_price": true,
+    "daily_change": true,
+    "weekly_change": true,
+    "monthly_change": true,
+    "yearly_change": true,
+    "3w_cumulative_return": false,
+    "3m_cumulative_return": false
+  }
+}
+```
+
+
+## Priority Levels
+
+### High Priority (MVP)
+1. Basic React setup and routing
+2. Core API endpoints implementation
+3. Main indices table with sorting
+4. Column configuration functionality
+5. Basic dashboard pages
+
+### Medium Priority
+1. Momentum metrics integration
+2. Advanced visualizations
+3. Performance optimizations
+4. Settings and configuration
+
+
+## Dependencies & Technologies
+
+### Frontend
+- React 18+ with TypeScript
+- React Router for navigation
+- Axios for API calls
+- Chart.js or Recharts for visualizations
+- Tailwind CSS for styling
+- React Query for data fetching
+
+### Backend
+- FastAPI for REST APIs
+- SQLAlchemy for database ORM
+- SQLite for database
+- Pydantic for data validation
+- Uvicorn for server
+
+### Development Tools
+- ESLint and Prettier for code formatting
+- Jest for testing
+- Webpack/Vite for bundling
+
+
+## Success Criteria
+- [ ] All indices displayed with accurate data
+- [ ] Sorting works on all columns
+- [ ] Column configuration persists across sessions
+- [ ] Dashboard shows correct top performers
+- [ ] Application loads quickly and is responsive
+- [ ] APIs are well-documented and reliable
+- [ ] Code is maintainable and well-tested

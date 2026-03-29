@@ -30,9 +30,9 @@ class DataCalculator:
     def __init__(self, db_path: str = None):
         """Initialize DataCalculator with database path"""
         if db_path is None:
-            db_path = os.path.join(os.path.dirname(__file__), 'database', 'index-database.db')
+            db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'index-database.db')
         
-        self.db_path = db_path
+        self.db_path = os.path.abspath(db_path)
         self.conn = None
         
     def connect(self):
@@ -125,55 +125,53 @@ class DataCalculator:
         return daily_change, daily_change_percent
     
     def calculate_weekly_change(self, df: pd.DataFrame) -> Tuple[pd.Series, pd.Series]:
-        """Calculate weekly change and percentage change"""
+        """Calculate weekly change and percentage change (7 days ago to today)"""
         if len(df) < 7:
             return pd.Series(), pd.Series()
-        
-        # Resample to weekly data
-        weekly_data = df.set_index('date').resample('W').last()
-        
-        weekly_change = weekly_data['close_price'].diff()
-        weekly_change_percent = (weekly_change / weekly_data['close_price'].shift(1)) * 100
-        
-        # Reindex back to original dates
-        weekly_change = weekly_change.reindex(df['date'], method='ffill')
-        weekly_change_percent = weekly_change_percent.reindex(df['date'], method='ffill')
-        
+
+        # Calculate change from 7 days ago to current day
+        weekly_change = df['close_price'] - df['close_price'].shift(7)
+        weekly_change_percent = (weekly_change / df['close_price'].shift(7)) * 100
+
         return weekly_change, weekly_change_percent
     
     def calculate_monthly_change(self, df: pd.DataFrame) -> Tuple[pd.Series, pd.Series]:
-        """Calculate monthly change and percentage change"""
+        """Calculate monthly change and percentage change (30 days ago to today)"""
         if len(df) < 30:
             return pd.Series(), pd.Series()
-        
-        # Resample to monthly data
-        monthly_data = df.set_index('date').resample('ME').last()
-        
-        monthly_change = monthly_data['close_price'].diff()
-        monthly_change_percent = (monthly_change / monthly_data['close_price'].shift(1)) * 100
-        
-        # Reindex back to original dates
-        monthly_change = monthly_change.reindex(df['date'], method='ffill')
-        monthly_change_percent = monthly_change_percent.reindex(df['date'], method='ffill')
-        
+
+        # Calculate change from 30 days ago to current day
+        monthly_change = df['close_price'] - df['close_price'].shift(30)
+        monthly_change_percent = (monthly_change / df['close_price'].shift(30)) * 100
+
         return monthly_change, monthly_change_percent
     
     def calculate_yearly_change(self, df: pd.DataFrame) -> Tuple[pd.Series, pd.Series]:
         """Calculate yearly change and percentage change"""
-        if len(df) < 365:
+        # For less than 365 days, we'll use the entire period as a "year"
+        if len(df) < 30:  # Need at least 30 days for any meaningful calculation
             return pd.Series(), pd.Series()
         
-        # Resample to yearly data
-        yearly_data = df.set_index('date').resample('Y').last()
-        
-        yearly_change = yearly_data['close_price'].diff()
-        yearly_change_percent = (yearly_change / yearly_data['close_price'].shift(1)) * 100
-        
-        # Reindex back to original dates
-        yearly_change = yearly_change.reindex(df['date'], method='ffill')
-        yearly_change_percent = yearly_change_percent.reindex(df['date'], method='ffill')
-        
-        return yearly_change, yearly_change_percent
+        # If we have less than 365 days, calculate change from first to last day
+        if len(df) < 365:
+            # Calculate change from first available day to current day
+            first_price = df['close_price'].iloc[0]
+            yearly_change = df['close_price'] - first_price
+            yearly_change_percent = (yearly_change / first_price) * 100
+            
+            return yearly_change, yearly_change_percent
+        else:
+            # Resample to yearly data (using year end)
+            yearly_data = df.set_index('date').resample('YE').last()
+            
+            yearly_change = yearly_data['close_price'].diff()
+            yearly_change_percent = (yearly_change / yearly_data['close_price'].shift(1)) * 100
+            
+            # Reindex back to original dates
+            yearly_change = yearly_change.reindex(df['date'], method='ffill')
+            yearly_change_percent = yearly_change_percent.reindex(df['date'], method='ffill')
+            
+            return yearly_change, yearly_change_percent
     
     def calculate_all_metrics(self, index_id: int, start_date: str = None, end_date: str = None):
         """Calculate all performance metrics for an index"""

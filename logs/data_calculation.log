@@ -478,3 +478,656 @@
 2026-03-29 14:46:31,222 - INFO - Calculation completed for all indices
 2026-03-29 14:46:31,223 - INFO - Data calculation process completed successfully
 2026-03-29 14:46:31,223 - INFO - Disconnected from database
+2026-03-29 15:02:20,769 - ERROR - Failed to connect to database: unable to open database file
+2026-03-29 15:02:20,769 - ERROR - Data calculation process failed: unable to open database file
+2026-03-29 15:05:34,095 - ERROR - Failed to connect to database: unable to open database file
+2026-03-29 15:05:34,097 - ERROR - Data calculation process failed: unable to open database file
+2026-03-29 15:07:36,685 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:07:36,690 - INFO - Retrieved 31 active indices
+2026-03-29 15:07:36,690 - INFO - Calculating metrics for Silver BeES (SILVERBEES)
+2026-03-29 15:07:36,708 - INFO - Retrieved 245 records for index_id 1
+2026-03-29 15:07:36,797 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:36,798 - INFO - Calculated metrics for 244 records for index_id 1
+2026-03-29 15:07:36,798 - INFO - Successfully calculated metrics for Silver BeES
+2026-03-29 15:07:36,798 - INFO - Calculating metrics for Gold BeES (GOLDBEES)
+2026-03-29 15:07:36,801 - INFO - Retrieved 245 records for index_id 2
+2026-03-29 15:07:36,834 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:36,835 - INFO - Calculated metrics for 244 records for index_id 2
+2026-03-29 15:07:36,835 - INFO - Successfully calculated metrics for Gold BeES
+2026-03-29 15:07:36,835 - INFO - Calculating metrics for Nifty BeES (NIFTYBEES)
+2026-03-29 15:07:36,839 - INFO - Retrieved 245 records for index_id 3
+2026-03-29 15:07:36,862 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:36,862 - INFO - Calculated metrics for 244 records for index_id 3
+2026-03-29 15:07:36,862 - INFO - Successfully calculated metrics for Nifty BeES
+2026-03-29 15:07:36,862 - INFO - Calculating metrics for Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 15:07:36,867 - INFO - Retrieved 245 records for index_id 4
+2026-03-29 15:07:36,903 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:36,903 - INFO - Calculated metrics for 244 records for index_id 4
+2026-03-29 15:07:36,904 - INFO - Successfully calculated metrics for Motilal Oswal Nifty 500
+2026-03-29 15:07:36,904 - INFO - Calculating metrics for Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 15:07:36,908 - INFO - Retrieved 245 records for index_id 5
+2026-03-29 15:07:36,959 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:36,959 - INFO - Calculated metrics for 244 records for index_id 5
+2026-03-29 15:07:36,959 - INFO - Successfully calculated metrics for Nifty Momentum 50
+2026-03-29 15:07:36,959 - INFO - Calculating metrics for Nifty IT BeES (ITBEES)
+2026-03-29 15:07:36,963 - INFO - Retrieved 245 records for index_id 6
+2026-03-29 15:07:37,015 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,016 - INFO - Calculated metrics for 244 records for index_id 6
+2026-03-29 15:07:37,016 - INFO - Successfully calculated metrics for Nifty IT BeES
+2026-03-29 15:07:37,016 - INFO - Calculating metrics for Nifty Bank BeES (BANKBEES)
+2026-03-29 15:07:37,020 - INFO - Retrieved 245 records for index_id 7
+2026-03-29 15:07:37,067 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,067 - INFO - Calculated metrics for 244 records for index_id 7
+2026-03-29 15:07:37,067 - INFO - Successfully calculated metrics for Nifty Bank BeES
+2026-03-29 15:07:37,067 - INFO - Calculating metrics for Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 15:07:37,070 - INFO - Retrieved 245 records for index_id 8
+2026-03-29 15:07:37,108 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,108 - INFO - Calculated metrics for 244 records for index_id 8
+2026-03-29 15:07:37,109 - INFO - Successfully calculated metrics for Nifty PSU Bank BeES
+2026-03-29 15:07:37,109 - INFO - Calculating metrics for Nifty Auto BeES (AUTOBEES)
+2026-03-29 15:07:37,114 - INFO - Retrieved 245 records for index_id 9
+2026-03-29 15:07:37,149 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,149 - INFO - Calculated metrics for 244 records for index_id 9
+2026-03-29 15:07:37,149 - INFO - Successfully calculated metrics for Nifty Auto BeES
+2026-03-29 15:07:37,149 - INFO - Calculating metrics for Nifty Junior BeES (JUNIORBEES)
+2026-03-29 15:07:37,152 - INFO - Retrieved 245 records for index_id 10
+2026-03-29 15:07:37,179 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,179 - INFO - Calculated metrics for 244 records for index_id 10
+2026-03-29 15:07:37,179 - INFO - Successfully calculated metrics for Nifty Junior BeES
+2026-03-29 15:07:37,180 - INFO - Calculating metrics for Nifty Pharma BeES (PHARMABEES)
+2026-03-29 15:07:37,183 - INFO - Retrieved 245 records for index_id 11
+2026-03-29 15:07:37,203 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,203 - INFO - Calculated metrics for 244 records for index_id 11
+2026-03-29 15:07:37,203 - INFO - Successfully calculated metrics for Nifty Pharma BeES
+2026-03-29 15:07:37,204 - INFO - Calculating metrics for Nifty FMCG ETF (FMCGIETF)
+2026-03-29 15:07:37,206 - INFO - Retrieved 245 records for index_id 12
+2026-03-29 15:07:37,224 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,224 - INFO - Calculated metrics for 244 records for index_id 12
+2026-03-29 15:07:37,224 - INFO - Successfully calculated metrics for Nifty FMCG ETF
+2026-03-29 15:07:37,224 - INFO - Calculating metrics for Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 15:07:37,226 - INFO - Retrieved 245 records for index_id 13
+2026-03-29 15:07:37,245 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,246 - INFO - Calculated metrics for 244 records for index_id 13
+2026-03-29 15:07:37,246 - INFO - Successfully calculated metrics for Nifty Midcap 150 BeES
+2026-03-29 15:07:37,246 - INFO - Calculating metrics for Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 15:07:37,251 - INFO - Retrieved 245 records for index_id 14
+2026-03-29 15:07:37,271 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,271 - INFO - Calculated metrics for 244 records for index_id 14
+2026-03-29 15:07:37,271 - INFO - Successfully calculated metrics for Nifty Oil & Gas ETF
+2026-03-29 15:07:37,271 - INFO - Calculating metrics for Nifty Alpha 50 (ALPHA)
+2026-03-29 15:07:37,274 - INFO - Retrieved 245 records for index_id 15
+2026-03-29 15:07:37,296 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,296 - INFO - Calculated metrics for 244 records for index_id 15
+2026-03-29 15:07:37,296 - INFO - Successfully calculated metrics for Nifty Alpha 50
+2026-03-29 15:07:37,296 - INFO - Calculating metrics for Nifty Infra BeES (INFRABEES)
+2026-03-29 15:07:37,302 - INFO - Retrieved 245 records for index_id 16
+2026-03-29 15:07:37,328 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,329 - INFO - Calculated metrics for 244 records for index_id 16
+2026-03-29 15:07:37,329 - INFO - Successfully calculated metrics for Nifty Infra BeES
+2026-03-29 15:07:37,329 - INFO - Calculating metrics for Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 15:07:37,332 - INFO - Retrieved 245 records for index_id 17
+2026-03-29 15:07:37,357 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,357 - INFO - Calculated metrics for 244 records for index_id 17
+2026-03-29 15:07:37,357 - INFO - Successfully calculated metrics for Nifty Next 50 ETF
+2026-03-29 15:07:37,357 - INFO - Calculating metrics for Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 15:07:37,359 - INFO - Retrieved 245 records for index_id 18
+2026-03-29 15:07:37,379 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,379 - INFO - Calculated metrics for 244 records for index_id 18
+2026-03-29 15:07:37,380 - INFO - Successfully calculated metrics for Nifty Healthcare ETF
+2026-03-29 15:07:37,380 - INFO - Calculating metrics for Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 15:07:37,382 - INFO - Retrieved 243 records for index_id 19
+2026-03-29 15:07:37,406 - INFO - Inserted 242 calculated records
+2026-03-29 15:07:37,406 - INFO - Calculated metrics for 242 records for index_id 19
+2026-03-29 15:07:37,406 - INFO - Successfully calculated metrics for Nifty Smallcap 250
+2026-03-29 15:07:37,406 - INFO - Calculating metrics for Nifty Total Market (AONETOTAL)
+2026-03-29 15:07:37,408 - INFO - Retrieved 245 records for index_id 20
+2026-03-29 15:07:37,436 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,436 - INFO - Calculated metrics for 244 records for index_id 20
+2026-03-29 15:07:37,436 - INFO - Successfully calculated metrics for Nifty Total Market
+2026-03-29 15:07:37,436 - INFO - Calculating metrics for Nifty Momentum (MOMOMENTUM)
+2026-03-29 15:07:37,439 - INFO - Retrieved 245 records for index_id 21
+2026-03-29 15:07:37,460 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,460 - INFO - Calculated metrics for 244 records for index_id 21
+2026-03-29 15:07:37,460 - INFO - Successfully calculated metrics for Nifty Momentum
+2026-03-29 15:07:37,460 - INFO - Calculating metrics for Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 15:07:37,463 - INFO - Retrieved 243 records for index_id 22
+2026-03-29 15:07:37,483 - INFO - Inserted 242 calculated records
+2026-03-29 15:07:37,483 - INFO - Calculated metrics for 242 records for index_id 22
+2026-03-29 15:07:37,483 - INFO - Successfully calculated metrics for Nifty Quality Midcap 50
+2026-03-29 15:07:37,483 - INFO - Calculating metrics for HDFC Value Fund (HDFCVALUE)
+2026-03-29 15:07:37,486 - INFO - Retrieved 245 records for index_id 23
+2026-03-29 15:07:37,504 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,504 - INFO - Calculated metrics for 244 records for index_id 23
+2026-03-29 15:07:37,504 - INFO - Successfully calculated metrics for HDFC Value Fund
+2026-03-29 15:07:37,504 - INFO - Calculating metrics for HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 15:07:37,507 - INFO - Retrieved 245 records for index_id 24
+2026-03-29 15:07:37,525 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,525 - INFO - Calculated metrics for 244 records for index_id 24
+2026-03-29 15:07:37,525 - INFO - Successfully calculated metrics for HDFC Growth Fund
+2026-03-29 15:07:37,525 - INFO - Calculating metrics for HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 15:07:37,527 - INFO - Retrieved 245 records for index_id 25
+2026-03-29 15:07:37,547 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,547 - INFO - Calculated metrics for 244 records for index_id 25
+2026-03-29 15:07:37,548 - INFO - Successfully calculated metrics for HDFC Momentum Fund
+2026-03-29 15:07:37,548 - INFO - Calculating metrics for Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 15:07:37,549 - INFO - Retrieved 245 records for index_id 26
+2026-03-29 15:07:37,569 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,569 - INFO - Calculated metrics for 244 records for index_id 26
+2026-03-29 15:07:37,569 - INFO - Successfully calculated metrics for Motilal Oswal MSCI EAFE Fund
+2026-03-29 15:07:37,569 - INFO - Calculating metrics for Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 15:07:37,572 - INFO - Retrieved 245 records for index_id 27
+2026-03-29 15:07:37,589 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,589 - INFO - Calculated metrics for 244 records for index_id 27
+2026-03-29 15:07:37,589 - INFO - Successfully calculated metrics for Nifty EV & New Age Automotive
+2026-03-29 15:07:37,589 - INFO - Calculating metrics for Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 15:07:37,591 - INFO - Retrieved 245 records for index_id 28
+2026-03-29 15:07:37,617 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,617 - INFO - Calculated metrics for 244 records for index_id 28
+2026-03-29 15:07:37,617 - INFO - Successfully calculated metrics for Nifty Consumption ETF
+2026-03-29 15:07:37,617 - INFO - Calculating metrics for Nifty India Railways (GROWWRAIL)
+2026-03-29 15:07:37,622 - INFO - Retrieved 245 records for index_id 29
+2026-03-29 15:07:37,640 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,640 - INFO - Calculated metrics for 244 records for index_id 29
+2026-03-29 15:07:37,640 - INFO - Successfully calculated metrics for Nifty India Railways
+2026-03-29 15:07:37,640 - INFO - Calculating metrics for Nifty IPO ETF (SELECTIPO)
+2026-03-29 15:07:37,642 - INFO - Retrieved 245 records for index_id 30
+2026-03-29 15:07:37,660 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,660 - INFO - Calculated metrics for 244 records for index_id 30
+2026-03-29 15:07:37,660 - INFO - Successfully calculated metrics for Nifty IPO ETF
+2026-03-29 15:07:37,660 - INFO - Calculating metrics for Liquid BeES (LIQUIDBEES)
+2026-03-29 15:07:37,661 - INFO - Retrieved 245 records for index_id 31
+2026-03-29 15:07:37,680 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:37,680 - INFO - Calculated metrics for 244 records for index_id 31
+2026-03-29 15:07:37,680 - INFO - Successfully calculated metrics for Liquid BeES
+2026-03-29 15:07:37,680 - INFO - Calculation completed for all indices
+2026-03-29 15:07:37,680 - INFO - Data calculation process completed successfully
+2026-03-29 15:07:37,680 - INFO - Disconnected from database
+2026-03-29 15:07:45,955 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:07:45,955 - INFO - Retrieved 31 active indices
+2026-03-29 15:07:45,955 - INFO - Calculating metrics for Silver BeES (SILVERBEES)
+2026-03-29 15:07:45,965 - INFO - Retrieved 245 records for index_id 1
+2026-03-29 15:07:45,995 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:45,996 - INFO - Calculated metrics for 244 records for index_id 1
+2026-03-29 15:07:45,996 - INFO - Successfully calculated metrics for Silver BeES
+2026-03-29 15:07:45,996 - INFO - Calculating metrics for Gold BeES (GOLDBEES)
+2026-03-29 15:07:45,996 - INFO - Retrieved 245 records for index_id 2
+2026-03-29 15:07:46,014 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,014 - INFO - Calculated metrics for 244 records for index_id 2
+2026-03-29 15:07:46,014 - INFO - Successfully calculated metrics for Gold BeES
+2026-03-29 15:07:46,014 - INFO - Calculating metrics for Nifty BeES (NIFTYBEES)
+2026-03-29 15:07:46,015 - INFO - Retrieved 245 records for index_id 3
+2026-03-29 15:07:46,035 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,036 - INFO - Calculated metrics for 244 records for index_id 3
+2026-03-29 15:07:46,036 - INFO - Successfully calculated metrics for Nifty BeES
+2026-03-29 15:07:46,036 - INFO - Calculating metrics for Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 15:07:46,037 - INFO - Retrieved 245 records for index_id 4
+2026-03-29 15:07:46,053 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,054 - INFO - Calculated metrics for 244 records for index_id 4
+2026-03-29 15:07:46,054 - INFO - Successfully calculated metrics for Motilal Oswal Nifty 500
+2026-03-29 15:07:46,054 - INFO - Calculating metrics for Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 15:07:46,055 - INFO - Retrieved 245 records for index_id 5
+2026-03-29 15:07:46,075 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,075 - INFO - Calculated metrics for 244 records for index_id 5
+2026-03-29 15:07:46,076 - INFO - Successfully calculated metrics for Nifty Momentum 50
+2026-03-29 15:07:46,076 - INFO - Calculating metrics for Nifty IT BeES (ITBEES)
+2026-03-29 15:07:46,077 - INFO - Retrieved 245 records for index_id 6
+2026-03-29 15:07:46,110 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,110 - INFO - Calculated metrics for 244 records for index_id 6
+2026-03-29 15:07:46,110 - INFO - Successfully calculated metrics for Nifty IT BeES
+2026-03-29 15:07:46,110 - INFO - Calculating metrics for Nifty Bank BeES (BANKBEES)
+2026-03-29 15:07:46,111 - INFO - Retrieved 245 records for index_id 7
+2026-03-29 15:07:46,128 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,128 - INFO - Calculated metrics for 244 records for index_id 7
+2026-03-29 15:07:46,128 - INFO - Successfully calculated metrics for Nifty Bank BeES
+2026-03-29 15:07:46,129 - INFO - Calculating metrics for Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 15:07:46,132 - INFO - Retrieved 245 records for index_id 8
+2026-03-29 15:07:46,152 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,152 - INFO - Calculated metrics for 244 records for index_id 8
+2026-03-29 15:07:46,152 - INFO - Successfully calculated metrics for Nifty PSU Bank BeES
+2026-03-29 15:07:46,152 - INFO - Calculating metrics for Nifty Auto BeES (AUTOBEES)
+2026-03-29 15:07:46,155 - INFO - Retrieved 245 records for index_id 9
+2026-03-29 15:07:46,172 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,172 - INFO - Calculated metrics for 244 records for index_id 9
+2026-03-29 15:07:46,172 - INFO - Successfully calculated metrics for Nifty Auto BeES
+2026-03-29 15:07:46,172 - INFO - Calculating metrics for Nifty Junior BeES (JUNIORBEES)
+2026-03-29 15:07:46,173 - INFO - Retrieved 245 records for index_id 10
+2026-03-29 15:07:46,191 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,191 - INFO - Calculated metrics for 244 records for index_id 10
+2026-03-29 15:07:46,191 - INFO - Successfully calculated metrics for Nifty Junior BeES
+2026-03-29 15:07:46,191 - INFO - Calculating metrics for Nifty Pharma BeES (PHARMABEES)
+2026-03-29 15:07:46,195 - INFO - Retrieved 245 records for index_id 11
+2026-03-29 15:07:46,217 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,217 - INFO - Calculated metrics for 244 records for index_id 11
+2026-03-29 15:07:46,217 - INFO - Successfully calculated metrics for Nifty Pharma BeES
+2026-03-29 15:07:46,217 - INFO - Calculating metrics for Nifty FMCG ETF (FMCGIETF)
+2026-03-29 15:07:46,219 - INFO - Retrieved 245 records for index_id 12
+2026-03-29 15:07:46,237 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,237 - INFO - Calculated metrics for 244 records for index_id 12
+2026-03-29 15:07:46,237 - INFO - Successfully calculated metrics for Nifty FMCG ETF
+2026-03-29 15:07:46,237 - INFO - Calculating metrics for Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 15:07:46,239 - INFO - Retrieved 245 records for index_id 13
+2026-03-29 15:07:46,257 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,257 - INFO - Calculated metrics for 244 records for index_id 13
+2026-03-29 15:07:46,257 - INFO - Successfully calculated metrics for Nifty Midcap 150 BeES
+2026-03-29 15:07:46,257 - INFO - Calculating metrics for Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 15:07:46,263 - INFO - Retrieved 245 records for index_id 14
+2026-03-29 15:07:46,281 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,281 - INFO - Calculated metrics for 244 records for index_id 14
+2026-03-29 15:07:46,281 - INFO - Successfully calculated metrics for Nifty Oil & Gas ETF
+2026-03-29 15:07:46,281 - INFO - Calculating metrics for Nifty Alpha 50 (ALPHA)
+2026-03-29 15:07:46,282 - INFO - Retrieved 245 records for index_id 15
+2026-03-29 15:07:46,300 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,300 - INFO - Calculated metrics for 244 records for index_id 15
+2026-03-29 15:07:46,300 - INFO - Successfully calculated metrics for Nifty Alpha 50
+2026-03-29 15:07:46,300 - INFO - Calculating metrics for Nifty Infra BeES (INFRABEES)
+2026-03-29 15:07:46,303 - INFO - Retrieved 245 records for index_id 16
+2026-03-29 15:07:46,321 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,321 - INFO - Calculated metrics for 244 records for index_id 16
+2026-03-29 15:07:46,321 - INFO - Successfully calculated metrics for Nifty Infra BeES
+2026-03-29 15:07:46,321 - INFO - Calculating metrics for Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 15:07:46,324 - INFO - Retrieved 245 records for index_id 17
+2026-03-29 15:07:46,343 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,343 - INFO - Calculated metrics for 244 records for index_id 17
+2026-03-29 15:07:46,343 - INFO - Successfully calculated metrics for Nifty Next 50 ETF
+2026-03-29 15:07:46,343 - INFO - Calculating metrics for Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 15:07:46,345 - INFO - Retrieved 245 records for index_id 18
+2026-03-29 15:07:46,366 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,366 - INFO - Calculated metrics for 244 records for index_id 18
+2026-03-29 15:07:46,366 - INFO - Successfully calculated metrics for Nifty Healthcare ETF
+2026-03-29 15:07:46,366 - INFO - Calculating metrics for Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 15:07:46,368 - INFO - Retrieved 243 records for index_id 19
+2026-03-29 15:07:46,387 - INFO - Inserted 242 calculated records
+2026-03-29 15:07:46,387 - INFO - Calculated metrics for 242 records for index_id 19
+2026-03-29 15:07:46,387 - INFO - Successfully calculated metrics for Nifty Smallcap 250
+2026-03-29 15:07:46,387 - INFO - Calculating metrics for Nifty Total Market (AONETOTAL)
+2026-03-29 15:07:46,388 - INFO - Retrieved 245 records for index_id 20
+2026-03-29 15:07:46,405 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,405 - INFO - Calculated metrics for 244 records for index_id 20
+2026-03-29 15:07:46,405 - INFO - Successfully calculated metrics for Nifty Total Market
+2026-03-29 15:07:46,405 - INFO - Calculating metrics for Nifty Momentum (MOMOMENTUM)
+2026-03-29 15:07:46,408 - INFO - Retrieved 245 records for index_id 21
+2026-03-29 15:07:46,426 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,426 - INFO - Calculated metrics for 244 records for index_id 21
+2026-03-29 15:07:46,426 - INFO - Successfully calculated metrics for Nifty Momentum
+2026-03-29 15:07:46,426 - INFO - Calculating metrics for Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 15:07:46,427 - INFO - Retrieved 243 records for index_id 22
+2026-03-29 15:07:46,448 - INFO - Inserted 242 calculated records
+2026-03-29 15:07:46,448 - INFO - Calculated metrics for 242 records for index_id 22
+2026-03-29 15:07:46,448 - INFO - Successfully calculated metrics for Nifty Quality Midcap 50
+2026-03-29 15:07:46,448 - INFO - Calculating metrics for HDFC Value Fund (HDFCVALUE)
+2026-03-29 15:07:46,450 - INFO - Retrieved 245 records for index_id 23
+2026-03-29 15:07:46,469 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,469 - INFO - Calculated metrics for 244 records for index_id 23
+2026-03-29 15:07:46,469 - INFO - Successfully calculated metrics for HDFC Value Fund
+2026-03-29 15:07:46,469 - INFO - Calculating metrics for HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 15:07:46,471 - INFO - Retrieved 245 records for index_id 24
+2026-03-29 15:07:46,489 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,490 - INFO - Calculated metrics for 244 records for index_id 24
+2026-03-29 15:07:46,490 - INFO - Successfully calculated metrics for HDFC Growth Fund
+2026-03-29 15:07:46,490 - INFO - Calculating metrics for HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 15:07:46,491 - INFO - Retrieved 245 records for index_id 25
+2026-03-29 15:07:46,514 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,514 - INFO - Calculated metrics for 244 records for index_id 25
+2026-03-29 15:07:46,514 - INFO - Successfully calculated metrics for HDFC Momentum Fund
+2026-03-29 15:07:46,514 - INFO - Calculating metrics for Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 15:07:46,516 - INFO - Retrieved 245 records for index_id 26
+2026-03-29 15:07:46,537 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,537 - INFO - Calculated metrics for 244 records for index_id 26
+2026-03-29 15:07:46,537 - INFO - Successfully calculated metrics for Motilal Oswal MSCI EAFE Fund
+2026-03-29 15:07:46,537 - INFO - Calculating metrics for Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 15:07:46,538 - INFO - Retrieved 245 records for index_id 27
+2026-03-29 15:07:46,556 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,556 - INFO - Calculated metrics for 244 records for index_id 27
+2026-03-29 15:07:46,556 - INFO - Successfully calculated metrics for Nifty EV & New Age Automotive
+2026-03-29 15:07:46,556 - INFO - Calculating metrics for Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 15:07:46,560 - INFO - Retrieved 245 records for index_id 28
+2026-03-29 15:07:46,578 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,578 - INFO - Calculated metrics for 244 records for index_id 28
+2026-03-29 15:07:46,578 - INFO - Successfully calculated metrics for Nifty Consumption ETF
+2026-03-29 15:07:46,578 - INFO - Calculating metrics for Nifty India Railways (GROWWRAIL)
+2026-03-29 15:07:46,581 - INFO - Retrieved 245 records for index_id 29
+2026-03-29 15:07:46,600 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,600 - INFO - Calculated metrics for 244 records for index_id 29
+2026-03-29 15:07:46,600 - INFO - Successfully calculated metrics for Nifty India Railways
+2026-03-29 15:07:46,600 - INFO - Calculating metrics for Nifty IPO ETF (SELECTIPO)
+2026-03-29 15:07:46,602 - INFO - Retrieved 245 records for index_id 30
+2026-03-29 15:07:46,620 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,620 - INFO - Calculated metrics for 244 records for index_id 30
+2026-03-29 15:07:46,620 - INFO - Successfully calculated metrics for Nifty IPO ETF
+2026-03-29 15:07:46,620 - INFO - Calculating metrics for Liquid BeES (LIQUIDBEES)
+2026-03-29 15:07:46,621 - INFO - Retrieved 245 records for index_id 31
+2026-03-29 15:07:46,640 - INFO - Inserted 244 calculated records
+2026-03-29 15:07:46,640 - INFO - Calculated metrics for 244 records for index_id 31
+2026-03-29 15:07:46,640 - INFO - Successfully calculated metrics for Liquid BeES
+2026-03-29 15:07:46,640 - INFO - Calculation completed for all indices
+2026-03-29 15:07:46,640 - INFO - Data calculation process completed successfully
+2026-03-29 15:07:46,640 - INFO - Disconnected from database
+2026-03-29 15:10:23,801 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:10:23,804 - INFO - Retrieved 31 active indices
+2026-03-29 15:10:23,804 - INFO - Calculating metrics for Silver BeES (SILVERBEES)
+2026-03-29 15:10:23,818 - INFO - Retrieved 245 records for index_id 1
+2026-03-29 15:10:23,870 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:23,870 - INFO - Calculated metrics for 245 records for index_id 1
+2026-03-29 15:10:23,870 - INFO - Successfully calculated metrics for Silver BeES
+2026-03-29 15:10:23,870 - INFO - Calculating metrics for Gold BeES (GOLDBEES)
+2026-03-29 15:10:23,873 - INFO - Retrieved 245 records for index_id 2
+2026-03-29 15:10:23,893 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:23,893 - INFO - Calculated metrics for 245 records for index_id 2
+2026-03-29 15:10:23,893 - INFO - Successfully calculated metrics for Gold BeES
+2026-03-29 15:10:23,893 - INFO - Calculating metrics for Nifty BeES (NIFTYBEES)
+2026-03-29 15:10:23,894 - INFO - Retrieved 245 records for index_id 3
+2026-03-29 15:10:23,917 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:23,918 - INFO - Calculated metrics for 245 records for index_id 3
+2026-03-29 15:10:23,918 - INFO - Successfully calculated metrics for Nifty BeES
+2026-03-29 15:10:23,918 - INFO - Calculating metrics for Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 15:10:23,922 - INFO - Retrieved 245 records for index_id 4
+2026-03-29 15:10:23,958 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:23,958 - INFO - Calculated metrics for 245 records for index_id 4
+2026-03-29 15:10:23,958 - INFO - Successfully calculated metrics for Motilal Oswal Nifty 500
+2026-03-29 15:10:23,958 - INFO - Calculating metrics for Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 15:10:23,961 - INFO - Retrieved 245 records for index_id 5
+2026-03-29 15:10:23,986 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:23,986 - INFO - Calculated metrics for 245 records for index_id 5
+2026-03-29 15:10:23,986 - INFO - Successfully calculated metrics for Nifty Momentum 50
+2026-03-29 15:10:23,986 - INFO - Calculating metrics for Nifty IT BeES (ITBEES)
+2026-03-29 15:10:23,988 - INFO - Retrieved 245 records for index_id 6
+2026-03-29 15:10:24,008 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,008 - INFO - Calculated metrics for 245 records for index_id 6
+2026-03-29 15:10:24,008 - INFO - Successfully calculated metrics for Nifty IT BeES
+2026-03-29 15:10:24,008 - INFO - Calculating metrics for Nifty Bank BeES (BANKBEES)
+2026-03-29 15:10:24,009 - INFO - Retrieved 245 records for index_id 7
+2026-03-29 15:10:24,033 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,033 - INFO - Calculated metrics for 245 records for index_id 7
+2026-03-29 15:10:24,033 - INFO - Successfully calculated metrics for Nifty Bank BeES
+2026-03-29 15:10:24,033 - INFO - Calculating metrics for Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 15:10:24,036 - INFO - Retrieved 245 records for index_id 8
+2026-03-29 15:10:24,058 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,058 - INFO - Calculated metrics for 245 records for index_id 8
+2026-03-29 15:10:24,059 - INFO - Successfully calculated metrics for Nifty PSU Bank BeES
+2026-03-29 15:10:24,059 - INFO - Calculating metrics for Nifty Auto BeES (AUTOBEES)
+2026-03-29 15:10:24,064 - INFO - Retrieved 245 records for index_id 9
+2026-03-29 15:10:24,091 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,091 - INFO - Calculated metrics for 245 records for index_id 9
+2026-03-29 15:10:24,091 - INFO - Successfully calculated metrics for Nifty Auto BeES
+2026-03-29 15:10:24,091 - INFO - Calculating metrics for Nifty Junior BeES (JUNIORBEES)
+2026-03-29 15:10:24,094 - INFO - Retrieved 245 records for index_id 10
+2026-03-29 15:10:24,118 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,118 - INFO - Calculated metrics for 245 records for index_id 10
+2026-03-29 15:10:24,118 - INFO - Successfully calculated metrics for Nifty Junior BeES
+2026-03-29 15:10:24,118 - INFO - Calculating metrics for Nifty Pharma BeES (PHARMABEES)
+2026-03-29 15:10:24,122 - INFO - Retrieved 245 records for index_id 11
+2026-03-29 15:10:24,157 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,157 - INFO - Calculated metrics for 245 records for index_id 11
+2026-03-29 15:10:24,157 - INFO - Successfully calculated metrics for Nifty Pharma BeES
+2026-03-29 15:10:24,157 - INFO - Calculating metrics for Nifty FMCG ETF (FMCGIETF)
+2026-03-29 15:10:24,159 - INFO - Retrieved 245 records for index_id 12
+2026-03-29 15:10:24,190 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,190 - INFO - Calculated metrics for 245 records for index_id 12
+2026-03-29 15:10:24,190 - INFO - Successfully calculated metrics for Nifty FMCG ETF
+2026-03-29 15:10:24,190 - INFO - Calculating metrics for Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 15:10:24,194 - INFO - Retrieved 245 records for index_id 13
+2026-03-29 15:10:24,243 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,243 - INFO - Calculated metrics for 245 records for index_id 13
+2026-03-29 15:10:24,243 - INFO - Successfully calculated metrics for Nifty Midcap 150 BeES
+2026-03-29 15:10:24,243 - INFO - Calculating metrics for Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 15:10:24,250 - INFO - Retrieved 245 records for index_id 14
+2026-03-29 15:10:24,273 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,273 - INFO - Calculated metrics for 245 records for index_id 14
+2026-03-29 15:10:24,273 - INFO - Successfully calculated metrics for Nifty Oil & Gas ETF
+2026-03-29 15:10:24,273 - INFO - Calculating metrics for Nifty Alpha 50 (ALPHA)
+2026-03-29 15:10:24,276 - INFO - Retrieved 245 records for index_id 15
+2026-03-29 15:10:24,302 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,302 - INFO - Calculated metrics for 245 records for index_id 15
+2026-03-29 15:10:24,303 - INFO - Successfully calculated metrics for Nifty Alpha 50
+2026-03-29 15:10:24,303 - INFO - Calculating metrics for Nifty Infra BeES (INFRABEES)
+2026-03-29 15:10:24,307 - INFO - Retrieved 245 records for index_id 16
+2026-03-29 15:10:24,327 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,327 - INFO - Calculated metrics for 245 records for index_id 16
+2026-03-29 15:10:24,327 - INFO - Successfully calculated metrics for Nifty Infra BeES
+2026-03-29 15:10:24,327 - INFO - Calculating metrics for Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 15:10:24,329 - INFO - Retrieved 245 records for index_id 17
+2026-03-29 15:10:24,350 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,350 - INFO - Calculated metrics for 245 records for index_id 17
+2026-03-29 15:10:24,350 - INFO - Successfully calculated metrics for Nifty Next 50 ETF
+2026-03-29 15:10:24,350 - INFO - Calculating metrics for Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 15:10:24,353 - INFO - Retrieved 245 records for index_id 18
+2026-03-29 15:10:24,373 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,373 - INFO - Calculated metrics for 245 records for index_id 18
+2026-03-29 15:10:24,373 - INFO - Successfully calculated metrics for Nifty Healthcare ETF
+2026-03-29 15:10:24,373 - INFO - Calculating metrics for Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 15:10:24,375 - INFO - Retrieved 243 records for index_id 19
+2026-03-29 15:10:24,393 - INFO - Inserted 243 calculated records
+2026-03-29 15:10:24,393 - INFO - Calculated metrics for 243 records for index_id 19
+2026-03-29 15:10:24,393 - INFO - Successfully calculated metrics for Nifty Smallcap 250
+2026-03-29 15:10:24,393 - INFO - Calculating metrics for Nifty Total Market (AONETOTAL)
+2026-03-29 15:10:24,395 - INFO - Retrieved 245 records for index_id 20
+2026-03-29 15:10:24,413 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,413 - INFO - Calculated metrics for 245 records for index_id 20
+2026-03-29 15:10:24,413 - INFO - Successfully calculated metrics for Nifty Total Market
+2026-03-29 15:10:24,413 - INFO - Calculating metrics for Nifty Momentum (MOMOMENTUM)
+2026-03-29 15:10:24,416 - INFO - Retrieved 245 records for index_id 21
+2026-03-29 15:10:24,435 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,435 - INFO - Calculated metrics for 245 records for index_id 21
+2026-03-29 15:10:24,435 - INFO - Successfully calculated metrics for Nifty Momentum
+2026-03-29 15:10:24,435 - INFO - Calculating metrics for Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 15:10:24,437 - INFO - Retrieved 243 records for index_id 22
+2026-03-29 15:10:24,456 - INFO - Inserted 243 calculated records
+2026-03-29 15:10:24,456 - INFO - Calculated metrics for 243 records for index_id 22
+2026-03-29 15:10:24,456 - INFO - Successfully calculated metrics for Nifty Quality Midcap 50
+2026-03-29 15:10:24,456 - INFO - Calculating metrics for HDFC Value Fund (HDFCVALUE)
+2026-03-29 15:10:24,459 - INFO - Retrieved 245 records for index_id 23
+2026-03-29 15:10:24,484 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,484 - INFO - Calculated metrics for 245 records for index_id 23
+2026-03-29 15:10:24,484 - INFO - Successfully calculated metrics for HDFC Value Fund
+2026-03-29 15:10:24,484 - INFO - Calculating metrics for HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 15:10:24,486 - INFO - Retrieved 245 records for index_id 24
+2026-03-29 15:10:24,509 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,509 - INFO - Calculated metrics for 245 records for index_id 24
+2026-03-29 15:10:24,509 - INFO - Successfully calculated metrics for HDFC Growth Fund
+2026-03-29 15:10:24,509 - INFO - Calculating metrics for HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 15:10:24,511 - INFO - Retrieved 245 records for index_id 25
+2026-03-29 15:10:24,536 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,536 - INFO - Calculated metrics for 245 records for index_id 25
+2026-03-29 15:10:24,536 - INFO - Successfully calculated metrics for HDFC Momentum Fund
+2026-03-29 15:10:24,536 - INFO - Calculating metrics for Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 15:10:24,538 - INFO - Retrieved 245 records for index_id 26
+2026-03-29 15:10:24,557 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,557 - INFO - Calculated metrics for 245 records for index_id 26
+2026-03-29 15:10:24,557 - INFO - Successfully calculated metrics for Motilal Oswal MSCI EAFE Fund
+2026-03-29 15:10:24,557 - INFO - Calculating metrics for Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 15:10:24,558 - INFO - Retrieved 245 records for index_id 27
+2026-03-29 15:10:24,577 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,577 - INFO - Calculated metrics for 245 records for index_id 27
+2026-03-29 15:10:24,577 - INFO - Successfully calculated metrics for Nifty EV & New Age Automotive
+2026-03-29 15:10:24,577 - INFO - Calculating metrics for Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 15:10:24,581 - INFO - Retrieved 245 records for index_id 28
+2026-03-29 15:10:24,598 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,598 - INFO - Calculated metrics for 245 records for index_id 28
+2026-03-29 15:10:24,599 - INFO - Successfully calculated metrics for Nifty Consumption ETF
+2026-03-29 15:10:24,599 - INFO - Calculating metrics for Nifty India Railways (GROWWRAIL)
+2026-03-29 15:10:24,603 - INFO - Retrieved 245 records for index_id 29
+2026-03-29 15:10:24,623 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,623 - INFO - Calculated metrics for 245 records for index_id 29
+2026-03-29 15:10:24,623 - INFO - Successfully calculated metrics for Nifty India Railways
+2026-03-29 15:10:24,623 - INFO - Calculating metrics for Nifty IPO ETF (SELECTIPO)
+2026-03-29 15:10:24,625 - INFO - Retrieved 245 records for index_id 30
+2026-03-29 15:10:24,644 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,644 - INFO - Calculated metrics for 245 records for index_id 30
+2026-03-29 15:10:24,644 - INFO - Successfully calculated metrics for Nifty IPO ETF
+2026-03-29 15:10:24,644 - INFO - Calculating metrics for Liquid BeES (LIQUIDBEES)
+2026-03-29 15:10:24,645 - INFO - Retrieved 245 records for index_id 31
+2026-03-29 15:10:24,665 - INFO - Inserted 245 calculated records
+2026-03-29 15:10:24,666 - INFO - Calculated metrics for 245 records for index_id 31
+2026-03-29 15:10:24,666 - INFO - Successfully calculated metrics for Liquid BeES
+2026-03-29 15:10:24,666 - INFO - Calculation completed for all indices
+2026-03-29 15:10:24,666 - INFO - Data calculation process completed successfully
+2026-03-29 15:10:24,666 - INFO - Disconnected from database
+2026-03-29 15:16:09,563 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:16:09,566 - INFO - Retrieved 31 active indices
+2026-03-29 15:16:09,566 - INFO - Calculating metrics for Silver BeES (SILVERBEES)
+2026-03-29 15:16:09,580 - INFO - Retrieved 245 records for index_id 1
+2026-03-29 15:16:09,641 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,641 - INFO - Calculated metrics for 245 records for index_id 1
+2026-03-29 15:16:09,641 - INFO - Successfully calculated metrics for Silver BeES
+2026-03-29 15:16:09,641 - INFO - Calculating metrics for Gold BeES (GOLDBEES)
+2026-03-29 15:16:09,644 - INFO - Retrieved 245 records for index_id 2
+2026-03-29 15:16:09,657 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,657 - INFO - Calculated metrics for 245 records for index_id 2
+2026-03-29 15:16:09,657 - INFO - Successfully calculated metrics for Gold BeES
+2026-03-29 15:16:09,657 - INFO - Calculating metrics for Nifty BeES (NIFTYBEES)
+2026-03-29 15:16:09,658 - INFO - Retrieved 245 records for index_id 3
+2026-03-29 15:16:09,683 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,683 - INFO - Calculated metrics for 245 records for index_id 3
+2026-03-29 15:16:09,683 - INFO - Successfully calculated metrics for Nifty BeES
+2026-03-29 15:16:09,683 - INFO - Calculating metrics for Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 15:16:09,688 - INFO - Retrieved 245 records for index_id 4
+2026-03-29 15:16:09,702 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,703 - INFO - Calculated metrics for 245 records for index_id 4
+2026-03-29 15:16:09,703 - INFO - Successfully calculated metrics for Motilal Oswal Nifty 500
+2026-03-29 15:16:09,703 - INFO - Calculating metrics for Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 15:16:09,705 - INFO - Retrieved 245 records for index_id 5
+2026-03-29 15:16:09,718 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,718 - INFO - Calculated metrics for 245 records for index_id 5
+2026-03-29 15:16:09,718 - INFO - Successfully calculated metrics for Nifty Momentum 50
+2026-03-29 15:16:09,718 - INFO - Calculating metrics for Nifty IT BeES (ITBEES)
+2026-03-29 15:16:09,719 - INFO - Retrieved 245 records for index_id 6
+2026-03-29 15:16:09,737 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,737 - INFO - Calculated metrics for 245 records for index_id 6
+2026-03-29 15:16:09,737 - INFO - Successfully calculated metrics for Nifty IT BeES
+2026-03-29 15:16:09,738 - INFO - Calculating metrics for Nifty Bank BeES (BANKBEES)
+2026-03-29 15:16:09,739 - INFO - Retrieved 245 records for index_id 7
+2026-03-29 15:16:09,751 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,752 - INFO - Calculated metrics for 245 records for index_id 7
+2026-03-29 15:16:09,752 - INFO - Successfully calculated metrics for Nifty Bank BeES
+2026-03-29 15:16:09,752 - INFO - Calculating metrics for Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 15:16:09,754 - INFO - Retrieved 245 records for index_id 8
+2026-03-29 15:16:09,770 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,770 - INFO - Calculated metrics for 245 records for index_id 8
+2026-03-29 15:16:09,770 - INFO - Successfully calculated metrics for Nifty PSU Bank BeES
+2026-03-29 15:16:09,770 - INFO - Calculating metrics for Nifty Auto BeES (AUTOBEES)
+2026-03-29 15:16:09,775 - INFO - Retrieved 245 records for index_id 9
+2026-03-29 15:16:09,793 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,793 - INFO - Calculated metrics for 245 records for index_id 9
+2026-03-29 15:16:09,793 - INFO - Successfully calculated metrics for Nifty Auto BeES
+2026-03-29 15:16:09,793 - INFO - Calculating metrics for Nifty Junior BeES (JUNIORBEES)
+2026-03-29 15:16:09,794 - INFO - Retrieved 245 records for index_id 10
+2026-03-29 15:16:09,809 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,809 - INFO - Calculated metrics for 245 records for index_id 10
+2026-03-29 15:16:09,809 - INFO - Successfully calculated metrics for Nifty Junior BeES
+2026-03-29 15:16:09,809 - INFO - Calculating metrics for Nifty Pharma BeES (PHARMABEES)
+2026-03-29 15:16:09,813 - INFO - Retrieved 245 records for index_id 11
+2026-03-29 15:16:09,830 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,830 - INFO - Calculated metrics for 245 records for index_id 11
+2026-03-29 15:16:09,830 - INFO - Successfully calculated metrics for Nifty Pharma BeES
+2026-03-29 15:16:09,830 - INFO - Calculating metrics for Nifty FMCG ETF (FMCGIETF)
+2026-03-29 15:16:09,832 - INFO - Retrieved 245 records for index_id 12
+2026-03-29 15:16:09,846 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,846 - INFO - Calculated metrics for 245 records for index_id 12
+2026-03-29 15:16:09,846 - INFO - Successfully calculated metrics for Nifty FMCG ETF
+2026-03-29 15:16:09,846 - INFO - Calculating metrics for Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 15:16:09,849 - INFO - Retrieved 245 records for index_id 13
+2026-03-29 15:16:09,861 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,862 - INFO - Calculated metrics for 245 records for index_id 13
+2026-03-29 15:16:09,862 - INFO - Successfully calculated metrics for Nifty Midcap 150 BeES
+2026-03-29 15:16:09,862 - INFO - Calculating metrics for Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 15:16:09,867 - INFO - Retrieved 245 records for index_id 14
+2026-03-29 15:16:09,881 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,881 - INFO - Calculated metrics for 245 records for index_id 14
+2026-03-29 15:16:09,881 - INFO - Successfully calculated metrics for Nifty Oil & Gas ETF
+2026-03-29 15:16:09,881 - INFO - Calculating metrics for Nifty Alpha 50 (ALPHA)
+2026-03-29 15:16:09,883 - INFO - Retrieved 245 records for index_id 15
+2026-03-29 15:16:09,896 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,896 - INFO - Calculated metrics for 245 records for index_id 15
+2026-03-29 15:16:09,896 - INFO - Successfully calculated metrics for Nifty Alpha 50
+2026-03-29 15:16:09,896 - INFO - Calculating metrics for Nifty Infra BeES (INFRABEES)
+2026-03-29 15:16:09,898 - INFO - Retrieved 245 records for index_id 16
+2026-03-29 15:16:09,913 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,913 - INFO - Calculated metrics for 245 records for index_id 16
+2026-03-29 15:16:09,913 - INFO - Successfully calculated metrics for Nifty Infra BeES
+2026-03-29 15:16:09,913 - INFO - Calculating metrics for Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 15:16:09,915 - INFO - Retrieved 245 records for index_id 17
+2026-03-29 15:16:09,927 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,927 - INFO - Calculated metrics for 245 records for index_id 17
+2026-03-29 15:16:09,927 - INFO - Successfully calculated metrics for Nifty Next 50 ETF
+2026-03-29 15:16:09,927 - INFO - Calculating metrics for Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 15:16:09,929 - INFO - Retrieved 245 records for index_id 18
+2026-03-29 15:16:09,945 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,945 - INFO - Calculated metrics for 245 records for index_id 18
+2026-03-29 15:16:09,946 - INFO - Successfully calculated metrics for Nifty Healthcare ETF
+2026-03-29 15:16:09,946 - INFO - Calculating metrics for Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 15:16:09,949 - INFO - Retrieved 243 records for index_id 19
+2026-03-29 15:16:09,960 - INFO - Inserted 243 calculated records
+2026-03-29 15:16:09,960 - INFO - Calculated metrics for 243 records for index_id 19
+2026-03-29 15:16:09,960 - INFO - Successfully calculated metrics for Nifty Smallcap 250
+2026-03-29 15:16:09,960 - INFO - Calculating metrics for Nifty Total Market (AONETOTAL)
+2026-03-29 15:16:09,962 - INFO - Retrieved 245 records for index_id 20
+2026-03-29 15:16:09,976 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,976 - INFO - Calculated metrics for 245 records for index_id 20
+2026-03-29 15:16:09,976 - INFO - Successfully calculated metrics for Nifty Total Market
+2026-03-29 15:16:09,976 - INFO - Calculating metrics for Nifty Momentum (MOMOMENTUM)
+2026-03-29 15:16:09,978 - INFO - Retrieved 245 records for index_id 21
+2026-03-29 15:16:09,992 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:09,992 - INFO - Calculated metrics for 245 records for index_id 21
+2026-03-29 15:16:09,992 - INFO - Successfully calculated metrics for Nifty Momentum
+2026-03-29 15:16:09,992 - INFO - Calculating metrics for Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 15:16:09,994 - INFO - Retrieved 243 records for index_id 22
+2026-03-29 15:16:10,013 - INFO - Inserted 243 calculated records
+2026-03-29 15:16:10,013 - INFO - Calculated metrics for 243 records for index_id 22
+2026-03-29 15:16:10,013 - INFO - Successfully calculated metrics for Nifty Quality Midcap 50
+2026-03-29 15:16:10,013 - INFO - Calculating metrics for HDFC Value Fund (HDFCVALUE)
+2026-03-29 15:16:10,017 - INFO - Retrieved 245 records for index_id 23
+2026-03-29 15:16:10,036 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,036 - INFO - Calculated metrics for 245 records for index_id 23
+2026-03-29 15:16:10,037 - INFO - Successfully calculated metrics for HDFC Value Fund
+2026-03-29 15:16:10,037 - INFO - Calculating metrics for HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 15:16:10,039 - INFO - Retrieved 245 records for index_id 24
+2026-03-29 15:16:10,051 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,051 - INFO - Calculated metrics for 245 records for index_id 24
+2026-03-29 15:16:10,051 - INFO - Successfully calculated metrics for HDFC Growth Fund
+2026-03-29 15:16:10,051 - INFO - Calculating metrics for HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 15:16:10,054 - INFO - Retrieved 245 records for index_id 25
+2026-03-29 15:16:10,069 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,069 - INFO - Calculated metrics for 245 records for index_id 25
+2026-03-29 15:16:10,069 - INFO - Successfully calculated metrics for HDFC Momentum Fund
+2026-03-29 15:16:10,070 - INFO - Calculating metrics for Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 15:16:10,072 - INFO - Retrieved 245 records for index_id 26
+2026-03-29 15:16:10,086 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,086 - INFO - Calculated metrics for 245 records for index_id 26
+2026-03-29 15:16:10,086 - INFO - Successfully calculated metrics for Motilal Oswal MSCI EAFE Fund
+2026-03-29 15:16:10,086 - INFO - Calculating metrics for Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 15:16:10,087 - INFO - Retrieved 245 records for index_id 27
+2026-03-29 15:16:10,104 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,104 - INFO - Calculated metrics for 245 records for index_id 27
+2026-03-29 15:16:10,104 - INFO - Successfully calculated metrics for Nifty EV & New Age Automotive
+2026-03-29 15:16:10,104 - INFO - Calculating metrics for Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 15:16:10,109 - INFO - Retrieved 245 records for index_id 28
+2026-03-29 15:16:10,148 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,148 - INFO - Calculated metrics for 245 records for index_id 28
+2026-03-29 15:16:10,148 - INFO - Successfully calculated metrics for Nifty Consumption ETF
+2026-03-29 15:16:10,148 - INFO - Calculating metrics for Nifty India Railways (GROWWRAIL)
+2026-03-29 15:16:10,152 - INFO - Retrieved 245 records for index_id 29
+2026-03-29 15:16:10,165 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,165 - INFO - Calculated metrics for 245 records for index_id 29
+2026-03-29 15:16:10,165 - INFO - Successfully calculated metrics for Nifty India Railways
+2026-03-29 15:16:10,165 - INFO - Calculating metrics for Nifty IPO ETF (SELECTIPO)
+2026-03-29 15:16:10,167 - INFO - Retrieved 245 records for index_id 30
+2026-03-29 15:16:10,178 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,179 - INFO - Calculated metrics for 245 records for index_id 30
+2026-03-29 15:16:10,179 - INFO - Successfully calculated metrics for Nifty IPO ETF
+2026-03-29 15:16:10,179 - INFO - Calculating metrics for Liquid BeES (LIQUIDBEES)
+2026-03-29 15:16:10,180 - INFO - Retrieved 245 records for index_id 31
+2026-03-29 15:16:10,192 - INFO - Inserted 245 calculated records
+2026-03-29 15:16:10,192 - INFO - Calculated metrics for 245 records for index_id 31
+2026-03-29 15:16:10,192 - INFO - Successfully calculated metrics for Liquid BeES
+2026-03-29 15:16:10,192 - INFO - Calculation completed for all indices
+2026-03-29 15:16:10,192 - INFO - Data calculation process completed successfully
+2026-03-29 15:16:10,192 - INFO - Disconnected from database
+2026-03-29 15:37:23,064 - ERROR - Failed to connect to database: unable to open database file
+2026-03-29 15:37:49,484 - ERROR - Failed to connect to database: unable to open database file
+2026-03-29 15:38:17,457 - ERROR - Failed to connect to database: unable to open database file
+2026-03-29 15:38:30,793 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:38:30,923 - INFO - Disconnected from database
+2026-03-29 15:39:11,063 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:39:11,167 - INFO - Disconnected from database
+2026-03-29 15:39:14,504 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 15:39:14,505 - INFO - Disconnected from database

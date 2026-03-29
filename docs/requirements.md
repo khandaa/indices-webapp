@@ -1,8 +1,14 @@
+create a page in react that shows the list of all indices with their current price, daily change, weekly change, monthly change, yearly change. The table should have sorting capability on every column.
+At the top of the page, it should have option to configure which columns to view. I should be able to enable/disable columns.
+It should have additional columns for momentum metrics like 3W cumulative return and 3M cumulative return. 
+
+
+
+
 This should be a web app that tracks the indices daily prices
-It should have a configuration page to manage the master list of indices
-Should be able to refresh data manually
-
-
+It should have a configuration page to manage the master list of indices. It should be possible to enable/disable all indices from here.
+It should have a page that has tabs for daily, weekly, monthly, yearly performance.
+When the page is loaded, it should show the date, index, current price, daily change, weekly change, monthly change, yearly change. The table should have sorting capability on every column.
 
 The app should have the following features:
 - Dashboard to show the indices performance
