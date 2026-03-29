@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { WeeklyRecommendation, MonthlyRecommendation } from '../types';
 import { apiService } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -13,7 +13,7 @@ const Recommendations: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -32,21 +32,11 @@ const Recommendations: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const formatNumber = (value: number | null): string => {
-    if (value === null || value === undefined) return 'N/A';
-    return value.toFixed(2);
-  };
-
-  const formatDate = (dateString: string | null): string => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString();
-  };
+  }, [fetchData]);
 
   if (loading) {
     return (

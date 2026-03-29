@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TopPerformer } from '../types';
 import { apiService } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
-import IndexCard from '../components/IndexCard';
 import MomentumIndicator from '../components/MomentumIndicator';
 
 const WeeklyDashboard: React.FC = () => {
@@ -12,7 +11,7 @@ const WeeklyDashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -25,11 +24,11 @@ const WeeklyDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const formatNumber = (value: number | null): string => {
     if (value === null || value === undefined) return 'N/A';
@@ -91,11 +90,22 @@ const WeeklyDashboard: React.FC = () => {
             <div className="absolute top-2 left-2 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
               {index + 1}
             </div>
-            <IndexCard
-              index={performer}
-              variant="detailed"
-              className="pt-8"
-            />
+            <div className="pt-8 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+              <div className="mb-3">
+                <h3 className="font-semibold text-gray-900">{performer.name}</h3>
+                <p className="text-sm text-gray-600">{performer.symbol}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatNumber(performer.current_price)}
+                </p>
+                <MomentumIndicator
+                  value={performer.weekly_change_percent ?? null}
+                  showArrow={true}
+                  showBackground={true}
+                />
+              </div>
+            </div>
           </div>
         ))}
       </div>
@@ -149,11 +159,11 @@ const WeeklyDashboard: React.FC = () => {
                       {formatNumber(performer.current_price)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      {formatNumber(performer.weekly_change)}
+                      {formatNumber(performer.weekly_change ?? null)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <MomentumIndicator 
-                        value={performer.weekly_change_percent} 
+                        value={performer.weekly_change_percent ?? null}
                         showArrow={true}
                         showBackground={true}
                       />
@@ -180,7 +190,7 @@ const WeeklyDashboard: React.FC = () => {
               {topPerformers[0]?.name || 'N/A'}
             </p>
             <p className="text-sm text-blue-600">
-              {topPerformers[0] ? formatPercent(topPerformers[0].weekly_change_percent) : 'N/A'}
+              {topPerformers[0] ? formatPercent(topPerformers[0].weekly_change_percent ?? null) : 'N/A'}
             </p>
           </div>
           <div className="text-center">

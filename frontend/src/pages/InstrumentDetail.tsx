@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Index, DailyPrice } from '../types';
 import { apiService } from '../services/api';
@@ -15,7 +15,7 @@ const InstrumentDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!id) return;
     
     try {
@@ -36,21 +36,15 @@ const InstrumentDetail: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchData();
-  }, [id]);
+  }, [fetchData]);
 
   const formatNumber = (value: number | null): string => {
     if (value === null || value === undefined) return 'N/A';
     return value.toFixed(2);
-  };
-
-  const formatPercent = (value: number | null): string => {
-    if (value === null || value === undefined) return 'N/A';
-    const formatted = formatNumber(value);
-    return `${formatted}%`;
   };
 
   const formatDate = (dateString: string): string => {

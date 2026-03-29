@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import DataTable from '../components/DataTable';
 import ColumnToggle from '../components/ColumnToggle';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { apiService } from '../services/api';
 import { Index, ColumnConfig } from '../types';
 
@@ -22,6 +24,8 @@ const IndicesPage: React.FC = () => {
     weekly_change_percent: false,
     monthly_change_percent: false,
     yearly_change_percent: false,
+    three_week_cumulative_return: false,
+    three_month_cumulative_return: false,
   });
 
   // Load column config from localStorage on mount
@@ -42,7 +46,7 @@ const IndicesPage: React.FC = () => {
   }, [columnConfig]);
 
   // Fetch indices data
-  const fetchIndices = async () => {
+  const fetchIndices = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -54,11 +58,11 @@ const IndicesPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchIndices();
-  }, []);
+  }, [fetchIndices]);
 
   // Sort functionality
   const handleSort = (column: string) => {
@@ -104,21 +108,18 @@ const IndicesPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <LoadingSpinner size="large" message="Loading indices data..." />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-md p-4">
-        <div className="text-red-800">{error}</div>
-        <button
-          onClick={fetchIndices}
-          className="mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-        >
-          Retry
-        </button>
+      <div className="max-w-4xl mx-auto p-6">
+        <ErrorMessage 
+          message={error} 
+          onRetry={fetchIndices}
+        />
       </div>
     );
   }
