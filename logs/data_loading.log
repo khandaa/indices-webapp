@@ -1,0 +1,164 @@
+2026-03-29 14:36:18,136 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 14:36:18,142 - INFO - Retrieved 31 active indices
+2026-03-29 14:36:18,142 - INFO - Loading data for Silver BeES (SILVERBEES)
+2026-03-29 14:36:18,142 - INFO - Downloading data for SILVERBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:19,030 - INFO - Downloaded 245 records for SILVERBEES.NS
+2026-03-29 14:36:19,042 - INFO - Inserted 245 records for index_id 1
+2026-03-29 14:36:19,042 - INFO - Successfully loaded data for Silver BeES
+2026-03-29 14:36:19,042 - INFO - Loading data for Gold BeES (GOLDBEES)
+2026-03-29 14:36:19,042 - INFO - Downloading data for GOLDBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:19,391 - INFO - Downloaded 245 records for GOLDBEES.NS
+2026-03-29 14:36:19,400 - INFO - Inserted 245 records for index_id 2
+2026-03-29 14:36:19,400 - INFO - Successfully loaded data for Gold BeES
+2026-03-29 14:36:19,400 - INFO - Loading data for Nifty BeES (NIFTYBEES)
+2026-03-29 14:36:19,400 - INFO - Downloading data for NIFTYBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:19,639 - INFO - Downloaded 245 records for NIFTYBEES.NS
+2026-03-29 14:36:19,650 - INFO - Inserted 245 records for index_id 3
+2026-03-29 14:36:19,650 - INFO - Successfully loaded data for Nifty BeES
+2026-03-29 14:36:19,651 - INFO - Loading data for Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 14:36:19,651 - INFO - Downloading data for MONIFTY500.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:20,089 - INFO - Downloaded 245 records for MONIFTY500.NS
+2026-03-29 14:36:20,101 - INFO - Inserted 245 records for index_id 4
+2026-03-29 14:36:20,101 - INFO - Successfully loaded data for Motilal Oswal Nifty 500
+2026-03-29 14:36:20,101 - INFO - Loading data for Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 14:36:20,101 - INFO - Downloading data for MOMENTUM50.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:20,539 - INFO - Downloaded 245 records for MOMENTUM50.NS
+2026-03-29 14:36:20,549 - INFO - Inserted 245 records for index_id 5
+2026-03-29 14:36:20,549 - INFO - Successfully loaded data for Nifty Momentum 50
+2026-03-29 14:36:20,549 - INFO - Loading data for Nifty IT BeES (ITBEES)
+2026-03-29 14:36:20,549 - INFO - Downloading data for ITBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:20,930 - INFO - Downloaded 245 records for ITBEES.NS
+2026-03-29 14:36:20,938 - INFO - Inserted 245 records for index_id 6
+2026-03-29 14:36:20,939 - INFO - Successfully loaded data for Nifty IT BeES
+2026-03-29 14:36:20,939 - INFO - Loading data for Nifty Bank BeES (BANKBEES)
+2026-03-29 14:36:20,939 - INFO - Downloading data for BANKBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:21,334 - INFO - Downloaded 245 records for BANKBEES.NS
+2026-03-29 14:36:21,345 - INFO - Inserted 245 records for index_id 7
+2026-03-29 14:36:21,345 - INFO - Successfully loaded data for Nifty Bank BeES
+2026-03-29 14:36:21,345 - INFO - Loading data for Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 14:36:21,345 - INFO - Downloading data for PSUBNKBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:21,842 - INFO - Downloaded 245 records for PSUBNKBEES.NS
+2026-03-29 14:36:21,858 - INFO - Inserted 245 records for index_id 8
+2026-03-29 14:36:21,858 - INFO - Successfully loaded data for Nifty PSU Bank BeES
+2026-03-29 14:36:21,858 - INFO - Loading data for Nifty Auto BeES (AUTOBEES)
+2026-03-29 14:36:21,858 - INFO - Downloading data for AUTOBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:22,022 - INFO - Downloaded 245 records for AUTOBEES.NS
+2026-03-29 14:36:22,032 - INFO - Inserted 245 records for index_id 9
+2026-03-29 14:36:22,032 - INFO - Successfully loaded data for Nifty Auto BeES
+2026-03-29 14:36:22,032 - INFO - Loading data for Nifty Junior BeES (JUNIORBEES)
+2026-03-29 14:36:22,032 - INFO - Downloading data for JUNIORBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:22,262 - INFO - Downloaded 245 records for JUNIORBEES.NS
+2026-03-29 14:36:22,276 - INFO - Inserted 245 records for index_id 10
+2026-03-29 14:36:22,276 - INFO - Successfully loaded data for Nifty Junior BeES
+2026-03-29 14:36:22,276 - INFO - Loading data for Nifty Pharma BeES (PHARMABEES)
+2026-03-29 14:36:22,276 - INFO - Downloading data for PHARMABEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:22,511 - INFO - Downloaded 245 records for PHARMABEES.NS
+2026-03-29 14:36:22,518 - INFO - Inserted 245 records for index_id 11
+2026-03-29 14:36:22,518 - INFO - Successfully loaded data for Nifty Pharma BeES
+2026-03-29 14:36:22,518 - INFO - Loading data for Nifty FMCG ETF (FMCGIETF)
+2026-03-29 14:36:22,518 - INFO - Downloading data for FMCGIETF.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:22,828 - INFO - Downloaded 245 records for FMCGIETF.NS
+2026-03-29 14:36:22,838 - INFO - Inserted 245 records for index_id 12
+2026-03-29 14:36:22,838 - INFO - Successfully loaded data for Nifty FMCG ETF
+2026-03-29 14:36:22,838 - INFO - Loading data for Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 14:36:22,838 - INFO - Downloading data for MID150BEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:23,017 - INFO - Downloaded 245 records for MID150BEES.NS
+2026-03-29 14:36:23,028 - INFO - Inserted 245 records for index_id 13
+2026-03-29 14:36:23,028 - INFO - Successfully loaded data for Nifty Midcap 150 BeES
+2026-03-29 14:36:23,028 - INFO - Loading data for Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 14:36:23,028 - INFO - Downloading data for OILIETF.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:23,256 - INFO - Downloaded 245 records for OILIETF.NS
+2026-03-29 14:36:23,277 - INFO - Inserted 245 records for index_id 14
+2026-03-29 14:36:23,277 - INFO - Successfully loaded data for Nifty Oil & Gas ETF
+2026-03-29 14:36:23,277 - INFO - Loading data for Nifty Alpha 50 (ALPHA)
+2026-03-29 14:36:23,277 - INFO - Downloading data for ALPHA.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:23,478 - INFO - Downloaded 245 records for ALPHA.NS
+2026-03-29 14:36:23,490 - INFO - Inserted 245 records for index_id 15
+2026-03-29 14:36:23,491 - INFO - Successfully loaded data for Nifty Alpha 50
+2026-03-29 14:36:23,491 - INFO - Loading data for Nifty Infra BeES (INFRABEES)
+2026-03-29 14:36:23,491 - INFO - Downloading data for INFRABEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:23,678 - INFO - Downloaded 245 records for INFRABEES.NS
+2026-03-29 14:36:23,688 - INFO - Inserted 245 records for index_id 16
+2026-03-29 14:36:23,688 - INFO - Successfully loaded data for Nifty Infra BeES
+2026-03-29 14:36:23,688 - INFO - Loading data for Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 14:36:23,688 - INFO - Downloading data for NEXT50IETF.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:23,974 - INFO - Downloaded 245 records for NEXT50IETF.NS
+2026-03-29 14:36:23,987 - INFO - Inserted 245 records for index_id 17
+2026-03-29 14:36:23,987 - INFO - Successfully loaded data for Nifty Next 50 ETF
+2026-03-29 14:36:23,987 - INFO - Loading data for Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 14:36:23,987 - INFO - Downloading data for HEALTHIETF.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:24,414 - INFO - Downloaded 245 records for HEALTHIETF.NS
+2026-03-29 14:36:24,422 - INFO - Inserted 245 records for index_id 18
+2026-03-29 14:36:24,422 - INFO - Successfully loaded data for Nifty Healthcare ETF
+2026-03-29 14:36:24,422 - INFO - Loading data for Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 14:36:24,422 - INFO - Downloading data for SMALLCAP.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:24,614 - INFO - Downloaded 243 records for SMALLCAP.NS
+2026-03-29 14:36:24,625 - INFO - Inserted 243 records for index_id 19
+2026-03-29 14:36:24,625 - INFO - Successfully loaded data for Nifty Smallcap 250
+2026-03-29 14:36:24,625 - INFO - Loading data for Nifty Total Market (AONETOTAL)
+2026-03-29 14:36:24,625 - INFO - Downloading data for AONETOTAL.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:24,944 - INFO - Downloaded 245 records for AONETOTAL.NS
+2026-03-29 14:36:24,955 - INFO - Inserted 245 records for index_id 20
+2026-03-29 14:36:24,955 - INFO - Successfully loaded data for Nifty Total Market
+2026-03-29 14:36:24,955 - INFO - Loading data for Nifty Momentum (MOMOMENTUM)
+2026-03-29 14:36:24,957 - INFO - Downloading data for MOMOMENTUM.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:25,231 - INFO - Downloaded 245 records for MOMOMENTUM.NS
+2026-03-29 14:36:25,241 - INFO - Inserted 245 records for index_id 21
+2026-03-29 14:36:25,241 - INFO - Successfully loaded data for Nifty Momentum
+2026-03-29 14:36:25,241 - INFO - Loading data for Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 14:36:25,241 - INFO - Downloading data for MONQ50.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:25,513 - INFO - Downloaded 243 records for MONQ50.NS
+2026-03-29 14:36:25,523 - INFO - Inserted 243 records for index_id 22
+2026-03-29 14:36:25,523 - INFO - Successfully loaded data for Nifty Quality Midcap 50
+2026-03-29 14:36:25,523 - INFO - Loading data for HDFC Value Fund (HDFCVALUE)
+2026-03-29 14:36:25,523 - INFO - Downloading data for HDFCVALUE.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:25,862 - INFO - Downloaded 245 records for HDFCVALUE.NS
+2026-03-29 14:36:25,870 - INFO - Inserted 245 records for index_id 23
+2026-03-29 14:36:25,870 - INFO - Successfully loaded data for HDFC Value Fund
+2026-03-29 14:36:25,870 - INFO - Loading data for HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 14:36:25,871 - INFO - Downloading data for HDFCGROWTH.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:26,228 - INFO - Downloaded 245 records for HDFCGROWTH.NS
+2026-03-29 14:36:26,244 - INFO - Inserted 245 records for index_id 24
+2026-03-29 14:36:26,245 - INFO - Successfully loaded data for HDFC Growth Fund
+2026-03-29 14:36:26,245 - INFO - Loading data for HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 14:36:26,245 - INFO - Downloading data for HDFCMOMENT.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:26,628 - INFO - Downloaded 245 records for HDFCMOMENT.NS
+2026-03-29 14:36:26,635 - INFO - Inserted 245 records for index_id 25
+2026-03-29 14:36:26,635 - INFO - Successfully loaded data for HDFC Momentum Fund
+2026-03-29 14:36:26,635 - INFO - Loading data for Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 14:36:26,635 - INFO - Downloading data for MODEFENCE.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:27,113 - INFO - Downloaded 245 records for MODEFENCE.NS
+2026-03-29 14:36:27,128 - INFO - Inserted 245 records for index_id 26
+2026-03-29 14:36:27,128 - INFO - Successfully loaded data for Motilal Oswal MSCI EAFE Fund
+2026-03-29 14:36:27,128 - INFO - Loading data for Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 14:36:27,128 - INFO - Downloading data for EVINDIA.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:27,546 - INFO - Downloaded 245 records for EVINDIA.NS
+2026-03-29 14:36:27,555 - INFO - Inserted 245 records for index_id 27
+2026-03-29 14:36:27,555 - INFO - Successfully loaded data for Nifty EV & New Age Automotive
+2026-03-29 14:36:27,555 - INFO - Loading data for Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 14:36:27,555 - INFO - Downloading data for CONSUMIETF.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:27,844 - INFO - Downloaded 245 records for CONSUMIETF.NS
+2026-03-29 14:36:27,852 - INFO - Inserted 245 records for index_id 28
+2026-03-29 14:36:27,852 - INFO - Successfully loaded data for Nifty Consumption ETF
+2026-03-29 14:36:27,852 - INFO - Loading data for Nifty India Railways (GROWWRAIL)
+2026-03-29 14:36:27,853 - INFO - Downloading data for GROWWRAIL.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:28,123 - INFO - Downloaded 245 records for GROWWRAIL.NS
+2026-03-29 14:36:28,133 - INFO - Inserted 245 records for index_id 29
+2026-03-29 14:36:28,133 - INFO - Successfully loaded data for Nifty India Railways
+2026-03-29 14:36:28,133 - INFO - Loading data for Nifty IPO ETF (SELECTIPO)
+2026-03-29 14:36:28,133 - INFO - Downloading data for SELECTIPO.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:28,363 - INFO - Downloaded 245 records for SELECTIPO.NS
+2026-03-29 14:36:28,394 - INFO - Inserted 245 records for index_id 30
+2026-03-29 14:36:28,394 - INFO - Successfully loaded data for Nifty IPO ETF
+2026-03-29 14:36:28,394 - INFO - Loading data for Liquid BeES (LIQUIDBEES)
+2026-03-29 14:36:28,394 - INFO - Downloading data for LIQUIDBEES.NS from 2025-03-29 to 2026-03-29
+2026-03-29 14:36:28,717 - INFO - Downloaded 245 records for LIQUIDBEES.NS
+2026-03-29 14:36:28,728 - INFO - Inserted 245 records for index_id 31
+2026-03-29 14:36:28,728 - INFO - Successfully loaded data for Liquid BeES
+2026-03-29 14:36:28,728 - INFO - Data loading completed for all indices
+2026-03-29 14:36:28,728 - INFO - Data loading process completed successfully
+2026-03-29 14:36:28,729 - INFO - Disconnected from database
+2026-03-29 14:36:58,273 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 14:36:58,275 - INFO - Retrieved 31 active indices
+2026-03-29 14:36:58,275 - INFO - Disconnected from database
+2026-03-29 14:36:58,356 - INFO - Data validation completed

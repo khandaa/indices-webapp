@@ -1,0 +1,132 @@
+2026-03-29 14:50:58,786 - INFO - Connected to database: /Users/alokk/EmployDEX/Applications/indices-webapp/database/index-database.db
+2026-03-29 14:50:58,787 - INFO - Starting monthly change calculation for all indices
+2026-03-29 14:50:58,789 - INFO - Retrieved 31 active indices
+2026-03-29 14:50:58,790 - INFO - Processing monthly changes for 31 indices
+2026-03-29 14:50:58,790 - INFO - Processing Silver BeES (SILVERBEES)
+2026-03-29 14:50:58,819 - INFO - Retrieved 245 records for index_id 1
+2026-03-29 14:50:59,057 - INFO - Updated monthly changes for 205 records for index_id 1
+2026-03-29 14:50:59,057 - INFO - Successfully updated monthly changes for Silver BeES
+2026-03-29 14:50:59,057 - INFO - Processing Gold BeES (GOLDBEES)
+2026-03-29 14:50:59,059 - INFO - Retrieved 245 records for index_id 2
+2026-03-29 14:50:59,077 - INFO - Updated monthly changes for 205 records for index_id 2
+2026-03-29 14:50:59,077 - INFO - Successfully updated monthly changes for Gold BeES
+2026-03-29 14:50:59,077 - INFO - Processing Nifty BeES (NIFTYBEES)
+2026-03-29 14:50:59,078 - INFO - Retrieved 245 records for index_id 3
+2026-03-29 14:50:59,091 - INFO - Updated monthly changes for 205 records for index_id 3
+2026-03-29 14:50:59,092 - INFO - Successfully updated monthly changes for Nifty BeES
+2026-03-29 14:50:59,092 - INFO - Processing Motilal Oswal Nifty 500 (MONIFTY500)
+2026-03-29 14:50:59,094 - INFO - Retrieved 245 records for index_id 4
+2026-03-29 14:50:59,113 - INFO - Updated monthly changes for 205 records for index_id 4
+2026-03-29 14:50:59,113 - INFO - Successfully updated monthly changes for Motilal Oswal Nifty 500
+2026-03-29 14:50:59,113 - INFO - Processing Nifty Momentum 50 (MOMENTUM50)
+2026-03-29 14:50:59,114 - INFO - Retrieved 245 records for index_id 5
+2026-03-29 14:50:59,133 - INFO - Updated monthly changes for 205 records for index_id 5
+2026-03-29 14:50:59,133 - INFO - Successfully updated monthly changes for Nifty Momentum 50
+2026-03-29 14:50:59,133 - INFO - Processing Nifty IT BeES (ITBEES)
+2026-03-29 14:50:59,134 - INFO - Retrieved 245 records for index_id 6
+2026-03-29 14:50:59,148 - INFO - Updated monthly changes for 205 records for index_id 6
+2026-03-29 14:50:59,148 - INFO - Successfully updated monthly changes for Nifty IT BeES
+2026-03-29 14:50:59,148 - INFO - Processing Nifty Bank BeES (BANKBEES)
+2026-03-29 14:50:59,152 - INFO - Retrieved 245 records for index_id 7
+2026-03-29 14:50:59,171 - INFO - Updated monthly changes for 205 records for index_id 7
+2026-03-29 14:50:59,171 - INFO - Successfully updated monthly changes for Nifty Bank BeES
+2026-03-29 14:50:59,172 - INFO - Processing Nifty PSU Bank BeES (PSUBNKBEES)
+2026-03-29 14:50:59,175 - INFO - Retrieved 245 records for index_id 8
+2026-03-29 14:50:59,197 - INFO - Updated monthly changes for 205 records for index_id 8
+2026-03-29 14:50:59,197 - INFO - Successfully updated monthly changes for Nifty PSU Bank BeES
+2026-03-29 14:50:59,197 - INFO - Processing Nifty Auto BeES (AUTOBEES)
+2026-03-29 14:50:59,199 - INFO - Retrieved 245 records for index_id 9
+2026-03-29 14:50:59,212 - INFO - Updated monthly changes for 205 records for index_id 9
+2026-03-29 14:50:59,213 - INFO - Successfully updated monthly changes for Nifty Auto BeES
+2026-03-29 14:50:59,213 - INFO - Processing Nifty Junior BeES (JUNIORBEES)
+2026-03-29 14:50:59,213 - INFO - Retrieved 245 records for index_id 10
+2026-03-29 14:50:59,236 - INFO - Updated monthly changes for 205 records for index_id 10
+2026-03-29 14:50:59,236 - INFO - Successfully updated monthly changes for Nifty Junior BeES
+2026-03-29 14:50:59,236 - INFO - Processing Nifty Pharma BeES (PHARMABEES)
+2026-03-29 14:50:59,237 - INFO - Retrieved 245 records for index_id 11
+2026-03-29 14:50:59,254 - INFO - Updated monthly changes for 205 records for index_id 11
+2026-03-29 14:50:59,254 - INFO - Successfully updated monthly changes for Nifty Pharma BeES
+2026-03-29 14:50:59,254 - INFO - Processing Nifty FMCG ETF (FMCGIETF)
+2026-03-29 14:50:59,255 - INFO - Retrieved 245 records for index_id 12
+2026-03-29 14:50:59,268 - INFO - Updated monthly changes for 205 records for index_id 12
+2026-03-29 14:50:59,269 - INFO - Successfully updated monthly changes for Nifty FMCG ETF
+2026-03-29 14:50:59,269 - INFO - Processing Nifty Midcap 150 BeES (MID150BEES)
+2026-03-29 14:50:59,271 - INFO - Retrieved 245 records for index_id 13
+2026-03-29 14:50:59,304 - INFO - Updated monthly changes for 205 records for index_id 13
+2026-03-29 14:50:59,304 - INFO - Successfully updated monthly changes for Nifty Midcap 150 BeES
+2026-03-29 14:50:59,304 - INFO - Processing Nifty Oil & Gas ETF (OILIETF)
+2026-03-29 14:50:59,305 - INFO - Retrieved 245 records for index_id 14
+2026-03-29 14:50:59,313 - INFO - Updated monthly changes for 205 records for index_id 14
+2026-03-29 14:50:59,313 - INFO - Successfully updated monthly changes for Nifty Oil & Gas ETF
+2026-03-29 14:50:59,313 - INFO - Processing Nifty Alpha 50 (ALPHA)
+2026-03-29 14:50:59,314 - INFO - Retrieved 245 records for index_id 15
+2026-03-29 14:50:59,330 - INFO - Updated monthly changes for 205 records for index_id 15
+2026-03-29 14:50:59,331 - INFO - Successfully updated monthly changes for Nifty Alpha 50
+2026-03-29 14:50:59,331 - INFO - Processing Nifty Infra BeES (INFRABEES)
+2026-03-29 14:50:59,334 - INFO - Retrieved 245 records for index_id 16
+2026-03-29 14:50:59,347 - INFO - Updated monthly changes for 205 records for index_id 16
+2026-03-29 14:50:59,348 - INFO - Successfully updated monthly changes for Nifty Infra BeES
+2026-03-29 14:50:59,348 - INFO - Processing Nifty Next 50 ETF (NEXT50IETF)
+2026-03-29 14:50:59,351 - INFO - Retrieved 245 records for index_id 17
+2026-03-29 14:50:59,372 - INFO - Updated monthly changes for 205 records for index_id 17
+2026-03-29 14:50:59,372 - INFO - Successfully updated monthly changes for Nifty Next 50 ETF
+2026-03-29 14:50:59,372 - INFO - Processing Nifty Healthcare ETF (HEALTHIETF)
+2026-03-29 14:50:59,374 - INFO - Retrieved 245 records for index_id 18
+2026-03-29 14:50:59,387 - INFO - Updated monthly changes for 205 records for index_id 18
+2026-03-29 14:50:59,387 - INFO - Successfully updated monthly changes for Nifty Healthcare ETF
+2026-03-29 14:50:59,387 - INFO - Processing Nifty Smallcap 250 (SMALLCAP)
+2026-03-29 14:50:59,388 - INFO - Retrieved 243 records for index_id 19
+2026-03-29 14:50:59,402 - INFO - Updated monthly changes for 203 records for index_id 19
+2026-03-29 14:50:59,402 - INFO - Successfully updated monthly changes for Nifty Smallcap 250
+2026-03-29 14:50:59,402 - INFO - Processing Nifty Total Market (AONETOTAL)
+2026-03-29 14:50:59,403 - INFO - Retrieved 245 records for index_id 20
+2026-03-29 14:50:59,425 - INFO - Updated monthly changes for 205 records for index_id 20
+2026-03-29 14:50:59,426 - INFO - Successfully updated monthly changes for Nifty Total Market
+2026-03-29 14:50:59,426 - INFO - Processing Nifty Momentum (MOMOMENTUM)
+2026-03-29 14:50:59,428 - INFO - Retrieved 245 records for index_id 21
+2026-03-29 14:50:59,444 - INFO - Updated monthly changes for 205 records for index_id 21
+2026-03-29 14:50:59,444 - INFO - Successfully updated monthly changes for Nifty Momentum
+2026-03-29 14:50:59,444 - INFO - Processing Nifty Quality Midcap 50 (MONQ50)
+2026-03-29 14:50:59,445 - INFO - Retrieved 243 records for index_id 22
+2026-03-29 14:50:59,457 - INFO - Updated monthly changes for 203 records for index_id 22
+2026-03-29 14:50:59,457 - INFO - Successfully updated monthly changes for Nifty Quality Midcap 50
+2026-03-29 14:50:59,457 - INFO - Processing HDFC Value Fund (HDFCVALUE)
+2026-03-29 14:50:59,458 - INFO - Retrieved 245 records for index_id 23
+2026-03-29 14:50:59,475 - INFO - Updated monthly changes for 205 records for index_id 23
+2026-03-29 14:50:59,476 - INFO - Successfully updated monthly changes for HDFC Value Fund
+2026-03-29 14:50:59,476 - INFO - Processing HDFC Growth Fund (HDFCGROWTH)
+2026-03-29 14:50:59,476 - INFO - Retrieved 245 records for index_id 24
+2026-03-29 14:50:59,486 - INFO - Updated monthly changes for 205 records for index_id 24
+2026-03-29 14:50:59,486 - INFO - Successfully updated monthly changes for HDFC Growth Fund
+2026-03-29 14:50:59,486 - INFO - Processing HDFC Momentum Fund (HDFCMOMENT)
+2026-03-29 14:50:59,487 - INFO - Retrieved 245 records for index_id 25
+2026-03-29 14:50:59,497 - INFO - Updated monthly changes for 205 records for index_id 25
+2026-03-29 14:50:59,497 - INFO - Successfully updated monthly changes for HDFC Momentum Fund
+2026-03-29 14:50:59,497 - INFO - Processing Motilal Oswal MSCI EAFE Fund (MODEFENCE)
+2026-03-29 14:50:59,500 - INFO - Retrieved 245 records for index_id 26
+2026-03-29 14:50:59,509 - INFO - Updated monthly changes for 205 records for index_id 26
+2026-03-29 14:50:59,509 - INFO - Successfully updated monthly changes for Motilal Oswal MSCI EAFE Fund
+2026-03-29 14:50:59,509 - INFO - Processing Nifty EV & New Age Automotive (EVINDIA)
+2026-03-29 14:50:59,511 - INFO - Retrieved 245 records for index_id 27
+2026-03-29 14:50:59,522 - INFO - Updated monthly changes for 205 records for index_id 27
+2026-03-29 14:50:59,522 - INFO - Successfully updated monthly changes for Nifty EV & New Age Automotive
+2026-03-29 14:50:59,522 - INFO - Processing Nifty Consumption ETF (CONSUMIETF)
+2026-03-29 14:50:59,523 - INFO - Retrieved 245 records for index_id 28
+2026-03-29 14:50:59,531 - INFO - Updated monthly changes for 205 records for index_id 28
+2026-03-29 14:50:59,531 - INFO - Successfully updated monthly changes for Nifty Consumption ETF
+2026-03-29 14:50:59,531 - INFO - Processing Nifty India Railways (GROWWRAIL)
+2026-03-29 14:50:59,533 - INFO - Retrieved 245 records for index_id 29
+2026-03-29 14:50:59,541 - INFO - Updated monthly changes for 205 records for index_id 29
+2026-03-29 14:50:59,541 - INFO - Successfully updated monthly changes for Nifty India Railways
+2026-03-29 14:50:59,541 - INFO - Processing Nifty IPO ETF (SELECTIPO)
+2026-03-29 14:50:59,542 - INFO - Retrieved 245 records for index_id 30
+2026-03-29 14:50:59,550 - INFO - Updated monthly changes for 205 records for index_id 30
+2026-03-29 14:50:59,550 - INFO - Successfully updated monthly changes for Nifty IPO ETF
+2026-03-29 14:50:59,550 - INFO - Processing Liquid BeES (LIQUIDBEES)
+2026-03-29 14:50:59,551 - INFO - Retrieved 245 records for index_id 31
+2026-03-29 14:50:59,561 - INFO - Updated monthly changes for 205 records for index_id 31
+2026-03-29 14:50:59,561 - INFO - Successfully updated monthly changes for Liquid BeES
+2026-03-29 14:50:59,561 - INFO - Monthly change update completed: 31 successful, 0 failed
+2026-03-29 14:50:59,564 - INFO - Monthly change summary for 31 indices
+2026-03-29 14:50:59,564 - INFO - Monthly change calculation completed successfully
+2026-03-29 14:50:59,565 - INFO - Disconnected from database
