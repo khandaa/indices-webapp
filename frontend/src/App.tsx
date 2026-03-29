@@ -7,6 +7,7 @@ import InstrumentDetail from './pages/InstrumentDetail';
 import Recommendations from './pages/Recommendations';
 import Recommendations3 from './pages/recommendations-3';
 import CombinedRecommendations from './pages/combined-recommendations';
+import RecommendationsTable from './pages/recommendations-table';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -59,6 +60,12 @@ function App() {
                     >
                       Combined Recommendations
                     </Link>
+                    <Link
+                      to="/recommendations-table"
+                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    >
+                      All Recommendations
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -75,6 +82,7 @@ function App() {
                 <Route path="/recommendations" element={<Recommendations />} />
                 <Route path="/recommendations-3" element={<Recommendations3 />} />
                 <Route path="/combined-recommendations" element={<CombinedRecommendations />} />
+                <Route path="/recommendations-table" element={<RecommendationsTable />} />
                 <Route path="/instrument/:id" element={<InstrumentDetail />} />
               </Routes>
             </ErrorBoundary>
