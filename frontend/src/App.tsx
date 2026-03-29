@@ -5,6 +5,8 @@ import WeeklyDashboard from './pages/WeeklyDashboard';
 import MonthlyDashboard from './pages/MonthlyDashboard';
 import InstrumentDetail from './pages/InstrumentDetail';
 import Recommendations from './pages/Recommendations';
+import Recommendations3 from './pages/recommendations-3';
+import CombinedRecommendations from './pages/combined-recommendations';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -45,6 +47,18 @@ function App() {
                     >
                       Recommendations
                     </Link>
+                    <Link
+                      to="/recommendations-3"
+                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    >
+                      Top 3 Recommendations
+                    </Link>
+                    <Link
+                      to="/combined-recommendations"
+                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    >
+                      Combined Recommendations
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -59,6 +73,8 @@ function App() {
                 <Route path="/weekly" element={<WeeklyDashboard />} />
                 <Route path="/monthly" element={<MonthlyDashboard />} />
                 <Route path="/recommendations" element={<Recommendations />} />
+                <Route path="/recommendations-3" element={<Recommendations3 />} />
+                <Route path="/combined-recommendations" element={<CombinedRecommendations />} />
                 <Route path="/instrument/:id" element={<InstrumentDetail />} />
               </Routes>
             </ErrorBoundary>
