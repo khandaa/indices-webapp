@@ -19,6 +19,8 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({ columnConfig, onColumnToggl
     weekly_change_percent: 'Weekly %',
     monthly_change_percent: 'Monthly %',
     yearly_change_percent: 'Yearly %',
+    three_week_cumulative_return: '3W Return',
+    three_month_cumulative_return: '3M Return',
   };
 
   const presets = [
@@ -36,6 +38,8 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({ columnConfig, onColumnToggl
         weekly_change_percent: false,
         monthly_change_percent: false,
         yearly_change_percent: false,
+        three_week_cumulative_return: false,
+        three_month_cumulative_return: false,
       } as ColumnConfig,
     },
     {
@@ -52,6 +56,8 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({ columnConfig, onColumnToggl
         weekly_change_percent: true,
         monthly_change_percent: true,
         yearly_change_percent: true,
+        three_week_cumulative_return: true,
+        three_month_cumulative_return: true,
       } as ColumnConfig,
     },
     {
@@ -68,6 +74,26 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({ columnConfig, onColumnToggl
         weekly_change_percent: true,
         monthly_change_percent: true,
         yearly_change_percent: true,
+        three_week_cumulative_return: true,
+        three_month_cumulative_return: true,
+      } as ColumnConfig,
+    },
+    {
+      name: 'Momentum',
+      config: {
+        name: true,
+        symbol: true,
+        current_price: true,
+        daily_change: true,
+        weekly_change: true,
+        monthly_change: true,
+        yearly_change: false,
+        daily_change_percent: true,
+        weekly_change_percent: true,
+        monthly_change_percent: true,
+        yearly_change_percent: false,
+        three_week_cumulative_return: true,
+        three_month_cumulative_return: true,
       } as ColumnConfig,
     },
   ];
@@ -91,6 +117,8 @@ const ColumnToggle: React.FC<ColumnToggleProps> = ({ columnConfig, onColumnToggl
       weekly_change_percent: false,
       monthly_change_percent: false,
       yearly_change_percent: false,
+      three_week_cumulative_return: false,
+      three_month_cumulative_return: false,
     };
 
     Object.entries(defaultConfig).forEach(([column, value]) => {

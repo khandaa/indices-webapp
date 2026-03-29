@@ -11,6 +11,8 @@ export interface Index {
   weekly_change_percent: number | null;
   monthly_change_percent: number | null;
   yearly_change_percent: number | null;
+  three_week_cumulative_return: number | null;
+  three_month_cumulative_return: number | null;
   calculation_date: string | null;
 }
 
@@ -34,6 +36,43 @@ export interface PerformanceResponse {
   top_performers: TopPerformer[];
 }
 
+export interface DailyPrice {
+  date: string;
+  open_price: number | null;
+  close_price: number | null;
+  high_price: number | null;
+  low_price: number | null;
+  volume: number | null;
+  daily_change_percent: number | null;
+  change_from_previous: number | null;
+}
+
+export interface DailyPriceResponse {
+  daily_prices: DailyPrice[];
+}
+
+export interface WeeklyRecommendation {
+  week: string;
+  recommendation_date: string | null;
+  instrument: string;
+  symbol: string;
+  one_week_return: number | null;
+  three_week_cumulative_return: number | null;
+}
+
+export interface MonthlyRecommendation {
+  month: string;
+  recommendation_date: string | null;
+  instrument: string;
+  symbol: string;
+  one_month_return: number | null;
+  three_month_cumulative_return: number | null;
+}
+
+export interface RecommendationsResponse {
+  recommendations: WeeklyRecommendation[] | MonthlyRecommendation[];
+}
+
 export interface ColumnConfig {
   name: boolean;
   symbol: boolean;
@@ -46,4 +85,6 @@ export interface ColumnConfig {
   weekly_change_percent: boolean;
   monthly_change_percent: boolean;
   yearly_change_percent: boolean;
+  three_week_cumulative_return: boolean;
+  three_month_cumulative_return: boolean;
 }

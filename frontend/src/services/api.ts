@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Index, ApiResponse, PerformanceResponse } from '../types';
+import { Index, ApiResponse, PerformanceResponse, DailyPriceResponse, WeeklyRecommendation, MonthlyRecommendation, RecommendationsResponse } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
 
@@ -63,6 +63,39 @@ export const apiService = {
       return response.data;
     } catch (error) {
       console.error('Health check failed:', error);
+      throw error;
+    }
+  },
+
+  // Get daily prices for an index
+  getDailyPrices: async (indexId: number, limit: number = 100): Promise<DailyPriceResponse['daily_prices']> => {
+    try {
+      const response = await api.get<DailyPriceResponse>(`/api/indices/${indexId}/daily-prices?limit=${limit}`);
+      return response.data.daily_prices;
+    } catch (error) {
+      console.error('Error fetching daily prices:', error);
+      throw error;
+    }
+  },
+
+  // Get weekly recommendations
+  getWeeklyRecommendations: async (): Promise<WeeklyRecommendation[]> => {
+    try {
+      const response = await api.get<RecommendationsResponse>('/api/recommendations/weekly');
+      return response.data.recommendations as WeeklyRecommendation[];
+    } catch (error) {
+      console.error('Error fetching weekly recommendations:', error);
+      throw error;
+    }
+  },
+
+  // Get monthly recommendations
+  getMonthlyRecommendations: async (): Promise<MonthlyRecommendation[]> => {
+    try {
+      const response = await api.get<RecommendationsResponse>('/api/recommendations/monthly');
+      return response.data.recommendations as MonthlyRecommendation[];
+    } catch (error) {
+      console.error('Error fetching monthly recommendations:', error);
       throw error;
     }
   },

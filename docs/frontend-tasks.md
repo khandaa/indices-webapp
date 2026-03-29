@@ -36,9 +36,9 @@ This document outlines all tasks needed to build the frontend for the Indices We
 ### Core Components Development
 - [x] Create reusable DataTable component with sorting functionality
 - [x] Create ColumnToggle component for show/hide columns
-- [ ] Create IndexCard component for displaying individual index data
-- [ ] Create LoadingSpinner component for async operations
-- [ ] Create ErrorMessage component for error handling
+- [x] Create IndexCard component for displaying individual index data
+- [x] Create LoadingSpinner component for async operations
+- [x] Create ErrorMessage component for error handling
 
 ### Main Indices Page
 - [x] Build main indices list page with data table
@@ -56,31 +56,31 @@ This document outlines all tasks needed to build the frontend for the Indices We
 - [x] Add "Reset to Default" option
 
 ### Momentum Metrics Integration
-- [ ] Add 3W (3-week) cumulative return column
-- [ ] Add 3M (3-month) cumulative return column
-- [ ] Implement momentum calculation logic
-- [ ] Add visual indicators for momentum (up/down arrows, colors)
+- [x] Add 3W (3-week) cumulative return column
+- [x] Add 3M (3-month) cumulative return column
+- [x] Implement momentum calculation logic
+- [x] Add visual indicators for momentum (up/down arrows, colors)
 - [ ] Create momentum trend visualization
 
 ### Dashboard Pages
 
 #### Weekly Dashboard
-- [ ] Create weekly performance dashboard page
-- [ ] Implement top 3 weekly indices display
-- [ ] Add sorting by 3W cumulative return
+- [x] Create weekly performance dashboard page
+- [x] Implement top 3 weekly indices display
+- [x] Add sorting by 3W cumulative return
 - [ ] Create visual charts for weekly performance
-- [ ] Add weekly performance summary statistics
+- [x] Add weekly performance summary statistics
 
 #### Monthly Dashboard
-- [ ] Create monthly performance dashboard page
-- [ ] Implement top 3 monthly indices display
-- [ ] Add sorting by 3M cumulative return
+- [x] Create monthly performance dashboard page
+- [x] Implement top 3 monthly indices display
+- [x] Add sorting by 3M cumulative return
 - [ ] Create visual charts for monthly performance
-- [ ] Add monthly performance summary statistics
+- [x] Add monthly performance summary statistics
 
 
 ### Performance & Optimization
-- [ ] Add error boundaries for better error handling
+- [x] Add error boundaries for better error handling
 
 ### Configuration & Settings
 - [ ] Create settings page for user preferences
@@ -171,10 +171,13 @@ This document outlines all tasks needed to build the frontend for the Indices We
 
 
 ## Success Criteria
-- [ ] All indices displayed with accurate data
-- [ ] Sorting works on all columns
-- [ ] Column configuration persists across sessions
-- [ ] Dashboard shows correct top performers
-- [ ] Application loads quickly and is responsive
-- [ ] APIs are well-documented and reliable
-- [ ] Code is maintainable and well-tested
+- [x] All indices displayed with accurate data
+- [x] Sorting works on all columns
+- [x] Column configuration persists across sessions
+- [x] Dashboard shows correct top performers
+- [x] Application loads quickly and is responsive
+- [x] APIs are well-documented and reliable
+- [x] Code is maintainable and well-tested
+- [x] Momentum metrics are calculated and displayed
+- [x] Error boundaries provide better error handling
+- [x] Navigation between pages works correctly

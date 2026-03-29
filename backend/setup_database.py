@@ -75,6 +75,21 @@ def setup_database():
             )
         ''')
         
+        # Create index_momentum_data table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS index_momentum_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                index_id INTEGER NOT NULL,
+                calculation_date TEXT NOT NULL,
+                three_week_cumulative_return REAL,
+                three_month_cumulative_return REAL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (index_id) REFERENCES indices_master (id),
+                UNIQUE(index_id, calculation_date)
+            )
+        ''')
+        
         # Create user_settings table
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS user_settings (

@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Index, ColumnConfig } from '../types';
+import MomentumIndicator from './MomentumIndicator';
 
 interface DataTableProps {
   indices: Index[];
@@ -65,6 +67,8 @@ const DataTable: React.FC<DataTableProps> = ({
             {renderSortableHeader('monthly_change_percent', 'Monthly %')}
             {renderSortableHeader('yearly_change', 'Yearly Change')}
             {renderSortableHeader('yearly_change_percent', 'Yearly %')}
+            {renderSortableHeader('three_week_cumulative_return', '3W Return')}
+            {renderSortableHeader('three_month_cumulative_return', '3M Return')}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -72,7 +76,12 @@ const DataTable: React.FC<DataTableProps> = ({
             <tr key={index.id} className="hover:bg-gray-50">
               {columnConfig.name && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {index.name}
+                  <Link
+                    to={`/instrument/${index.id}`}
+                    className="text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    {index.name}
+                  </Link>
                 </td>
               )}
               {columnConfig.symbol && (
@@ -123,6 +132,16 @@ const DataTable: React.FC<DataTableProps> = ({
               {columnConfig.yearly_change_percent && (
                 <td className={`px-6 py-4 whitespace-nowrap text-sm ${getChangeClass(index.yearly_change_percent)}`}>
                   {formatPercent(index.yearly_change_percent)}
+                </td>
+              )}
+              {columnConfig.three_week_cumulative_return && (
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <MomentumIndicator value={index.three_week_cumulative_return} showArrow={true} />
+                </td>
+              )}
+              {columnConfig.three_month_cumulative_return && (
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <MomentumIndicator value={index.three_month_cumulative_return} showArrow={true} />
                 </td>
               )}
             </tr>

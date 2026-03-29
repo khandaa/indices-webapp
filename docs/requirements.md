@@ -370,3 +370,23 @@ python all-equities-data-to-excel-v1.py
 ```bash
 python momentum_strategy_v3.py
 ```
+
+
+on clicking of an instrument, show its daily prices as 
+date, open, close, volume, %change, % change from previous date
+create a recommendations sheet with 2 tabs, weekly and monthly recommendations 
+on the weekly recommendations create a table with columns:
+- Week (year-month-week)
+- recommendation date
+- Instrument
+- 1W Return
+- 3W cumulative return
+This table should be sorted by the 3W cumulative return in descending order
+
+on the monthly recommendations create a table with columns:
+- Month (year-month)
+- recommendation date
+- Instrument
+- 1M Return
+- 3M cumulative return
+This table should be sorted by the 3M cumulative return in descending order
