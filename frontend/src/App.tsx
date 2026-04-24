@@ -5,6 +5,7 @@ import IndexSelection from './pages/IndexSelection';
 import Comparison from './pages/Comparison';
 import Strategy from './pages/Strategy';
 import WhatIf from './pages/WhatIf';
+import PeriodDetail from './pages/PeriodDetail';
 import InstrumentDetail from './pages/InstrumentDetail';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -69,6 +70,7 @@ function App() {
                 <Route path="/comparison" element={<Comparison />} />
                 <Route path="/strategy" element={<Strategy />} />
                 <Route path="/whatif" element={<WhatIf />} />
+                <Route path="/whatif/period" element={<PeriodDetail />} />
                 <Route path="/instrument/:id" element={<InstrumentDetail />} />
               </Routes>
             </ErrorBoundary>

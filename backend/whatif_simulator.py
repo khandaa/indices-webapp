@@ -25,83 +25,109 @@ class WhatIfSimulator:
         result = cursor.fetchone()
         return result['id'] if result else None
     
-    def get_weekly_recommendations_for_week(self, week_start_date: str) -> List[Dict]:
-        """Get top 3 recommendations for a specific week"""
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT wr.index_id, im.symbol, im.name, wr.rank, wr.weekly_change_percent
-            FROM weekly_recommendations wr
-            JOIN indices_master im ON wr.index_id = im.id
-            WHERE wr.week_start_date = ?
-            ORDER BY wr.rank
-            LIMIT 3
-        """, (week_start_date,))
-        
-        results = cursor.fetchall()
-        return [dict(row) for row in results]
-    
-    def get_monthly_recommendations_for_month(self, month_start_date: str) -> List[Dict]:
-        """Get top 3 recommendations for a specific month"""
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT wr.index_id, im.symbol, im.name, wr.rank, wr.monthly_change_percent
-            FROM monthly_recommendations wr
-            JOIN indices_master im ON wr.index_id = im.id
-            WHERE wr.month_start_date = ?
-            ORDER BY wr.rank
-            LIMIT 3
-        """, (month_start_date,))
-        
-        results = cursor.fetchall()
-        return [dict(row) for row in results]
-    
     def get_niftybees_weekly_change(self, week_start_date: str) -> Optional[float]:
         """Get Niftybees weekly change for a specific week"""
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT niftybees_weekly_change_percent
-            FROM weekly_recommendations
-            WHERE week_start_date = ? AND index_id = ?
-        """, (week_start_date, self.get_niftybees_id()))
         
-        result = cursor.fetchone()
-        return result['niftybees_weekly_change_percent'] if result else None
+        week_end = (datetime.strptime(week_start_date, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
+        niftybees_id = self.get_niftybees_id()
+        
+        # Get most recent price on or before start date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (niftybees_id, week_start_date))
+        start_row = cursor.fetchone()
+        
+        # Get most recent price on or before end date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (niftybees_id, week_end))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
     
     def get_niftybees_monthly_change(self, month_start_date: str) -> Optional[float]:
         """Get Niftybees monthly change for a specific month"""
         cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT niftybees_monthly_change_percent
-            FROM monthly_recommendations
-            WHERE month_start_date = ? AND index_id = ?
-        """, (month_start_date, self.get_niftybees_id()))
         
-        result = cursor.fetchone()
-        return result['niftybees_monthly_change_percent'] if result else None
+        start_dt = datetime.strptime(month_start_date, '%Y-%m-%d')
+        if start_dt.month == 12:
+            next_month = start_dt.replace(year=start_dt.year + 1, month=1, day=1)
+        else:
+            next_month = start_dt.replace(month=start_dt.month + 1, day=1)
+        month_end = (next_month - timedelta(days=1)).strftime('%Y-%m-%d')
+        
+        niftybees_id = self.get_niftybees_id()
+        
+        # Get most recent price on or before start date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (niftybees_id, month_start_date))
+        start_row = cursor.fetchone()
+        
+        # Get most recent price on or before end date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (niftybees_id, month_end))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
     
     def get_week_dates(self, start_date: str, end_date: str) -> List[Dict]:
         """Generate list of week start/end dates between start and end"""
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT DISTINCT week_start_date, week_end_date
-            FROM weekly_recommendations
-            WHERE week_start_date >= ? AND week_start_date <= ?
-            ORDER BY week_start_date
-        """, (start_date, end_date))
+        start = datetime.strptime(start_date, '%Y-%m-%d')
+        end = datetime.strptime(end_date, '%Y-%m-%d')
         
-        return [dict(row) for row in cursor.fetchall()]
+        weeks = []
+        current = start
+        # Start from the exact start date, not adjusted to Monday
+        
+        while current <= end:
+            week_end = current + timedelta(days=6)
+            weeks.append({
+                'week_start_date': current.strftime('%Y-%m-%d'),
+                'week_end_date': min(week_end, end).strftime('%Y-%m-%d') if week_end > end else week_end.strftime('%Y-%m-%d')
+            })
+            current += timedelta(days=7)
+        
+        return weeks
     
     def get_month_dates(self, start_date: str, end_date: str) -> List[Dict]:
         """Generate list of month start/end dates between start and end"""
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT DISTINCT month_start_date, month_end_date
-            FROM monthly_recommendations
-            WHERE month_start_date >= ? AND month_start_date <= ?
-            ORDER BY month_start_date
-        """, (start_date, end_date))
+        start = datetime.strptime(start_date, '%Y-%m-%d')
+        end = datetime.strptime(end_date, '%Y-%m-%d')
         
-        return [dict(row) for row in cursor.fetchall()]
+        months = []
+        current = start.replace(day=1)
+        
+        while current <= end:
+            if current.month == 12:
+                next_month = current.replace(year=current.year + 1, month=1, day=1)
+            else:
+                next_month = current.replace(month=current.month + 1, day=1)
+            month_end = next_month - timedelta(days=1)
+            
+            months.append({
+                'month_start_date': current.strftime('%Y-%m-%d'),
+                'month_end_date': month_end.strftime('%Y-%m-%d')
+            })
+            current = next_month
+        
+        return months
     
     def simulate_weekly(
         self,
@@ -169,6 +195,15 @@ class WhatIfSimulator:
                 'allocation_1_percent': allocation_1,
                 'allocation_2_percent': allocation_2,
                 'allocation_3_percent': allocation_3,
+                'amount_invested_1': round(amount_1, 2) if recs and len(recs) >= 3 else 0,
+                'amount_invested_2': round(amount_2, 2) if recs and len(recs) >= 3 else 0,
+                'amount_invested_3': round(amount_3, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_1': round(value_1, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_2': round(value_2, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_3': round(value_3, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_1': round(change_1, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_2': round(change_2, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_3': round(change_3, 2) if recs and len(recs) >= 3 else 0,
                 'strategy_value_start': round(strategy_value_start, 2),
                 'strategy_value_end': round(strategy_value, 2),
                 'niftybees_value_start': round(niftybees_value_start, 2),
@@ -255,6 +290,15 @@ class WhatIfSimulator:
                 'allocation_1_percent': allocation_1,
                 'allocation_2_percent': allocation_2,
                 'allocation_3_percent': allocation_3,
+                'amount_invested_1': round(amount_1, 2) if recs and len(recs) >= 3 else 0,
+                'amount_invested_2': round(amount_2, 2) if recs and len(recs) >= 3 else 0,
+                'amount_invested_3': round(amount_3, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_1': round(value_1, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_2': round(value_2, 2) if recs and len(recs) >= 3 else 0,
+                'final_amount_3': round(value_3, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_1': round(change_1, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_2': round(change_2, 2) if recs and len(recs) >= 3 else 0,
+                'return_percent_3': round(change_3, 2) if recs and len(recs) >= 3 else 0,
                 'strategy_value_start': round(strategy_value_start, 2),
                 'strategy_value_end': round(strategy_value, 2),
                 'niftybees_value_start': round(niftybees_value_start, 2),
@@ -369,8 +413,11 @@ class WhatIfSimulator:
                 (scenario_id, period_number, period_start_date, period_end_date,
                  recommendation_1_symbol, recommendation_2_symbol, recommendation_3_symbol,
                  allocation_1_percent, allocation_2_percent, allocation_3_percent,
+                 amount_invested_1, amount_invested_2, amount_invested_3,
+                 final_amount_1, final_amount_2, final_amount_3,
+                 return_percent_1, return_percent_2, return_percent_3,
                  strategy_value_start, strategy_value_end, niftybees_value_start, niftybees_value_end)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 scenario_id,
                 result['period_number'],
@@ -382,6 +429,15 @@ class WhatIfSimulator:
                 result['allocation_1_percent'],
                 result['allocation_2_percent'],
                 result['allocation_3_percent'],
+                result.get('amount_invested_1', 0),
+                result.get('amount_invested_2', 0),
+                result.get('amount_invested_3', 0),
+                result.get('final_amount_1', 0),
+                result.get('final_amount_2', 0),
+                result.get('final_amount_3', 0),
+                result.get('return_percent_1', 0),
+                result.get('return_percent_2', 0),
+                result.get('return_percent_3', 0),
                 result['strategy_value_start'],
                 result['strategy_value_end'],
                 result['niftybees_value_start'],
@@ -397,3 +453,207 @@ class WhatIfSimulator:
             SELECT * FROM whatif_simulation_results WHERE scenario_id = ? ORDER BY period_number
         """, (scenario_id,))
         return [dict(row) for row in cursor.fetchall()]
+    
+    def get_weekly_recommendations_for_week(self, week_start_date: str) -> List[Dict]:
+        """Get top 3 weekly recommendations for a specific week"""
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT 
+                im.id,
+                im.symbol,
+                wr.weekly_change_percent,
+                wr.three_week_cumulative_return
+            FROM weekly_recommendations wr
+            JOIN indices_master im ON wr.index_id = im.id
+            WHERE wr.week_start_date = ? AND wr.rank <= 3
+            ORDER BY wr.rank
+        """, (week_start_date,))
+        
+        results = cursor.fetchall()
+        if results:
+            return [dict(row) for row in results]
+        
+        # Calculate recommendations if not in database
+        return self._calculate_weekly_recommendations(week_start_date)
+    
+    def _calculate_weekly_recommendations(self, week_start_date: str) -> List[Dict]:
+        """Calculate top 3 weekly recommendations for a week"""
+        cursor = self.conn.cursor()
+        
+        # Get week end date (start + 6 days)
+        week_end_date = (datetime.strptime(week_start_date, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
+        
+        # Get all active indices
+        cursor.execute("SELECT id, symbol FROM indices_master WHERE is_active = 1")
+        all_indices = cursor.fetchall()
+        
+        index_returns = []
+        for idx_id, symbol in all_indices:
+            # Calculate 3-week cumulative return as of week end
+            three_week_return = self._calculate_three_week_return(idx_id, week_end_date)
+            
+            # Get weekly change percent for this week
+            cursor.execute("""
+                SELECT weekly_change_percent
+                FROM index_calculated_data
+                WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
+            """, (idx_id, week_start_date, week_end_date))
+            result = cursor.fetchone()
+            weekly_change = float(result[0]) if result and result[0] else None
+            
+            if three_week_return is not None:
+                index_returns.append({
+                    'id': idx_id,
+                    'symbol': symbol,
+                    'weekly_change_percent': weekly_change,
+                    'three_week_cumulative_return': three_week_return
+                })
+        
+        # Sort by 3W return and take top 3
+        top_3 = sorted(index_returns, key=lambda x: x['three_week_cumulative_return'], reverse=True)[:3]
+        
+        # Store in database
+        for rank, rec in enumerate(top_3, 1):
+            cursor.execute("""
+                INSERT OR REPLACE INTO weekly_recommendations 
+                (index_id, week_start_date, week_end_date, rank, weekly_change_percent, 
+                 three_week_cumulative_return, recommendation_date)
+                VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+            """, (rec['id'], week_start_date, week_end_date, rank, rec.get('weekly_change_percent'),
+                  rec['three_week_cumulative_return']))
+        self.conn.commit()
+        
+        return top_3
+    
+    def _calculate_three_week_return(self, index_id: int, end_date: str) -> Optional[float]:
+        """Calculate 3-week cumulative return"""
+        cursor = self.conn.cursor()
+        
+        # Get date 3 weeks before end date
+        end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+        start_dt = end_dt - timedelta(weeks=3)
+        start_date = start_dt.strftime('%Y-%m-%d')
+        
+        # Get price at start (first available <= start_date)
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date ASC LIMIT 1
+        """, (index_id, start_date))
+        start_row = cursor.fetchone()
+        
+        # Get price at end (latest available <= end_date)
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, end_date))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
+    
+    def _calculate_three_month_return(self, index_id: int, end_date: str) -> Optional[float]:
+        """Calculate 3-month cumulative return"""
+        cursor = self.conn.cursor()
+        
+        end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+        start_dt = end_dt - timedelta(days=90)
+        start_date = start_dt.strftime('%Y-%m-%d')
+        
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date ASC LIMIT 1
+        """, (index_id, start_date))
+        start_row = cursor.fetchone()
+        
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, end_date))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
+    
+    def get_monthly_recommendations_for_month(self, month_start_date: str) -> List[Dict]:
+        """Get top 3 monthly recommendations for a specific month"""
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT 
+                im.id,
+                im.symbol,
+                mr.monthly_change_percent,
+                mr.three_month_cumulative_return
+            FROM monthly_recommendations mr
+            JOIN indices_master im ON mr.index_id = im.id
+            WHERE mr.month_start_date = ? AND mr.rank <= 3
+            ORDER BY mr.rank
+        """, (month_start_date,))
+        
+        results = cursor.fetchall()
+        if results:
+            return [dict(row) for row in results]
+        
+        # Calculate recommendations if not in database
+        return self._calculate_monthly_recommendations(month_start_date)
+    
+    def _calculate_monthly_recommendations(self, month_start_date: str) -> List[Dict]:
+        """Calculate top 3 monthly recommendations for a month"""
+        cursor = self.conn.cursor()
+        
+        # Get month end date
+        start_dt = datetime.strptime(month_start_date, '%Y-%m-%d')
+        if start_dt.month == 12:
+            next_month = start_dt.replace(year=start_dt.year + 1, month=1, day=1)
+        else:
+            next_month = start_dt.replace(month=start_dt.month + 1, day=1)
+        month_end_date = (next_month - timedelta(days=1)).strftime('%Y-%m-%d')
+        
+        # Get all active indices
+        cursor.execute("SELECT id, symbol FROM indices_master WHERE is_active = 1")
+        all_indices = cursor.fetchall()
+        
+        index_returns = []
+        for idx_id, symbol in all_indices:
+            # Calculate 3-month cumulative return
+            three_month_return = self._calculate_three_month_return(idx_id, month_end_date)
+            
+            # Get monthly change percent for this month
+            cursor.execute("""
+                SELECT monthly_change_percent
+                FROM index_calculated_data
+                WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
+            """, (idx_id, month_start_date, month_end_date))
+            result = cursor.fetchone()
+            monthly_change = float(result[0]) if result and result[0] else None
+            
+            if three_month_return is not None:
+                index_returns.append({
+                    'id': idx_id,
+                    'symbol': symbol,
+                    'monthly_change_percent': monthly_change,
+                    'three_month_cumulative_return': three_month_return
+                })
+        
+        # Sort by 3M return and take top 3
+        top_3 = sorted(index_returns, key=lambda x: x['three_month_cumulative_return'], reverse=True)[:3]
+        
+        # Store in database
+        for rank, rec in enumerate(top_3, 1):
+            cursor.execute("""
+                INSERT OR REPLACE INTO monthly_recommendations 
+                (index_id, month_start_date, month_end_date, rank, monthly_change_percent, 
+                 three_month_cumulative_return, recommendation_date)
+                VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+            """, (rec['id'], month_start_date, month_end_date, rank, rec.get('monthly_change_percent'),
+                  rec['three_month_cumulative_return']))
+        self.conn.commit()
+        
+        return top_3

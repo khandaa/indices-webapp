@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { apiService } from '../services/api';
 
@@ -9,6 +10,18 @@ interface SimulationResult {
   recommendation_1_symbol: string;
   recommendation_2_symbol: string;
   recommendation_3_symbol: string;
+  allocation_1_percent: number;
+  allocation_2_percent: number;
+  allocation_3_percent: number;
+  amount_invested_1: number;
+  amount_invested_2: number;
+  amount_invested_3: number;
+  final_amount_1: number;
+  final_amount_2: number;
+  final_amount_3: number;
+  return_percent_1: number;
+  return_percent_2: number;
+  return_percent_3: number;
   strategy_value_start: number;
   strategy_value_end: number;
   niftybees_value_start: number;
@@ -408,36 +421,64 @@ const WhatIf: React.FC = () => {
                   <table className="min-w-full text-sm">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-4 py-2 text-left">Period</th>
-                        <th className="px-4 py-2 text-left">Dates</th>
-                        <th className="px-4 py-2 text-left">Recommendations</th>
-                        <th className="px-4 py-2 text-right">Strategy</th>
-                        <th className="px-4 py-2 text-right">Niftybees</th>
-                        <th className="px-4 py-2 text-right">Return</th>
+                        <th className="px-2 py-2 text-left">Period</th>
+                        <th className="px-2 py-2 text-left">Dates</th>
+                        <th className="px-2 py-2 text-center">Rec 1</th>
+                        <th className="px-2 py-2 text-center">Rec 2</th>
+                        <th className="px-2 py-2 text-center">Rec 3</th>
+                        <th className="px-2 py-2 text-right">Inv 1 (₹)</th>
+                        <th className="px-2 py-2 text-right">Final 1 (₹)</th>
+                        <th className="px-2 py-2 text-right">Ret 1 %</th>
+                        <th className="px-2 py-2 text-right">Inv 2 (₹)</th>
+                        <th className="px-2 py-2 text-right">Final 2 (₹)</th>
+                        <th className="px-2 py-2 text-right">Ret 2 %</th>
+                        <th className="px-2 py-2 text-right">Inv 3 (₹)</th>
+                        <th className="px-2 py-2 text-right">Final 3 (₹)</th>
+                        <th className="px-2 py-2 text-right">Ret 3 %</th>
+                        <th className="px-2 py-2 text-right">Total Inv (₹)</th>
+                        <th className="px-2 py-2 text-right">Strategy Final (₹)</th>
+                        <th className="px-2 py-2 text-right">Niftybees Inv (₹)</th>
+                        <th className="px-2 py-2 text-right">Niftybees Final (₹)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
                       {results.map((r) => {
-                        const strategyReturn = ((r.strategy_value_end - r.strategy_value_start) / r.strategy_value_start * 100);
                         return (
                           <tr key={r.period_number} className="hover:bg-gray-50">
-                            <td className="px-4 py-2">{r.period_number}</td>
-                            <td className="px-4 py-2">
-                              {r.period_start_date} to {r.period_end_date}
+                            <td className="px-2 py-2">{r.period_number}</td>
+                            <td className="px-2 py-2">
+                              <Link
+                                to={`/whatif/period?start=${r.period_start_date}&end=${r.period_end_date}&rec1=${r.recommendation_1_symbol || ''}&rec2=${r.recommendation_2_symbol || ''}&rec3=${r.recommendation_3_symbol || ''}&strategyStart=${r.strategy_value_start}&strategyEnd=${r.strategy_value_end}&niftybeesStart=${r.niftybees_value_start}&niftybeesEnd=${r.niftybees_value_end}&amt1=${r.amount_invested_1 || 0}&amt2=${r.amount_invested_2 || 0}&amt3=${r.amount_invested_3 || 0}&final1=${r.final_amount_1 || 0}&final2=${r.final_amount_2 || 0}&final3=${r.final_amount_3 || 0}&ret1=${r.return_percent_1 || 0}&ret2=${r.return_percent_2 || 0}&ret3=${r.return_percent_3 || 0}`}
+                                className="text-blue-600 hover:text-blue-800 underline"
+                              >
+                                {r.period_start_date} to {r.period_end_date}
+                              </Link>
                             </td>
-                            <td className="px-4 py-2">
-                              <span className="text-blue-600">{r.recommendation_1_symbol || '-'}</span>,{' '}
-                              <span className="text-green-600">{r.recommendation_2_symbol || '-'}</span>,{' '}
-                              <span className="text-orange-600">{r.recommendation_3_symbol || '-'}</span>
+                            <td className="px-2 py-2 text-center text-blue-600 font-medium">{r.recommendation_1_symbol || '-'}</td>
+                            <td className="px-2 py-2 text-center text-green-600 font-medium">{r.recommendation_2_symbol || '-'}</td>
+                            <td className="px-2 py-2 text-center text-orange-600 font-medium">{r.recommendation_3_symbol || '-'}</td>
+                            <td className="px-2 py-2 text-right">{r.amount_invested_1?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right">{r.final_amount_1?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_1 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(r.return_percent_1 || 0) >= 0 ? '+' : ''}{(r.return_percent_1 || 0).toFixed(2)}%
                             </td>
-                            <td className="px-4 py-2 text-right">
-                              {formatCurrency(r.strategy_value_end)}
+                            <td className="px-2 py-2 text-right">{r.amount_invested_2?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right">{r.final_amount_2?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_2 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(r.return_percent_2 || 0) >= 0 ? '+' : ''}{(r.return_percent_2 || 0).toFixed(2)}%
                             </td>
-                            <td className="px-4 py-2 text-right">
-                              {formatCurrency(r.niftybees_value_end)}
+                            <td className="px-2 py-2 text-right">{r.amount_invested_3?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right">{r.final_amount_3?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_3 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {(r.return_percent_3 || 0) >= 0 ? '+' : ''}{(r.return_percent_3 || 0).toFixed(2)}%
                             </td>
-                            <td className={`px-4 py-2 text-right ${strategyReturn >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {strategyReturn >= 0 ? '+' : ''}{strategyReturn.toFixed(2)}%
+                            <td className="px-2 py-2 text-right font-medium">{r.strategy_value_start?.toLocaleString('en-IN')}</td>
+                            <td className={`px-2 py-2 text-right font-medium ${r.strategy_value_end >= r.strategy_value_start ? 'text-green-600' : 'text-red-600'}`}>
+                              {r.strategy_value_end?.toLocaleString('en-IN')}
+                            </td>
+                            <td className="px-2 py-2 text-right">{r.niftybees_value_start?.toLocaleString('en-IN')}</td>
+                            <td className={`px-2 py-2 text-right ${r.niftybees_value_end >= r.niftybees_value_start ? 'text-green-600' : 'text-red-600'}`}>
+                              {r.niftybees_value_end?.toLocaleString('en-IN')}
                             </td>
                           </tr>
                         );
