@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { apiService } from '../services/api';
 
 interface WeekData {
@@ -243,7 +244,14 @@ const Dashboard: React.FC = () => {
                       {week.recommendations.map((rec) => (
                         <tr key={rec.rank}>
                           <td className="py-2 font-semibold text-gray-900">#{rec.rank}</td>
-                          <td className="py-2">{rec.name}</td>
+                          <td className="py-2">
+                            <Link
+                              to={`/comparison?indices=${rec.symbol},NIFTYBEES`}
+                              className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                            >
+                              {rec.name}
+                            </Link>
+                          </td>
                           <td className="py-2 text-gray-600">{rec.symbol}</td>
                           <td className={`py-2 font-medium ${(rec.weekly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {formatPercent(rec.weekly_change_percent)}
@@ -318,7 +326,14 @@ const Dashboard: React.FC = () => {
                       {month.recommendations.map((rec) => (
                         <tr key={rec.rank}>
                           <td className="py-2 font-semibold text-gray-900">#{rec.rank}</td>
-                          <td className="py-2">{rec.name}</td>
+                          <td className="py-2">
+                            <Link
+                              to={`/comparison?indices=${rec.symbol},NIFTYBEES`}
+                              className="text-blue-600 hover:text-blue-800 hover:underline font-medium"
+                            >
+                              {rec.name}
+                            </Link>
+                          </td>
                           <td className="py-2 text-gray-600">{rec.symbol}</td>
                           <td className={`py-2 font-medium ${(rec.monthly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                             {formatPercent(rec.monthly_change_percent)}

@@ -256,6 +256,8 @@ async def get_daily_prices(index_id: int, limit: int = 100):
         calculator.connect()
         
         cursor = calculator.conn.cursor()
+        
+        # Get data ordered by date ascending to calculate previous close properly
         cursor.execute("""
             SELECT 
                 date,
@@ -263,25 +265,22 @@ async def get_daily_prices(index_id: int, limit: int = 100):
                 close_price,
                 high_price,
                 low_price,
-                volume,
-                ((close_price - open_price) / open_price * 100) as daily_change_percent
+                volume
             FROM index_data
             WHERE index_id = ? AND close_price IS NOT NULL
-            ORDER BY date DESC
-            LIMIT ?
-        """, (index_id, limit))
+            ORDER BY date ASC
+        """, (index_id,))
         
-        results = cursor.fetchall()
+        all_data = cursor.fetchall()
         
         daily_prices = []
-        previous_close = None
-        
-        for row in results:
-            current_close = row[2]  # close_price
-            change_from_previous = None
+        for i, row in enumerate(all_data):
+            current_close = row[2]
+            previous_close = all_data[i-1][2] if i > 0 else None
             
-            if previous_close is not None and current_close is not None and previous_close != 0:
-                change_from_previous = ((current_close - previous_close) / previous_close) * 100
+            daily_change_percent = None
+            if previous_close is not None and previous_close != 0:
+                daily_change_percent = ((current_close - previous_close) / previous_close) * 100
             
             daily_prices.append({
                 "date": row[0],
@@ -290,11 +289,12 @@ async def get_daily_prices(index_id: int, limit: int = 100):
                 "high_price": float(row[3]) if row[3] else None,
                 "low_price": float(row[4]) if row[4] else None,
                 "volume": int(row[5]) if row[5] else None,
-                "daily_change_percent": float(row[6]) if row[6] else None,
-                "change_from_previous": round(change_from_previous, 4) if change_from_previous is not None else None
+                "daily_change_percent": round(daily_change_percent, 4) if daily_change_percent is not None else None
             })
-            
-            previous_close = current_close
+        
+        # Take last 'limit' records and reverse for descending order
+        daily_prices = daily_prices[-limit:] if len(daily_prices) > limit else daily_prices
+        daily_prices.reverse()
         
         calculator.disconnect()
         return {"daily_prices": daily_prices}

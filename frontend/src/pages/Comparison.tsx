@@ -1,29 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar
+} from 'recharts';
 import { apiService } from '../services/api';
 
 interface IndexInfo {
   id: number;
   name: string;
   symbol: string;
+  current_price?: number;
+  weekly_change_percent?: number;
+  monthly_change_percent?: number;
+  yearly_change_percent?: number;
 }
 
 interface PriceData {
   date: string;
   close_price: number;
-  daily_change_percent: number;
+  daily_change_percent: number | null;
 }
 
+type SortOption = 'name' | 'weekly' | 'monthly' | 'yearly';
+type ViewMode = 'table' | 'chart';
+
 const Comparison: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [indices, setIndices] = useState<IndexInfo[]>([]);
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
-  const [viewMode, setViewMode] = useState<'table' | 'chart'>('table');
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [chartType, setChartType] = useState<'line' | 'bar'>('line');
   const [comparisonData, setComparisonData] = useState<Record<number, PriceData[]>>({});
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState('30');
+  const [sortBy, setSortBy] = useState<SortOption>('weekly');
+  const [normalizePrices, setNormalizePrices] = useState(true);
 
   useEffect(() => {
     loadIndices();
   }, []);
+
+  useEffect(() => {
+    const indicesParam = searchParams.get('indices');
+    if (indicesParam) {
+      const symbols = indicesParam.split(',');
+      const selected = indices
+        .filter(idx => symbols.includes(idx.symbol))
+        .map(idx => idx.id);
+      if (selected.length > 0) {
+        setSelectedIndices(prev => Array.from(new Set([...prev, ...selected])));
+      }
+    }
+  }, [searchParams, indices]);
 
   useEffect(() => {
     if (selectedIndices.length > 0) {
@@ -34,11 +71,16 @@ const Comparison: React.FC = () => {
   const loadIndices = async () => {
     try {
       const data = await apiService.getIndices();
-      setIndices(data.map((i: any) => ({
+      const indexData = data.map((i: any) => ({
         id: i.id,
         name: i.name,
-        symbol: i.symbol
-      })));
+        symbol: i.symbol,
+        current_price: i.current_price,
+        weekly_change_percent: i.weekly_change_percent,
+        monthly_change_percent: i.monthly_change_percent,
+        yearly_change_percent: i.yearly_change_percent
+      }));
+      setIndices(indexData);
     } catch (error) {
       console.error('Error loading indices:', error);
     }
@@ -80,11 +122,63 @@ const Comparison: React.FC = () => {
     return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
   };
 
+  const getSortedIndices = (): IndexInfo[] => {
+    return [...indices].sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'weekly':
+          return (b.weekly_change_percent || 0) - (a.weekly_change_percent || 0);
+        case 'monthly':
+          return (b.monthly_change_percent || 0) - (a.monthly_change_percent || 0);
+        case 'yearly':
+          return (b.yearly_change_percent || 0) - (a.yearly_change_percent || 0);
+        default:
+          return 0;
+      }
+    });
+  };
+
   const getAllDates = (): string[] => {
     if (Object.keys(comparisonData).length === 0) return [];
     const firstIndexData = comparisonData[selectedIndices[0]] || [];
     return firstIndexData.map(d => d.date).reverse();
   };
+
+  const getChartData = () => {
+    const dates = getAllDates();
+    
+    // For normalization: get starting prices for each index
+    const startPrices: Record<number, number> = {};
+    if (normalizePrices) {
+      selectedIndices.forEach(id => {
+        const data = comparisonData[id] || [];
+        if (data.length > 0) {
+          startPrices[id] = data[data.length - 1].close_price;
+        }
+      });
+    }
+    
+    return dates.map(date => {
+      const point: Record<string, string | number> = { date };
+      selectedIndices.forEach(id => {
+        const data = comparisonData[id] || [];
+        const dayData = data.find(d => d.date === date);
+        const index = indices.find(i => i.id === id);
+        if (dayData && index && dayData.close_price != null) {
+          let value = dayData.close_price;
+          // Normalize: show percentage change from start
+          if (normalizePrices && startPrices[id]) {
+            value = ((dayData.close_price - startPrices[id]) / startPrices[id]) * 100;
+          }
+          point[index.symbol] = value;
+        }
+      });
+      return point;
+    });
+  };
+
+  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -115,8 +209,22 @@ const Comparison: React.FC = () => {
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg shadow p-4">
             <h3 className="text-sm font-medium text-gray-700 mb-3">Select Indices</h3>
+            {/* Sort Options */}
+            <div className="mb-3">
+              <label className="text-xs text-gray-500 mb-1 block">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="w-full border rounded px-2 py-1 text-sm"
+              >
+                <option value="name">Name (A-Z)</option>
+                <option value="weekly">Weekly Return</option>
+                <option value="monthly">Monthly Return</option>
+                <option value="yearly">Yearly Return</option>
+              </select>
+            </div>
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {indices.map(index => (
+              {getSortedIndices().map(index => (
                 <label
                   key={index.id}
                   className={`flex items-center p-2 rounded cursor-pointer ${
@@ -136,22 +244,55 @@ const Comparison: React.FC = () => {
           </div>
         </div>
 
-        {/* Date Range */}
+        {/* Main Content */}
         <div className="lg:col-span-3">
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-medium text-gray-700">Date Range</h3>
-              <select
-                value={dateRange}
-                onChange={(e) => setDateRange(e.target.value)}
-                className="border rounded px-2 py-1 text-sm"
-              >
-                <option value="7">Last 7 days</option>
-                <option value="30">Last 30 days</option>
-                <option value="90">Last 90 days</option>
-                <option value="180">Last 6 months</option>
-                <option value="365">Last 1 year</option>
-              </select>
+              <h3 className="text-sm font-medium text-gray-700">
+                {viewMode === 'table' ? 'Performance Table' : 'Performance Chart'}
+              </h3>
+              <div className="flex gap-2 items-center">
+                {viewMode === 'chart' && (
+                  <div className="flex gap-1">
+                    <label className="flex items-center gap-1 text-xs">
+                      <input
+                        type="checkbox"
+                        checked={normalizePrices}
+                        onChange={(e) => setNormalizePrices(e.target.checked)}
+                        className="h-3 w-3"
+                      />
+                      <span>Normalized</span>
+                    </label>
+                    <button
+                      onClick={() => setChartType('line')}
+                      className={`px-2 py-1 rounded text-xs ${
+                        chartType === 'line' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                      }`}
+                    >
+                      Line
+                    </button>
+                    <button
+                      onClick={() => setChartType('bar')}
+                      className={`px-2 py-1 rounded text-xs ${
+                        chartType === 'bar' ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                      }`}
+                    >
+                      Bar
+                    </button>
+                  </div>
+                )}
+                <select
+                  value={dateRange}
+                  onChange={(e) => setDateRange(e.target.value)}
+                  className="border rounded px-2 py-1 text-sm"
+                >
+                  <option value="7">Last 7 days</option>
+                  <option value="30">Last 30 days</option>
+                  <option value="90">Last 90 days</option>
+                  <option value="180">Last 6 months</option>
+                  <option value="365">Last 1 year</option>
+                </select>
+              </div>
             </div>
 
             {loading ? (
@@ -165,50 +306,86 @@ const Comparison: React.FC = () => {
               </div>
             ) : viewMode === 'table' ? (
               <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
+                {/* Default Summary Table */}
+                <table className="min-w-full text-sm mb-6">
                   <thead>
-                    <tr className="border-b">
-                      <th className="py-2 text-left text-gray-500">Date</th>
-                      {selectedIndices.map(id => {
-                        const index = indices.find(i => i.id === id);
-                        return (
-                          <th key={id} className="py-2 text-right text-gray-500">
-                            {index?.symbol}
-                          </th>
-                        );
-                      })}
+                    <tr className="border-b bg-gray-50">
+                      <th className="py-2 text-left text-gray-500 font-medium">Instrument</th>
+                      <th className="py-2 text-right text-gray-500 font-medium">This Week</th>
+                      <th className="py-2 text-right text-gray-500 font-medium">This Month</th>
+                      <th className="py-2 text-right text-gray-500 font-medium">This Year</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {getAllDates().map(date => (
-                      <tr key={date} className="border-b">
-                        <td className="py-2 text-gray-700">{date}</td>
-                        {selectedIndices.map(id => {
-                          const data = comparisonData[id] || [];
-                          const dayData = data.find(d => d.date === date);
-                          return (
-                            <td
-                              key={id}
-                              className={`py-2 text-right font-medium ${
-                                (dayData?.daily_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                              }`}
-                            >
-                              {dayData ? formatPercent(dayData.daily_change_percent) : 'N/A'}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
+<tbody>
+                    {getSortedIndices()
+                      .filter(i => selectedIndices.includes(i.id))
+                      .map(index => (
+                        <tr key={index.id} className="border-b hover:bg-gray-50">
+                          <td className="py-2 font-medium text-gray-900">{index.name}</td>
+                          <td className={`py-2 text-right font-medium ${
+                            (index.weekly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {formatPercent(index.weekly_change_percent)}
+                          </td>
+                          <td className={`py-2 text-right font-medium ${
+                            (index.monthly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {formatPercent(index.monthly_change_percent)}
+                          </td>
+                          <td className={`py-2 text-right font-medium ${
+                            (index.yearly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {formatPercent(index.yearly_change_percent)}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
             ) : (
-              <div className="h-96 flex items-center justify-center text-gray-500">
-                <div className="text-center">
-                  <p>Chart View</p>
-                  <p className="text-sm">({selectedIndices.length} indices selected)</p>
-                  <p className="text-xs mt-2">Use a charting library for implementation</p>
-                </div>
+              <div className="h-96">
+                <ResponsiveContainer width="100%" height="100%">
+                  {chartType === 'line' ? (
+                    <LineChart data={getChartData()}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip formatter={(value) => [`${Number(value).toFixed(2)}${normalizePrices ? '%' : ''}`, normalizePrices ? 'Change %' : 'Close Price']} />
+                      <Legend />
+                      {selectedIndices.map((id, idx) => {
+                        const index = indices.find(i => i.id === id);
+                        return (
+                          <Line
+                            key={id}
+                            type="monotone"
+                            dataKey={index?.symbol}
+                            stroke={colors[idx % colors.length]}
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        );
+                      })}
+                    </LineChart>
+                  ) : (
+                    <BarChart data={getChartData()}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip formatter={(value) => [`${Number(value).toFixed(2)}${normalizePrices ? '%' : ''}`, normalizePrices ? 'Change %' : 'Close Price']} />
+                      <Legend />
+                      {selectedIndices.map((id, idx) => {
+                        const index = indices.find(i => i.id === id);
+                        return (
+                          <Bar
+                            key={id}
+                            dataKey={index?.symbol}
+                            fill={colors[idx % colors.length]}
+                          />
+                        );
+                      })}
+                    </BarChart>
+                  )}
+                </ResponsiveContainer>
               </div>
             )}
           </div>
