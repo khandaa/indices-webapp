@@ -16,7 +16,11 @@ from date_utils import (
     format_week_display, format_month_display, get_week_from_date, get_month_from_date
 )
 from niftybees_helper import NiftybeesHelper
+from whatif_simulator import WhatIfSimulator
 import sqlite3
+from fastapi.responses import StreamingResponse
+import csv
+import io
 
 app = FastAPI(
     title="Indices Web API",
@@ -1013,4 +1017,230 @@ async def refresh_data(range: str = "all"):
         return JSONResponse(
             status_code=500,
             content={"error": f"Failed to refresh data: {str(e)}"}
+        )
+
+
+# What-If Simulation Endpoints
+
+@app.get("/api/whatif/simulate")
+async def run_simulation(
+    initial_amount: float = 100000,
+    start_date: str = None,
+    end_date: str = None,
+    frequency: str = "weekly",
+    allocation_1: float = 50,
+    allocation_2: float = 30,
+    allocation_3: float = 20,
+    save_scenario: bool = False,
+    scenario_name: str = None
+):
+    """Run investment simulation"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        
+        # Run simulation
+        result = simulator.simulate(
+            initial_amount=initial_amount,
+            start_date=start_date,
+            end_date=end_date,
+            frequency=frequency,
+            allocation_1=allocation_1,
+            allocation_2=allocation_2,
+            allocation_3=allocation_3
+        )
+        
+        # Save scenario if requested
+        scenario_id = None
+        if save_scenario and scenario_name:
+            scenario_id = simulator.save_scenario(
+                name=scenario_name,
+                description=f"{frequency.capitalize()} simulation starting {start_date}",
+                initial_amount=initial_amount,
+                frequency=frequency,
+                allocation_1=allocation_1,
+                allocation_2=allocation_2,
+                allocation_3=allocation_3,
+                start_date=start_date,
+                end_date=end_date
+            )
+            simulator.save_simulation_results(scenario_id, result['results'])
+        
+        simulator.disconnect()
+        
+        return {
+            "simulation": result,
+            "scenario_id": scenario_id
+        }
+        
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Simulation failed: {str(e)}"}
+        )
+
+
+@app.get("/api/whatif/scenarios")
+async def get_scenarios():
+    """Get all saved scenarios"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        scenarios = simulator.get_scenarios()
+        simulator.disconnect()
+        return {"scenarios": scenarios}
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to get scenarios: {str(e)}"}
+        )
+
+
+@app.get("/api/whatif/scenarios/{scenario_id}")
+async def get_scenario(scenario_id: int):
+    """Get a specific scenario with simulation results"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        scenario = simulator.get_scenario(scenario_id)
+        results = simulator.get_simulation_results(scenario_id)
+        simulator.disconnect()
+        
+        if not scenario:
+            return JSONResponse(status_code=404, content={"error": "Scenario not found"})
+        
+        return {"scenario": scenario, "results": results}
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to get scenario: {str(e)}"}
+        )
+
+
+@app.post("/api/whatif/scenarios")
+async def create_scenario(
+    name: str,
+    description: str = "",
+    initial_amount: float = 100000,
+    frequency: str = "weekly",
+    allocation_1: float = 50,
+    allocation_2: float = 30,
+    allocation_3: float = 20,
+    start_date: str = None,
+    end_date: str = None
+):
+    """Create a new scenario"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        scenario_id = simulator.save_scenario(
+            name=name, description=description, initial_amount=initial_amount,
+            frequency=frequency, allocation_1=allocation_1, allocation_2=allocation_2,
+            allocation_3=allocation_3, start_date=start_date, end_date=end_date
+        )
+        scenario = simulator.get_scenario(scenario_id)
+        simulator.disconnect()
+        return {"scenario_id": scenario_id, "scenario": scenario}
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to create scenario: {str(e)}"}
+        )
+
+
+@app.put("/api/whatif/scenarios/{scenario_id}")
+async def update_scenario(scenario_id: int, **kwargs):
+    """Update a scenario"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        simulator.update_scenario(scenario_id, **kwargs)
+        scenario = simulator.get_scenario(scenario_id)
+        simulator.disconnect()
+        return {"scenario": scenario}
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to update scenario: {str(e)}"}
+        )
+
+
+@app.delete("/api/whatif/scenarios/{scenario_id}")
+async def delete_scenario(scenario_id: int):
+    """Delete a scenario"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        simulator.delete_scenario(scenario_id)
+        simulator.disconnect()
+        return {"message": "Scenario deleted"}
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to delete scenario: {str(e)}"}
+        )
+
+
+@app.get("/api/whatif/scenarios/{scenario_id}/export")
+async def export_scenario_csv(scenario_id: int):
+    """Export simulation results as CSV"""
+    try:
+        simulator = WhatIfSimulator(DB_PATH)
+        simulator.connect()
+        scenario = simulator.get_scenario(scenario_id)
+        results = simulator.get_simulation_results(scenario_id)
+        simulator.disconnect()
+        
+        if not scenario:
+            return JSONResponse(status_code=404, content={"error": "Scenario not found"})
+        
+        # Create CSV content
+        output = io.StringIO()
+        writer = csv.writer(output)
+        
+        # Write header
+        writer.writerow([
+            "Period", "Start Date", "End Date",
+            "Rec 1", "Rec 2", "Rec 3",
+            "Allocation 1%", "Allocation 2%", "Allocation 3%",
+            "Strategy Start", "Strategy End", "Strategy Return%",
+            "Niftybees Start", "Niftybees End", "Niftybees Return%"
+        ])
+        
+        # Write data
+        for r in results:
+            strategy_return = ((r['strategy_value_end'] - r['strategy_value_start']) / r['strategy_value_start'] * 100) if r['strategy_value_start'] else 0
+            niftybees_return = ((r['niftybees_value_end'] - r['niftybees_value_start']) / r['niftybees_value_start'] * 100) if r['niftybees_value_start'] else 0
+            
+            writer.writerow([
+                r['period_number'],
+                r['period_start_date'],
+                r['period_end_date'],
+                r.get('recommendation_1_symbol') or '',
+                r.get('recommendation_2_symbol') or '',
+                r.get('recommendation_3_symbol') or '',
+                r['allocation_1_percent'],
+                r['allocation_2_percent'],
+                r['allocation_3_percent'],
+                r['strategy_value_start'],
+                r['strategy_value_end'],
+                f"{strategy_return:.2f}",
+                r['niftybees_value_start'],
+                r['niftybees_value_end'],
+                f"{niftybees_return:.2f}"
+            ])
+        
+        output.seek(0)
+        
+        filename = f"whatif_{scenario['name'].replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.csv"
+        
+        return StreamingResponse(
+            iter([output.getvalue()]),
+            media_type="text/csv",
+            headers={"Content-Disposition": f"attachment; filename={filename}"}
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to export: {str(e)}"}
         )

@@ -206,6 +206,89 @@ export const apiService = {
       throw error;
     }
   },
+
+  // What-If Simulation
+  runSimulation: async (params: {
+    initial_amount: number;
+    start_date: string;
+    end_date: string;
+    frequency: string;
+    allocation_1: number;
+    allocation_2: number;
+    allocation_3: number;
+    save_scenario?: boolean;
+    scenario_name?: string;
+  }) => {
+    try {
+      const response = await api.get('/api/whatif/simulate', { params });
+      return response.data;
+    } catch (error) {
+      console.error('Error running simulation:', error);
+      throw error;
+    }
+  },
+
+  getScenarios: async () => {
+    try {
+      const response = await api.get('/api/whatif/scenarios');
+      return response.data;
+    } catch (error) {
+      console.error('Error getting scenarios:', error);
+      throw error;
+    }
+  },
+
+  getScenario: async (scenarioId: number) => {
+    try {
+      const response = await api.get(`/api/whatif/scenarios/${scenarioId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error getting scenario:', error);
+      throw error;
+    }
+  },
+
+  createScenario: async (scenario: {
+    name: string;
+    description?: string;
+    initial_amount: number;
+    frequency: string;
+    allocation_1: number;
+    allocation_2: number;
+    allocation_3: number;
+    start_date: string;
+    end_date?: string;
+  }) => {
+    try {
+      const response = await api.post('/api/whatif/scenarios', null, { params: scenario });
+      return response.data;
+    } catch (error) {
+      console.error('Error creating scenario:', error);
+      throw error;
+    }
+  },
+
+  deleteScenario: async (scenarioId: number) => {
+    try {
+      const response = await api.delete(`/api/whatif/scenarios/${scenarioId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error deleting scenario:', error);
+      throw error;
+    }
+  },
+
+  exportScenario: async (scenarioId: number) => {
+    try {
+      const response = await api.get(`/api/whatif/scenarios/${scenarioId}/export`, {
+        responseType: 'blob',
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error exporting scenario:', error);
+      throw error;
+    }
+  },
 };
 
 export default api;

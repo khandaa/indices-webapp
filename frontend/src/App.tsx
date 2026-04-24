@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import IndexSelection from './pages/IndexSelection';
 import Comparison from './pages/Comparison';
 import Strategy from './pages/Strategy';
+import WhatIf from './pages/WhatIf';
 import InstrumentDetail from './pages/InstrumentDetail';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -46,6 +47,12 @@ function App() {
                     >
                       Strategy
                     </Link>
+                    <Link
+                      to="/whatif"
+                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                    >
+                      What-If
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -61,6 +68,7 @@ function App() {
                 <Route path="/index-selection" element={<IndexSelection />} />
                 <Route path="/comparison" element={<Comparison />} />
                 <Route path="/strategy" element={<Strategy />} />
+                <Route path="/whatif" element={<WhatIf />} />
                 <Route path="/instrument/:id" element={<InstrumentDetail />} />
               </Routes>
             </ErrorBoundary>

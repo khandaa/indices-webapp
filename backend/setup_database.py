@@ -149,6 +149,47 @@ def setup_database():
             )
         ''')
         
+        # Create whatif_scenarios table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS whatif_scenarios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                description TEXT,
+                initial_amount REAL NOT NULL DEFAULT 100000,
+                frequency TEXT NOT NULL DEFAULT 'weekly',
+                allocation_1 REAL NOT NULL DEFAULT 50,
+                allocation_2 REAL NOT NULL DEFAULT 30,
+                allocation_3 REAL NOT NULL DEFAULT 20,
+                start_date TEXT NOT NULL,
+                end_date TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        # Create whatif_simulation_results table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS whatif_simulation_results (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                scenario_id INTEGER NOT NULL,
+                period_number INTEGER NOT NULL,
+                period_start_date TEXT NOT NULL,
+                period_end_date TEXT NOT NULL,
+                recommendation_1_symbol TEXT,
+                recommendation_2_symbol TEXT,
+                recommendation_3_symbol TEXT,
+                allocation_1_percent REAL NOT NULL,
+                allocation_2_percent REAL NOT NULL,
+                allocation_3_percent REAL NOT NULL,
+                strategy_value_start REAL NOT NULL,
+                strategy_value_end REAL NOT NULL,
+                niftybees_value_start REAL NOT NULL,
+                niftybees_value_end REAL NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (scenario_id) REFERENCES whatif_scenarios(id) ON DELETE CASCADE
+            )
+        ''')
+        
         print("Database tables created successfully")
         
         # Insert indices data
@@ -253,6 +294,7 @@ def create_indexes(cursor):
         'CREATE INDEX IF NOT EXISTS idx_monthly_rec_index_id ON monthly_recommendations(index_id)',
         'CREATE INDEX IF NOT EXISTS idx_monthly_rec_month ON monthly_recommendations(month_start_date)',
         'CREATE INDEX IF NOT EXISTS idx_index_rec_index_id ON index_recommendations(index_id)',
+        'CREATE INDEX IF NOT EXISTS idx_whatif_results_scenario ON whatif_simulation_results(scenario_id)',
     ]
     
     for index_sql in indexes:
