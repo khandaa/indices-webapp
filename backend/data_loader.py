@@ -31,7 +31,7 @@ class DataLoader:
     def __init__(self, db_path: str = None):
         """Initialize DataLoader with database path"""
         if db_path is None:
-            db_path = os.path.join(os.path.dirname(__file__), 'database', 'index-database.db')
+            db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'index-database.db')
         
         self.db_path = db_path
         self.conn = None

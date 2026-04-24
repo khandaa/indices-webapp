@@ -13,7 +13,7 @@ def setup_database():
     """Create database and all tables"""
     
     # Ensure database directory exists
-    db_dir = os.path.join(os.path.dirname(__file__), 'database')
+    db_dir = os.path.join(os.path.dirname(__file__), '..', 'database')
     os.makedirs(db_dir, exist_ok=True)
     
     # Database path
@@ -98,6 +98,54 @@ def setup_database():
                 refresh_interval INTEGER DEFAULT 300,
                 theme TEXT DEFAULT 'light',
                 language TEXT DEFAULT 'en'
+            )
+        ''')
+        
+        # Create index_recommendations table (Task 1.1)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS index_recommendations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                index_id INTEGER NOT NULL,
+                is_selected BOOLEAN DEFAULT 1,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (index_id) REFERENCES indices_master(id),
+                UNIQUE(index_id)
+            )
+        ''')
+        
+        # Create weekly_recommendations table (Task 1.2)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS weekly_recommendations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                index_id INTEGER NOT NULL,
+                week_start_date TEXT NOT NULL,
+                week_end_date TEXT NOT NULL,
+                rank INTEGER NOT NULL,
+                weekly_change_percent REAL,
+                three_week_cumulative_return REAL,
+                niftybees_weekly_change_percent REAL,
+                niftybees_three_week_cumulative_return REAL,
+                recommendation_date TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (index_id) REFERENCES indices_master(id),
+                UNIQUE(index_id, week_start_date)
+            )
+        ''')
+        
+        # Create monthly_recommendations table (Task 1.3)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS monthly_recommendations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                index_id INTEGER NOT NULL,
+                month_start_date TEXT NOT NULL,
+                month_end_date TEXT NOT NULL,
+                rank INTEGER NOT NULL,
+                monthly_change_percent REAL,
+                three_month_cumulative_return REAL,
+                niftybees_monthly_change_percent REAL,
+                niftybees_three_month_cumulative_return REAL,
+                recommendation_date TEXT DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (index_id) REFERENCES indices_master(id),
+                UNIQUE(index_id, month_start_date)
             )
         ''')
         
@@ -198,6 +246,13 @@ def create_indexes(cursor):
         'CREATE INDEX IF NOT EXISTS idx_calculated_data_index_date ON index_calculated_data(index_id, calculation_date)',
         'CREATE INDEX IF NOT EXISTS idx_indices_master_symbol ON indices_master(symbol)',
         'CREATE INDEX IF NOT EXISTS idx_indices_master_type ON indices_master(index_type)',
+        'CREATE INDEX IF NOT EXISTS idx_momentum_data_index_id ON index_momentum_data(index_id)',
+        'CREATE INDEX IF NOT EXISTS idx_momentum_data_date ON index_momentum_data(calculation_date)',
+        'CREATE INDEX IF NOT EXISTS idx_weekly_rec_index_id ON weekly_recommendations(index_id)',
+        'CREATE INDEX IF NOT EXISTS idx_weekly_rec_week ON weekly_recommendations(week_start_date)',
+        'CREATE INDEX IF NOT EXISTS idx_monthly_rec_index_id ON monthly_recommendations(index_id)',
+        'CREATE INDEX IF NOT EXISTS idx_monthly_rec_month ON monthly_recommendations(month_start_date)',
+        'CREATE INDEX IF NOT EXISTS idx_index_rec_index_id ON index_recommendations(index_id)',
     ]
     
     for index_sql in indexes:

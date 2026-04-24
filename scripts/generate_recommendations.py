@@ -262,9 +262,9 @@ def insert_weekly_recommendations(conn, rec_date: date, indices: List[Dict], top
             three_week_cumulative_return_percentage, weekly_recommendation_rank,
             monthly_return_percentage, three_month_cumulative_return_percentage,
             monthly_recommendation_rank, recommendation_type
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
-        
+
         for rec in recommendations:
             conn.execute(insert_query, (
                 rec['recommendation_id'], rec['recommendation_date'], rec['recommendation_month'],
@@ -274,7 +274,7 @@ def insert_weekly_recommendations(conn, rec_date: date, indices: List[Dict], top
                 rec['three_month_cumulative_return_percentage'], rec['monthly_recommendation_rank'],
                 rec['recommendation_type']
             ))
-        
+
         conn.commit()
         print(f"Inserted {len(recommendations)} weekly recommendations for {rec_date}")
 
@@ -341,9 +341,9 @@ def insert_monthly_recommendations(conn, rec_date: date, indices: List[Dict], to
             three_week_cumulative_return_percentage, weekly_recommendation_rank,
             monthly_return_percentage, three_month_cumulative_return_percentage,
             monthly_recommendation_rank, recommendation_type
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
-        
+
         for rec in recommendations:
             conn.execute(insert_query, (
                 rec['recommendation_id'], rec['recommendation_date'], rec['recommendation_month'],
@@ -353,7 +353,7 @@ def insert_monthly_recommendations(conn, rec_date: date, indices: List[Dict], to
                 rec['three_month_cumulative_return_percentage'], rec['monthly_recommendation_rank'],
                 rec['recommendation_type']
             ))
-        
+
         conn.commit()
         print(f"Inserted {len(recommendations)} monthly recommendations for {rec_date}")
 
@@ -408,8 +408,11 @@ def generate_all_recommendations(top_ranks: int = DEFAULT_TOP_RANKS):
             except Exception as e:
                 print(f"Error generating monthly recommendations for {last_day}: {e}")
                 continue
-        
+
         print("Recommendations generation completed successfully!")
+
+    finally:
+        conn.close()
 
 def generate_recommendations_for_date_range(start_date_str: str, end_date_str: str, recommendation_type: str, top_ranks: int = DEFAULT_TOP_RANKS):
     """Generate recommendations for a specific date range and type"""
@@ -466,15 +469,9 @@ def generate_recommendations_for_date_range(start_date_str: str, end_date_str: s
             return
         
         print(f"Generated {recommendation_type} recommendations from {start_date} to {end_date}")
-        
+
     except Exception as e:
         print(f"Error in date range recommendations generation: {e}")
-        conn.rollback()
-    finally:
-        conn.close()
-        
-    except Exception as e:
-        print(f"Error in recommendations generation: {e}")
         conn.rollback()
     finally:
         conn.close()
@@ -559,10 +556,10 @@ if __name__ == "__main__":
             
         elif command == "date-range":
             # Generate recommendations for specific date range
-            if len(sys.argv) < 4:
+            if len(sys.argv) < 5:
                 print("Usage: python generate_recommendations.py date-range <start_date> <end_date> <weekly|monthly> [top_ranks]")
                 print("Example: python generate_recommendations.py date-range 2023-01-01 2023-12-31 weekly 5")
-                return
+                sys.exit(1)
             
             start_date_str = sys.argv[2]
             end_date_str = sys.argv[3]

@@ -1,0 +1,20 @@
+services:
+  - name: indices-backend
+    type: web
+    region: oregon
+    env: python
+    buildCommand: pip install -r backend/api/requirements.txt
+    startCommand: cd backend/api && python main.py
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        value: 5050
+      - key: DB_PATH
+        value: /var/opt/indices-webapp/index-database.db
+
+disks:
+  - name: indices-data
+    mountPath: /var/opt/indices-webapp
+    sizeGB: 1

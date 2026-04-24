@@ -1,0 +1,221 @@
+import React, { useState, useEffect } from 'react';
+import { apiService } from '../services/api';
+
+interface IndexInfo {
+  id: number;
+  name: string;
+  symbol: string;
+}
+
+interface PriceData {
+  date: string;
+  close_price: number;
+  daily_change_percent: number;
+}
+
+const Comparison: React.FC = () => {
+  const [indices, setIndices] = useState<IndexInfo[]>([]);
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [viewMode, setViewMode] = useState<'table' | 'chart'>('table');
+  const [comparisonData, setComparisonData] = useState<Record<number, PriceData[]>>({});
+  const [loading, setLoading] = useState(false);
+  const [dateRange, setDateRange] = useState('30');
+
+  useEffect(() => {
+    loadIndices();
+  }, []);
+
+  useEffect(() => {
+    if (selectedIndices.length > 0) {
+      loadComparisonData();
+    }
+  }, [selectedIndices, dateRange]);
+
+  const loadIndices = async () => {
+    try {
+      const data = await apiService.getIndices();
+      setIndices(data.map((i: any) => ({
+        id: i.id,
+        name: i.name,
+        symbol: i.symbol
+      })));
+    } catch (error) {
+      console.error('Error loading indices:', error);
+    }
+  };
+
+  const loadComparisonData = async () => {
+    setLoading(true);
+    try {
+      const limit = parseInt(dateRange);
+      const data: Record<number, PriceData[]> = {};
+      
+      for (const indexId of selectedIndices) {
+        const prices = await apiService.getDailyPrices(indexId, limit);
+        data[indexId] = prices.map((p: any) => ({
+          date: p.date,
+          close_price: p.close_price,
+          daily_change_percent: p.daily_change_percent
+        }));
+      }
+      
+      setComparisonData(data);
+    } catch (error) {
+      console.error('Error loading comparison data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleIndex = (indexId: number) => {
+    setSelectedIndices(prev => 
+      prev.includes(indexId)
+        ? prev.filter(id => id !== indexId)
+        : [...prev, indexId]
+    );
+  };
+
+  const formatPercent = (value: number | null | undefined): string => {
+    if (value === null || value === undefined) return 'N/A';
+    return `${value >= 0 ? '+' : ''}${value.toFixed(2)}%`;
+  };
+
+  const getAllDates = (): string[] => {
+    if (Object.keys(comparisonData).length === 0) return [];
+    const firstIndexData = comparisonData[selectedIndices[0]] || [];
+    return firstIndexData.map(d => d.date).reverse();
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Performance Comparison</h1>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setViewMode('table')}
+            className={`px-3 py-1 rounded text-sm ${
+              viewMode === 'table' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
+          >
+            Table
+          </button>
+          <button
+            onClick={() => setViewMode('chart')}
+            className={`px-3 py-1 rounded text-sm ${
+              viewMode === 'chart' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'
+            }`}
+          >
+            Chart
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+        {/* Index Selector */}
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-lg shadow p-4">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Select Indices</h3>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {indices.map(index => (
+                <label
+                  key={index.id}
+                  className={`flex items-center p-2 rounded cursor-pointer ${
+                    selectedIndices.includes(index.id) ? 'bg-blue-50' : 'hover:bg-gray-50'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedIndices.includes(index.id)}
+                    onChange={() => toggleIndex(index.id)}
+                    className="h-4 w-4 text-blue-600 rounded"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">{index.symbol}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Date Range */}
+        <div className="lg:col-span-3">
+          <div className="bg-white rounded-lg shadow p-4">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-medium text-gray-700">Date Range</h3>
+              <select
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value)}
+                className="border rounded px-2 py-1 text-sm"
+              >
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="180">Last 6 months</option>
+                <option value="365">Last 1 year</option>
+              </select>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p className="mt-2 text-gray-600">Loading...</p>
+              </div>
+            ) : selectedIndices.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                Select at least one index to compare
+              </div>
+            ) : viewMode === 'table' ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="py-2 text-left text-gray-500">Date</th>
+                      {selectedIndices.map(id => {
+                        const index = indices.find(i => i.id === id);
+                        return (
+                          <th key={id} className="py-2 text-right text-gray-500">
+                            {index?.symbol}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getAllDates().map(date => (
+                      <tr key={date} className="border-b">
+                        <td className="py-2 text-gray-700">{date}</td>
+                        {selectedIndices.map(id => {
+                          const data = comparisonData[id] || [];
+                          const dayData = data.find(d => d.date === date);
+                          return (
+                            <td
+                              key={id}
+                              className={`py-2 text-right font-medium ${
+                                (dayData?.daily_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                              }`}
+                            >
+                              {dayData ? formatPercent(dayData.daily_change_percent) : 'N/A'}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="h-96 flex items-center justify-center text-gray-500">
+                <div className="text-center">
+                  <p>Chart View</p>
+                  <p className="text-sm">({selectedIndices.length} indices selected)</p>
+                  <p className="text-xs mt-2">Use a charting library for implementation</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Comparison;

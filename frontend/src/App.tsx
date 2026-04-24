@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import IndicesPage from './pages/IndicesPage';
-import WeeklyDashboard from './pages/WeeklyDashboard';
-import MonthlyDashboard from './pages/MonthlyDashboard';
+// import IndicesPage from './pages/IndicesPage';
+// import WeeklyDashboard from './pages/WeeklyDashboard';
+// import MonthlyDashboard from './pages/MonthlyDashboard';
 import InstrumentDetail from './pages/InstrumentDetail';
-import Recommendations from './pages/Recommendations';
-import Recommendations3 from './pages/recommendations-3';
-import CombinedRecommendations from './pages/combined-recommendations';
-import RecommendationsTable from './pages/recommendations-table';
+// import Recommendations from './pages/Recommendations';
+// import Recommendations3 from './pages/recommendations-3';
+// import CombinedRecommendations from './pages/combined-recommendations';
+// import RecommendationsTable from './pages/recommendations-table';
+import Dashboard from './pages/Dashboard';
+import IndexSelection from './pages/IndexSelection';
+import Comparison from './pages/Comparison';
 import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
@@ -24,47 +27,24 @@ function App() {
                     <h1 className="text-xl font-bold text-gray-900">Indices Web App</h1>
                   </div>
                   <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+
                     <Link
-                      to="/"
+                      to="/dashboard"
                       className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                     >
-                      Indices
+                      Dashboard
                     </Link>
                     <Link
-                      to="/weekly"
+                      to="/index-selection"
                       className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                     >
-                      Weekly Dashboard
+                      Index Selection
                     </Link>
                     <Link
-                      to="/monthly"
+                      to="/comparison"
                       className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                     >
-                      Monthly Dashboard
-                    </Link>
-                    <Link
-                      to="/recommendations"
-                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                    >
-                      Recommendations
-                    </Link>
-                    <Link
-                      to="/recommendations-3"
-                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                    >
-                      Top 3 Recommendations
-                    </Link>
-                    <Link
-                      to="/combined-recommendations"
-                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                    >
-                      Combined Recommendations
-                    </Link>
-                    <Link
-                      to="/recommendations-table"
-                      className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                    >
-                      All Recommendations
+                      Comparison
                     </Link>
                   </div>
                 </div>
@@ -76,13 +56,10 @@ function App() {
           <main>
             <ErrorBoundary>
               <Routes>
-                <Route path="/" element={<IndicesPage />} />
-                <Route path="/weekly" element={<WeeklyDashboard />} />
-                <Route path="/monthly" element={<MonthlyDashboard />} />
-                <Route path="/recommendations" element={<Recommendations />} />
-                <Route path="/recommendations-3" element={<Recommendations3 />} />
-                <Route path="/combined-recommendations" element={<CombinedRecommendations />} />
-                <Route path="/recommendations-table" element={<RecommendationsTable />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/index-selection" element={<IndexSelection />} />
+                <Route path="/comparison" element={<Comparison />} />
                 <Route path="/instrument/:id" element={<InstrumentDetail />} />
               </Routes>
             </ErrorBoundary>
