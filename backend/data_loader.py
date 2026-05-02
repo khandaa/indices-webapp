@@ -183,6 +183,38 @@ class DataLoader:
             logger.error(f"Failed to load data for all indices: {e}")
             raise
     
+    def load_historical_data(self, start_date: str = '2019-01-01'):
+        """Load historical data from specified start date to present for all active indices"""
+        try:
+            end_date = datetime.now().strftime('%Y-%m-%d')
+            indices = self.get_all_indices()
+            
+            logger.info(f"Loading historical data from {start_date} to {end_date}")
+            
+            for index in indices:
+                try:
+                    logger.info(f"Loading historical data for {index['name']} ({index['symbol']})")
+                    
+                    # Download historical data
+                    data = self.get_index_data_from_yfinance(index['symbol'], start_date, end_date)
+                    
+                    if not data.empty:
+                        # Insert data
+                        self.insert_index_data(index['id'], data)
+                        logger.info(f"Successfully loaded {len(data)} records for {index['name']}")
+                    else:
+                        logger.warning(f"No data available for {index['name']}")
+                        
+                except Exception as e:
+                    logger.error(f"Failed to load historical data for {index['name']}: {e}")
+                    continue
+            
+            logger.info("Historical data loading completed for all indices")
+            
+        except Exception as e:
+            logger.error(f"Failed to load historical data: {e}")
+            raise
+    
     def load_data_for_specific_indices(self, symbols: List[str], start_date: str = None, end_date: str = None):
         """Load data for specific indices by symbols"""
         try:
@@ -225,13 +257,21 @@ class DataLoader:
 
 def main():
     """Main function to run data loading"""
+    import sys
+    
     loader = DataLoader()
     
     try:
         loader.connect()
         
-        # Load data for all indices for the last year
-        loader.load_data_for_all_indices()
+        # Check if historical loading is requested
+        if len(sys.argv) > 1 and sys.argv[1] == '--historical':
+            start_date = sys.argv[2] if len(sys.argv) > 2 else '2019-01-01'
+            logger.info(f"Loading historical data from {start_date}")
+            loader.load_historical_data(start_date)
+        else:
+            # Load data for all indices for the last year
+            loader.load_data_for_all_indices()
         
         logger.info("Data loading process completed successfully")
         

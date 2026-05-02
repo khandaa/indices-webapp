@@ -476,30 +476,46 @@ class WhatIfSimulator:
         # Calculate recommendations if not in database
         return self._calculate_weekly_recommendations(week_start_date)
     
+    def _calculate_weekly_return(self, index_id: int, week_start_date: str, week_end_date: str) -> Optional[float]:
+        """Calculate weekly change percent from raw prices"""
+        cursor = self.conn.cursor()
+        
+        # Get most recent price on or before start date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, week_start_date))
+        start_row = cursor.fetchone()
+        
+        # Get most recent price on or before end date
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, week_end_date))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
+    
     def _calculate_weekly_recommendations(self, week_start_date: str) -> List[Dict]:
         """Calculate top 3 weekly recommendations for a week"""
         cursor = self.conn.cursor()
         
-        # Get week end date (start + 6 days)
         week_end_date = (datetime.strptime(week_start_date, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
         
-        # Get all active indices
         cursor.execute("SELECT id, symbol FROM indices_master WHERE is_active = 1")
         all_indices = cursor.fetchall()
         
         index_returns = []
         for idx_id, symbol in all_indices:
-            # Calculate 3-week cumulative return as of week end
             three_week_return = self._calculate_three_week_return(idx_id, week_end_date)
             
-            # Get weekly change percent for this week
-            cursor.execute("""
-                SELECT weekly_change_percent
-                FROM index_calculated_data
-                WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
-            """, (idx_id, week_start_date, week_end_date))
-            result = cursor.fetchone()
-            weekly_change = float(result[0]) if result and result[0] else None
+            # Calculate weekly change from raw prices
+            weekly_change = self._calculate_weekly_return(idx_id, week_start_date, week_end_date)
             
             if three_week_return is not None:
                 index_returns.append({
@@ -509,10 +525,8 @@ class WhatIfSimulator:
                     'three_week_cumulative_return': three_week_return
                 })
         
-        # Sort by 3W return and take top 3
         top_3 = sorted(index_returns, key=lambda x: x['three_week_cumulative_return'], reverse=True)[:3]
         
-        # Store in database
         for rank, rec in enumerate(top_3, 1):
             cursor.execute("""
                 INSERT OR REPLACE INTO weekly_recommendations 
@@ -529,20 +543,19 @@ class WhatIfSimulator:
         """Calculate 3-week cumulative return"""
         cursor = self.conn.cursor()
         
-        # Get date 3 weeks before end date
         end_dt = datetime.strptime(end_date, '%Y-%m-%d')
         start_dt = end_dt - timedelta(weeks=3)
         start_date = start_dt.strftime('%Y-%m-%d')
         
-        # Get price at start (first available <= start_date)
+        # Get most recent price on or before start date
         cursor.execute("""
             SELECT close_price FROM index_data
             WHERE index_id = ? AND date <= ?
-            ORDER BY date ASC LIMIT 1
+            ORDER BY date DESC LIMIT 1
         """, (index_id, start_date))
         start_row = cursor.fetchone()
         
-        # Get price at end (latest available <= end_date)
+        # Get most recent price on or before end date
         cursor.execute("""
             SELECT close_price FROM index_data
             WHERE index_id = ? AND date <= ?
@@ -563,13 +576,15 @@ class WhatIfSimulator:
         start_dt = end_dt - timedelta(days=90)
         start_date = start_dt.strftime('%Y-%m-%d')
         
+        # Get most recent price on or before start date
         cursor.execute("""
             SELECT close_price FROM index_data
             WHERE index_id = ? AND date <= ?
-            ORDER BY date ASC LIMIT 1
+            ORDER BY date DESC LIMIT 1
         """, (index_id, start_date))
         start_row = cursor.fetchone()
         
+        # Get most recent price on or before end date
         cursor.execute("""
             SELECT close_price FROM index_data
             WHERE index_id = ? AND date <= ?
@@ -604,11 +619,33 @@ class WhatIfSimulator:
         # Calculate recommendations if not in database
         return self._calculate_monthly_recommendations(month_start_date)
     
+    def _calculate_monthly_return(self, index_id: int, month_start_date: str, month_end_date: str) -> Optional[float]:
+        """Calculate monthly change percent from raw prices"""
+        cursor = self.conn.cursor()
+        
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, month_start_date))
+        start_row = cursor.fetchone()
+        
+        cursor.execute("""
+            SELECT close_price FROM index_data
+            WHERE index_id = ? AND date <= ?
+            ORDER BY date DESC LIMIT 1
+        """, (index_id, month_end_date))
+        end_row = cursor.fetchone()
+        
+        if start_row and end_row and start_row[0] and end_row[0] and start_row[0] != 0:
+            return ((end_row[0] - start_row[0]) / start_row[0]) * 100
+        
+        return None
+    
     def _calculate_monthly_recommendations(self, month_start_date: str) -> List[Dict]:
         """Calculate top 3 monthly recommendations for a month"""
         cursor = self.conn.cursor()
         
-        # Get month end date
         start_dt = datetime.strptime(month_start_date, '%Y-%m-%d')
         if start_dt.month == 12:
             next_month = start_dt.replace(year=start_dt.year + 1, month=1, day=1)
@@ -616,23 +653,15 @@ class WhatIfSimulator:
             next_month = start_dt.replace(month=start_dt.month + 1, day=1)
         month_end_date = (next_month - timedelta(days=1)).strftime('%Y-%m-%d')
         
-        # Get all active indices
         cursor.execute("SELECT id, symbol FROM indices_master WHERE is_active = 1")
         all_indices = cursor.fetchall()
         
         index_returns = []
         for idx_id, symbol in all_indices:
-            # Calculate 3-month cumulative return
             three_month_return = self._calculate_three_month_return(idx_id, month_end_date)
             
-            # Get monthly change percent for this month
-            cursor.execute("""
-                SELECT monthly_change_percent
-                FROM index_calculated_data
-                WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
-            """, (idx_id, month_start_date, month_end_date))
-            result = cursor.fetchone()
-            monthly_change = float(result[0]) if result and result[0] else None
+            # Calculate monthly change from raw prices
+            monthly_change = self._calculate_monthly_return(idx_id, month_start_date, month_end_date)
             
             if three_month_return is not None:
                 index_returns.append({
@@ -642,10 +671,8 @@ class WhatIfSimulator:
                     'three_month_cumulative_return': three_month_return
                 })
         
-        # Sort by 3M return and take top 3
         top_3 = sorted(index_returns, key=lambda x: x['three_month_cumulative_return'], reverse=True)[:3]
         
-        # Store in database
         for rank, rec in enumerate(top_3, 1):
             cursor.execute("""
                 INSERT OR REPLACE INTO monthly_recommendations 

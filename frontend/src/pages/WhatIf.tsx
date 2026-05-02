@@ -417,36 +417,41 @@ const WhatIf: React.FC = () => {
                     </button>
                   )}
                 </div>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
                   <table className="min-w-full text-sm">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-100 sticky top-0 z-10">
                       <tr>
-                        <th className="px-2 py-2 text-left">Period</th>
-                        <th className="px-2 py-2 text-left">Dates</th>
-                        <th className="px-2 py-2 text-center">Rec 1</th>
-                        <th className="px-2 py-2 text-center">Rec 2</th>
-                        <th className="px-2 py-2 text-center">Rec 3</th>
-                        <th className="px-2 py-2 text-right">Inv 1 (₹)</th>
-                        <th className="px-2 py-2 text-right">Final 1 (₹)</th>
-                        <th className="px-2 py-2 text-right">Ret 1 %</th>
-                        <th className="px-2 py-2 text-right">Inv 2 (₹)</th>
-                        <th className="px-2 py-2 text-right">Final 2 (₹)</th>
-                        <th className="px-2 py-2 text-right">Ret 2 %</th>
-                        <th className="px-2 py-2 text-right">Inv 3 (₹)</th>
-                        <th className="px-2 py-2 text-right">Final 3 (₹)</th>
-                        <th className="px-2 py-2 text-right">Ret 3 %</th>
-                        <th className="px-2 py-2 text-right">Total Inv (₹)</th>
-                        <th className="px-2 py-2 text-right">Strategy Final (₹)</th>
-                        <th className="px-2 py-2 text-right">Niftybees Inv (₹)</th>
-                        <th className="px-2 py-2 text-right">Niftybees Final (₹)</th>
+                        <th className="px-2 py-2 text-left text-xs font-semibold">#</th>
+                        <th className="px-2 py-2 text-left text-xs font-semibold">Period</th>
+                        <th className="px-2 py-2 text-center text-xs font-semibold bg-blue-100">Rec 1</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-blue-100">Inv 1 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-blue-100">Final 1 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-blue-100">Ret 1 %</th>
+                        <th className="px-2 py-2 text-center text-xs font-semibold bg-green-100">Rec 2</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-green-100">Inv 2 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-green-100">Final 2 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-green-100">Ret 2 %</th>
+                        <th className="px-2 py-2 text-center text-xs font-semibold bg-orange-100">Rec 3</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-orange-100">Inv 3 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-orange-100">Final 3 (₹)</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold bg-orange-100">Ret 3 %</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold">Strategy Inv</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold">Strategy Final</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold">NB Inv</th>
+                        <th className="px-2 py-2 text-right text-xs font-semibold">NB Final</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
                       {results.map((r) => {
+                        const getInstrumentUrl = (symbol: string) => {
+                          if (!symbol) return '#';
+                          return `/whatif/period?start=${r.period_start_date}&end=${r.period_end_date}&rec1=${symbol}&rec2=&rec3=&strategyStart=${r.strategy_value_start}&strategyEnd=${r.strategy_value_end}&niftybeesStart=${r.niftybees_value_start}&niftybeesEnd=${r.niftybees_value_end}`;
+                        };
+                        
                         return (
                           <tr key={r.period_number} className="hover:bg-gray-50">
                             <td className="px-2 py-2">{r.period_number}</td>
-                            <td className="px-2 py-2">
+                            <td className="px-2 py-2 text-xs">
                               <Link
                                 to={`/whatif/period?start=${r.period_start_date}&end=${r.period_end_date}&rec1=${r.recommendation_1_symbol || ''}&rec2=${r.recommendation_2_symbol || ''}&rec3=${r.recommendation_3_symbol || ''}&strategyStart=${r.strategy_value_start}&strategyEnd=${r.strategy_value_end}&niftybeesStart=${r.niftybees_value_start}&niftybeesEnd=${r.niftybees_value_end}&amt1=${r.amount_invested_1 || 0}&amt2=${r.amount_invested_2 || 0}&amt3=${r.amount_invested_3 || 0}&final1=${r.final_amount_1 || 0}&final2=${r.final_amount_2 || 0}&final3=${r.final_amount_3 || 0}&ret1=${r.return_percent_1 || 0}&ret2=${r.return_percent_2 || 0}&ret3=${r.return_percent_3 || 0}`}
                                 className="text-blue-600 hover:text-blue-800 underline"
@@ -454,28 +459,51 @@ const WhatIf: React.FC = () => {
                                 {r.period_start_date} to {r.period_end_date}
                               </Link>
                             </td>
-                            <td className="px-2 py-2 text-center text-blue-600 font-medium">{r.recommendation_1_symbol || '-'}</td>
-                            <td className="px-2 py-2 text-center text-green-600 font-medium">{r.recommendation_2_symbol || '-'}</td>
-                            <td className="px-2 py-2 text-center text-orange-600 font-medium">{r.recommendation_3_symbol || '-'}</td>
-                            <td className="px-2 py-2 text-right">{r.amount_invested_1?.toLocaleString('en-IN') || '-'}</td>
-                            <td className="px-2 py-2 text-right">{r.final_amount_1?.toLocaleString('en-IN') || '-'}</td>
-                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_1 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {/* Instrument 1 */}
+                            <td className="px-2 py-2 text-center bg-blue-50">
+                              {r.recommendation_1_symbol ? (
+                                <Link to={getInstrumentUrl(r.recommendation_1_symbol)} className="text-blue-600 hover:text-blue-800 font-medium underline">
+                                  {r.recommendation_1_symbol}
+                                </Link>
+                              ) : '-'}
+                            </td>
+                            <td className="px-2 py-2 text-right bg-blue-50">{r.amount_invested_1?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right bg-blue-50">{r.final_amount_1?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium bg-blue-50 ${(r.return_percent_1 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                               {(r.return_percent_1 || 0) >= 0 ? '+' : ''}{(r.return_percent_1 || 0).toFixed(2)}%
                             </td>
-                            <td className="px-2 py-2 text-right">{r.amount_invested_2?.toLocaleString('en-IN') || '-'}</td>
-                            <td className="px-2 py-2 text-right">{r.final_amount_2?.toLocaleString('en-IN') || '-'}</td>
-                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_2 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {/* Instrument 2 */}
+                            <td className="px-2 py-2 text-center bg-green-50">
+                              {r.recommendation_2_symbol ? (
+                                <Link to={getInstrumentUrl(r.recommendation_2_symbol)} className="text-green-600 hover:text-green-800 font-medium underline">
+                                  {r.recommendation_2_symbol}
+                                </Link>
+                              ) : '-'}
+                            </td>
+                            <td className="px-2 py-2 text-right bg-green-50">{r.amount_invested_2?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right bg-green-50">{r.final_amount_2?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium bg-green-50 ${(r.return_percent_2 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                               {(r.return_percent_2 || 0) >= 0 ? '+' : ''}{(r.return_percent_2 || 0).toFixed(2)}%
                             </td>
-                            <td className="px-2 py-2 text-right">{r.amount_invested_3?.toLocaleString('en-IN') || '-'}</td>
-                            <td className="px-2 py-2 text-right">{r.final_amount_3?.toLocaleString('en-IN') || '-'}</td>
-                            <td className={`px-2 py-2 text-right font-medium ${(r.return_percent_3 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {/* Instrument 3 */}
+                            <td className="px-2 py-2 text-center bg-orange-50">
+                              {r.recommendation_3_symbol ? (
+                                <Link to={getInstrumentUrl(r.recommendation_3_symbol)} className="text-orange-600 hover:text-orange-800 font-medium underline">
+                                  {r.recommendation_3_symbol}
+                                </Link>
+                              ) : '-'}
+                            </td>
+                            <td className="px-2 py-2 text-right bg-orange-50">{r.amount_invested_3?.toLocaleString('en-IN') || '-'}</td>
+                            <td className="px-2 py-2 text-right bg-orange-50">{r.final_amount_3?.toLocaleString('en-IN') || '-'}</td>
+                            <td className={`px-2 py-2 text-right font-medium bg-orange-50 ${(r.return_percent_3 || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                               {(r.return_percent_3 || 0) >= 0 ? '+' : ''}{(r.return_percent_3 || 0).toFixed(2)}%
                             </td>
+                            {/* Strategy Summary */}
                             <td className="px-2 py-2 text-right font-medium">{r.strategy_value_start?.toLocaleString('en-IN')}</td>
                             <td className={`px-2 py-2 text-right font-medium ${r.strategy_value_end >= r.strategy_value_start ? 'text-green-600' : 'text-red-600'}`}>
                               {r.strategy_value_end?.toLocaleString('en-IN')}
                             </td>
+                            {/* Niftybees Summary */}
                             <td className="px-2 py-2 text-right">{r.niftybees_value_start?.toLocaleString('en-IN')}</td>
                             <td className={`px-2 py-2 text-right ${r.niftybees_value_end >= r.niftybees_value_start ? 'text-green-600' : 'text-red-600'}`}>
                               {r.niftybees_value_end?.toLocaleString('en-IN')}

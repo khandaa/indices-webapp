@@ -243,6 +243,22 @@ main() {
     echo "Press Ctrl+C to stop all services"
     echo ""
     
+    # Skip setup if database already exists
+    if [ -d "$BACKEND_DIR/database" ]; then
+        print_status "Database already exists. Skipping database setup."
+    else
+        setup_database
+    fi
+    
+    # Skip start backend if it's already running
+    if check_port $BACKEND_PORT; then
+        print_status "Backend server already running. Skipping backend start."
+    else
+        start_backend
+    fi
+    
+    echo ""
+    
     # Keep script running
     while true; do
         sleep 1
