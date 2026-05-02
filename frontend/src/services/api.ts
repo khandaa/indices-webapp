@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Index, ApiResponse, PerformanceResponse, DailyPriceResponse, WeeklyRecommendation, MonthlyRecommendation, RecommendationsResponse } from '../types';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5051';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

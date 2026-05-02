@@ -71,6 +71,44 @@ setup_venv() {
     print_success "Backend dependencies installed"
 }
 
+# Function to check if frontend port is in use
+check_frontend_port() {
+    if check_port $FRONTEND_PORT; then
+        print_warning "Port $FRONTEND_PORT is already in use"
+        read -p "Do you want to run the app on another port and start it? (y/n): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            read -p "Enter the new port number: " FRONTEND_PORT
+            start_frontend
+        else
+            print_error "Please free up port $FRONTEND_PORT and try again"
+            exit 1
+        fi
+    fi
+}
+
+# Function to start frontend
+start_frontend() {
+    print_status "Starting frontend development server..."
+    cd $FRONTEND_DIR
+    
+    # Start frontend in background
+    PORT=$FRONTEND_PORT npm start &
+    FRONTEND_PID=$!
+    cd ..
+    
+    # Wait for frontend to start
+    sleep 5
+    
+    # Check if frontend started successfully
+    if check_port $FRONTEND_PORT; then
+        print_success "Frontend server started on port $FRONTEND_PORT (PID: $FRONTEND_PID)"
+    else
+        print_error "Frontend server failed to start"
+        exit 1
+    fi
+}
+
 # Function to setup database
 setup_database() {
     print_status "Setting up database..."

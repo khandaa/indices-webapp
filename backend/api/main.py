@@ -29,7 +29,7 @@ app = FastAPI(
 )
 
 # Environment-based configuration
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3050,http://127.0.0.1:3000").split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001,http://localhost:3050,http://127.0.0.1:3000").split(",")
 DB_PATH = os.getenv("DB_PATH", os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'database', 'index-database.db')))
 
 # Configure CORS
