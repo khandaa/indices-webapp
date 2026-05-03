@@ -460,13 +460,19 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
                     })
                     
                     # Store in weekly_recommendations table
-                    cursor.execute("""
-                        INSERT OR REPLACE INTO weekly_recommendations 
+                    calc_params = (
+                        index_id, week_start, week_end, rank + 1, 
+                        index_data.get('weekly_change_percent'),
+                        index_data.get('three_week_cumulative_return')
+                    )
+                    cursor.execute(f"""
+                        INSERT INTO weekly_recommendations 
                         (index_id, week_start_date, week_end_date, rank, weekly_change_percent, 
                          three_week_cumulative_return, recommendation_date)
-                        VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
-                    """, (index_id, week_start, week_end, rank + 1, index_data['weekly_change_percent'],
-                         index_data['three_week_cumulative_return']))
+                        VALUES ({calc_params[0]}, '{calc_params[1]}', '{calc_params[2]}', {calc_params[3]}, 
+                                {calc_params[4] if calc_params[4] else 'NULL'}, 
+                                {calc_params[5] if calc_params[5] else 'NULL'}, NOW())
+                    """)
             
             calculator.conn.commit()
             max_results = top_indices  # For data_available check
