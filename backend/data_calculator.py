@@ -4,12 +4,17 @@ Data calculation script for Indices Web Application
 Calculates daily, weekly, monthly, and yearly changes for all indices
 """
 
-import sqlite3
-import pandas as pd
 import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# os.environ['DB_TYPE'] = 'mysql'  # Comment out to allow environment variable control
+
+import pandas as pd
 import logging
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any, Tuple
+
+from db import Database
 
 # Configure logging
 log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
@@ -27,37 +32,52 @@ logger = logging.getLogger(__name__)
 class DataCalculator:
     """Handles calculation of index performance metrics"""
     
-    def __init__(self, db_path: str = None):
-        """Initialize DataCalculator with database path"""
-        if db_path is None:
-            db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'index-database.db')
-        
-        self.db_path = os.path.abspath(db_path)
-        self.conn = None
+    def __init__(self, db_type: str = 'mysql'):
+        """Initialize DataCalculator with database"""
+        self.db_type = db_type
+        self.db = Database(db_type)
+        self._conn = None  # Legacy compatibility
+    
+    @property
+    def conn(self):
+        """Legacy property for backward compatibility"""
+        return self.db._conn
         
     def connect(self):
         """Connect to database"""
         try:
-            self.conn = sqlite3.connect(self.db_path)
-            logger.info(f"Connected to database: {self.db_path}")
+            self.db.connect()
+            logger.info(f"Connected to MySQL database")
         except Exception as e:
             logger.error(f"Failed to connect to database: {e}")
             raise
     
     def disconnect(self):
         """Disconnect from database"""
-        if self.conn:
-            self.conn.close()
-            logger.info("Disconnected from database")
+        self.db.close()
+        logger.info("Disconnected from database")
     
     def get_all_indices(self) -> List[Dict[str, Any]]:
         """Get all active indices from database"""
         query = "SELECT id, symbol, name FROM indices_master WHERE is_active = 1"
         
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query)
-            indices = cursor.fetchall()
+            results = self.db.fetch_all(query)
+            
+            indices_list = []
+            for row in results:
+                indices_list.append({
+                    'id': row['id'],
+                    'symbol': row['symbol'],
+                    'name': row['name']
+                })
+            
+            logger.info(f"Retrieved {len(indices_list)} active indices")
+            return indices_list
+            
+        except Exception as e:
+            logger.error(f"Failed to get indices: {e}")
+            raise
             
             indices_list = []
             for index in indices:

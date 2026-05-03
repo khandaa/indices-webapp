@@ -1,259 +1,165 @@
-import sqlite3
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# os.environ['DB_TYPE'] = 'mysql'
+
 from datetime import datetime, timedelta
 from typing import Optional, List, Dict, Any
 
+from db import Database
+
+
 class MomentumCalculator:
-    def __init__(self, db_path: str):
-        self.db_path = db_path
-        self.conn = None
+    def __init__(self, db_type: str = 'mysql'):
+        self.db_type = db_type
+        self.db = Database(db_type)
     
     def connect(self):
         """Connect to the database"""
-        self.conn = sqlite3.connect(self.db_path)
-        self.conn.row_factory = sqlite3.Row
+        self.db.connect()
     
     def disconnect(self):
         """Disconnect from the database"""
-        if self.conn:
-            self.conn.close()
-            self.conn = None
+        self.db.close()
     
     def calculate_three_week_cumulative_return(self, index_id: int, end_date: Optional[str] = None) -> Optional[float]:
-        """
-        Calculate 3-week (21 trading days) cumulative return for an index
-        
-        Args:
-            index_id: ID of the index
-            end_date: End date for calculation (YYYY-MM-DD format). If None, uses latest available date.
-            
-        Returns:
-            Cumulative return as percentage or None if insufficient data
-        """
-        if not self.conn:
-            raise ValueError("Database connection not established")
-        
-        cursor = self.conn.cursor()
-        
-        # Get end date (latest available if not specified)
+        """Calculate 3-week (21 trading days) cumulative return for an index"""
         if end_date:
-            cursor.execute("""
+            result = self.db.fetch_one("""
                 SELECT MAX(date) as date 
                 FROM index_data 
-                WHERE index_id = ? AND date <= ?
+                WHERE index_id = %s AND date <= %s
             """, (index_id, end_date))
         else:
-            cursor.execute("""
+            result = self.db.fetch_one("""
                 SELECT MAX(date) as date 
                 FROM index_data 
-                WHERE index_id = ?
+                WHERE index_id = %s
             """, (index_id,))
         
-        result = cursor.fetchone()
-        if not result or not result['date']:
+        if not result or not result.get('date'):
             return None
         
         latest_date = result['date']
         
-        # Get start date (21 trading days before latest date)
-        cursor.execute("""
+        results = self.db.fetch_all("""
             SELECT date, close_price
             FROM index_data
-            WHERE index_id = ? AND date <= ?
+            WHERE index_id = %s AND date <= %s
             ORDER BY date DESC
             LIMIT 22
         """, (index_id, latest_date))
         
-        rows = cursor.fetchall()
-        
-        if len(rows) < 22:  # Need at least 22 days of data (21 periods)
+        if len(results) < 22:
             return None
         
-        start_price = rows[-1]['close_price']  # 21st day back
-        end_price = rows[0]['close_price']    # Latest day
+        start_price = results[-1]['close_price']
+        end_price = results[0]['close_price']
         
         if start_price is None or end_price is None or start_price == 0:
             return None
         
-        # Calculate cumulative return as percentage
         cumulative_return = ((end_price - start_price) / start_price) * 100
         return round(cumulative_return, 4)
     
     def calculate_three_month_cumulative_return(self, index_id: int, end_date: Optional[str] = None) -> Optional[float]:
-        """
-        Calculate 3-month (approximately 63 trading days) cumulative return for an index
-        
-        Args:
-            index_id: ID of the index
-            end_date: End date for calculation (YYYY-MM-DD format). If None, uses latest available date.
-            
-        Returns:
-            Cumulative return as percentage or None if insufficient data
-        """
-        if not self.conn:
-            raise ValueError("Database connection not established")
-        
-        cursor = self.conn.cursor()
-        
-        # Get end date (latest available if not specified)
+        """Calculate 3-month cumulative return for an index"""
         if end_date:
-            cursor.execute("""
+            result = self.db.fetch_one("""
                 SELECT MAX(date) as date 
                 FROM index_data 
-                WHERE index_id = ? AND date <= ?
+                WHERE index_id = %s AND date <= %s
             """, (index_id, end_date))
         else:
-            cursor.execute("""
+            result = self.db.fetch_one("""
                 SELECT MAX(date) as date 
                 FROM index_data 
-                WHERE index_id = ?
+                WHERE index_id = %s
             """, (index_id,))
         
-        result = cursor.fetchone()
-        if not result or not result['date']:
+        if not result or not result.get('date'):
             return None
         
         latest_date = result['date']
         
-        # Get start date (63 trading days before latest date)
-        cursor.execute("""
+        results = self.db.fetch_all("""
             SELECT date, close_price
             FROM index_data
-            WHERE index_id = ? AND date <= ?
+            WHERE index_id = %s AND date <= %s
             ORDER BY date DESC
             LIMIT 64
         """, (index_id, latest_date))
         
-        rows = cursor.fetchall()
-        
-        if len(rows) < 64:  # Need at least 64 days of data (63 periods)
+        if len(results) < 64:
             return None
         
-        start_price = rows[-1]['close_price']  # 63rd day back
-        end_price = rows[0]['close_price']    # Latest day
+        start_price = results[-1]['close_price']
+        end_price = results[0]['close_price']
         
         if start_price is None or end_price is None or start_price == 0:
             return None
         
-        # Calculate cumulative return as percentage
         cumulative_return = ((end_price - start_price) / start_price) * 100
         return round(cumulative_return, 4)
     
-    def calculate_all_momentum_metrics(self, index_id: int, end_date: Optional[str] = None) -> Dict[str, Optional[float]]:
-        """
-        Calculate all momentum metrics for an index
+    def calculate_all_momentum(self, end_date: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Calculate momentum for all active indices"""
+        indices = self.db.fetch_all("SELECT id, symbol FROM indices_master WHERE is_active = 1")
         
-        Args:
-            index_id: ID of the index
-            end_date: End date for calculation (YYYY-MM-DD format). If None, uses latest available date.
+        results = []
+        for idx in indices:
+            three_week = self.calculate_three_week_cumulative_return(idx['id'], end_date)
+            three_month = self.calculate_three_month_cumulative_return(idx['id'], end_date)
             
-        Returns:
-            Dictionary with momentum metrics
-        """
-        return {
-            'three_week_cumulative_return': self.calculate_three_week_cumulative_return(index_id, end_date),
-            'three_month_cumulative_return': self.calculate_three_month_cumulative_return(index_id, end_date)
-        }
+            results.append({
+                'index_id': idx['id'],
+                'symbol': idx['symbol'],
+                'three_week_cumulative_return': three_week,
+                'three_month_cumulative_return': three_month
+            })
+        
+        return results
     
-    def update_momentum_data_for_all_indices(self, calculation_date: Optional[str] = None):
-        """
-        Update momentum data for all active indices
+    def save_momentum_data(self, index_id: int, end_date: str) -> bool:
+        """Save momentum data for an index"""
+        three_week = self.calculate_three_week_cumulative_return(index_id, end_date)
+        three_month = self.calculate_three_month_cumulative_return(index_id, end_date)
         
-        Args:
-            calculation_date: Date to use for calculations (YYYY-MM-DD format). If None, uses current date.
-        """
-        if not self.conn:
-            raise ValueError("Database connection not established")
+        existing = self.db.fetch_one("""
+            SELECT id FROM index_momentum_data 
+            WHERE index_id = %s AND calculation_date = %s
+        """, (index_id, end_date))
         
-        cursor = self.conn.cursor()
+        if existing:
+            self.db.execute("""
+                UPDATE index_momentum_data 
+                SET three_week_cumulative_return = %s, three_month_cumulative_return = %s, updated_at = NOW()
+                WHERE index_id = %s AND calculation_date = %s
+            """, (three_week, three_month, index_id, end_date))
+        else:
+            self.db.execute("""
+                INSERT INTO index_momentum_data 
+                (index_id, calculation_date, three_week_cumulative_return, three_month_cumulative_return)
+                VALUES (%s, %s, %s, %s)
+            """, (index_id, end_date, three_week, three_month))
         
-        # Get all active indices
-        cursor.execute("SELECT id FROM indices_master WHERE is_active = 1")
-        indices = cursor.fetchall()
-        
-        if not calculation_date:
-            calculation_date = datetime.now().strftime('%Y-%m-%d')
-        
-        updated_count = 0
-        for index_row in indices:
-            index_id = index_row['id']
-            
-            # Calculate momentum metrics
-            momentum_data = self.calculate_all_momentum_metrics(index_id)
-            
-            # Check if we already have data for this date
-            cursor.execute("""
-                SELECT id FROM index_momentum_data 
-                WHERE index_id = ? AND calculation_date = ?
-            """, (index_id, calculation_date))
-            
-            existing = cursor.fetchone()
-            
-            if existing:
-                # Update existing record
-                cursor.execute("""
-                    UPDATE index_momentum_data 
-                    SET three_week_cumulative_return = ?, 
-                        three_month_cumulative_return = ?,
-                        updated_at = CURRENT_TIMESTAMP
-                    WHERE index_id = ? AND calculation_date = ?
-                """, (
-                    momentum_data['three_week_cumulative_return'],
-                    momentum_data['three_month_cumulative_return'],
-                    index_id,
-                    calculation_date
-                ))
-            else:
-                # Insert new record
-                cursor.execute("""
-                    INSERT INTO index_momentum_data 
-                    (index_id, calculation_date, three_week_cumulative_return, three_month_cumulative_return)
-                    VALUES (?, ?, ?, ?)
-                """, (
-                    index_id,
-                    calculation_date,
-                    momentum_data['three_week_cumulative_return'],
-                    momentum_data['three_month_cumulative_return']
-                ))
-            
-            updated_count += 1
-        
-        self.conn.commit()
-        return updated_count
+        return True
     
-    def get_latest_momentum_data(self, index_id: int) -> Dict[str, Any]:
-        """
-        Get the latest momentum data for an index
-        
-        Args:
-            index_id: ID of the index
-            
-        Returns:
-            Dictionary with latest momentum data
-        """
-        if not self.conn:
-            raise ValueError("Database connection not established")
-        
-        cursor = self.conn.cursor()
-        
-        cursor.execute("""
-            SELECT three_week_cumulative_return, three_month_cumulative_return, calculation_date
-            FROM index_momentum_data
-            WHERE index_id = ?
-            ORDER BY calculation_date DESC
-            LIMIT 1
-        """, (index_id,))
-        
-        result = cursor.fetchone()
-        
-        if not result:
-            return {
-                'three_week_cumulative_return': None,
-                'three_month_cumulative_return': None,
-                'calculation_date': None
-            }
-        
-        return {
-            'three_week_cumulative_return': float(result['three_week_cumulative_return']) if result['three_week_cumulative_return'] else None,
-            'three_month_cumulative_return': float(result['three_month_cumulative_return']) if result['three_month_cumulative_return'] else None,
-            'calculation_date': result['calculation_date']
-        }
+    def get_momentum_data(self, index_id: int, end_date: Optional[str] = None) -> Optional[Dict[str, Any]]:
+        """Get saved momentum data for an index"""
+        if end_date:
+            return self.db.fetch_one("""
+                SELECT * FROM index_momentum_data 
+                WHERE index_id = %s AND calculation_date = %s
+            """, (index_id, end_date))
+        else:
+            return self.db.fetch_one("""
+                SELECT * FROM index_momentum_data 
+                WHERE index_id = %s
+                ORDER BY calculation_date DESC
+                LIMIT 1
+            """, (index_id,))
+    
+    def get_latest_momentum_data(self, index_id: int):
+        """Get latest momentum data for an index"""
+        return self.get_momentum_data(index_id)

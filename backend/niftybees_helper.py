@@ -1,54 +1,52 @@
-import sqlite3
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# os.environ['DB_TYPE'] = 'mysql'
+
 from datetime import datetime
+
+from db import Database
 
 
 class NiftybeesHelper:
     """Helper to get Niftybees performance data for comparison"""
     
-    def __init__(self, db_path):
-        self.db_path = db_path
-        self.conn = None
+    def __init__(self, db_type='mysql'):
+        self.db_type = db_type
+        self.db = Database(db_type)
         self.niftybees_symbol = 'NIFTYBEES'
     
     def connect(self):
         """Connect to database"""
-        self.conn = sqlite3.connect(self.db_path)
-        self.conn.row_factory = sqlite3.Row
+        self.db.connect()
     
     def disconnect(self):
         """Disconnect from database"""
-        if self.conn:
-            self.conn.close()
+        self.db.close()
     
     def get_niftybees_id(self):
         """Get Niftybees index ID"""
-        cursor = self.conn.cursor()
-        cursor.execute(
-            "SELECT id FROM indices_master WHERE symbol = ?",
+        result = self.db.fetch_one(
+            "SELECT id FROM indices_master WHERE symbol = %s",
             (self.niftybees_symbol,)
         )
-        result = cursor.fetchone()
-        return result[0] if result else None
+        return result['id'] if result else None
     
     def calculate_three_week_return(self, niftybees_id, end_date):
         """Calculate 3-week cumulative return as of end_date"""
-        cursor = self.conn.cursor()
-        
-        # Get 21 trading days before end_date
-        cursor.execute("""
+        results = self.db.fetch_all("""
             SELECT date, close_price
             FROM index_data
-            WHERE index_id = ? AND date <= ?
+            WHERE index_id = %s AND date <= %s
             ORDER BY date DESC
             LIMIT 22
         """, (niftybees_id, end_date))
         
-        rows = cursor.fetchall()
-        if len(rows) < 22:
+        if len(results) < 22:
             return None
         
-        start_price = rows[-1]['close_price']
-        end_price = rows[0]['close_price']
+        start_price = results[-1]['close_price']
+        end_price = results[0]['close_price']
         
         if not start_price or not end_price or start_price == 0:
             return None
@@ -57,23 +55,19 @@ class NiftybeesHelper:
     
     def calculate_three_month_return(self, niftybees_id, end_date):
         """Calculate 3-month cumulative return as of end_date"""
-        cursor = self.conn.cursor()
-        
-        # Get ~63 trading days before end_date
-        cursor.execute("""
+        results = self.db.fetch_all("""
             SELECT date, close_price
             FROM index_data
-            WHERE index_id = ? AND date <= ?
+            WHERE index_id = %s AND date <= %s
             ORDER BY date DESC
             LIMIT 64
         """, (niftybees_id, end_date))
         
-        rows = cursor.fetchall()
-        if len(rows) < 64:
+        if len(results) < 64:
             return None
         
-        start_price = rows[-1]['close_price']
-        end_price = rows[0]['close_price']
+        start_price = results[-1]['close_price']
+        end_price = results[0]['close_price']
         
         if not start_price or not end_price or start_price == 0:
             return None
@@ -81,89 +75,61 @@ class NiftybeesHelper:
         return ((end_price - start_price) / start_price) * 100
     
     def get_weekly_change_for_week(self, week_start_date, week_end_date):
-        """Get weekly change % for a specific week.
-        
-        Args:
-            week_start_date: Start date of the week (YYYY-MM-DD)
-            week_end_date: End date of the week (YYYY-MM-DD)
-            
-        Returns:
-            dict: weekly_change_percent, calculation_date
-        """
-        cursor = self.conn.cursor()
+        """Get weekly change % for a specific week."""
         niftybees_id = self.get_niftybees_id()
         
         if not niftybees_id:
             return {'weekly_change_percent': None, 'calculation_date': None}
         
-        # Get the calculated data for the week
-        cursor.execute("""
+        result = self.db.fetch_one("""
             SELECT weekly_change_percent, calculation_date
             FROM index_calculated_data
-            WHERE index_id = ?
-            AND calculation_date >= ?
-            AND calculation_date <= ?
+            WHERE index_id = %s
+            AND calculation_date >= %s
+            AND calculation_date <= %s
             ORDER BY calculation_date DESC
             LIMIT 1
         """, (niftybees_id, week_start_date, week_end_date))
         
-        result = cursor.fetchone()
         if result:
             return {
-                'weekly_change_percent': float(result[0]) if result[0] else None,
-                'calculation_date': result[1]
+                'weekly_change_percent': float(result['weekly_change_percent']) if result['weekly_change_percent'] else None,
+                'calculation_date': result['calculation_date']
             }
         
         return {'weekly_change_percent': None, 'calculation_date': None}
     
     def get_monthly_change_for_month(self, month_start_date, month_end_date):
-        """Get monthly change % for a specific month.
-        
-        Args:
-            month_start_date: Start date of the month (YYYY-MM-DD)
-            month_end_date: End date of the month (YYYY-MM-DD)
-            
-        Returns:
-            dict: monthly_change_percent, calculation_date
-        """
-        cursor = self.conn.cursor()
+        """Get monthly change % for a specific month."""
         niftybees_id = self.get_niftybees_id()
         
         if not niftybees_id:
             return {'monthly_change_percent': None, 'calculation_date': None}
         
-        # Get the calculated data for the month
-        cursor.execute("""
+        result = self.db.fetch_one("""
             SELECT monthly_change_percent, calculation_date
             FROM index_calculated_data
-            WHERE index_id = ?
-            AND calculation_date >= ?
-            AND calculation_date <= ?
+            WHERE index_id = %s
+            AND calculation_date >= %s
+            AND calculation_date <= %s
             ORDER BY calculation_date DESC
             LIMIT 1
         """, (niftybees_id, month_start_date, month_end_date))
         
-        result = cursor.fetchone()
         if result:
             return {
-                'monthly_change_percent': float(result[0]) if result[0] else None,
-                'calculation_date': result[1]
+                'monthly_change_percent': float(result['monthly_change_percent']) if result['monthly_change_percent'] else None,
+                'calculation_date': result['calculation_date']
             }
         
         return {'monthly_change_percent': None, 'calculation_date': None}
     
     def get_weekly_comparison(self, week_start_date, week_end_date):
-        """Get complete weekly comparison data for Niftybees.
-        
-        Returns:
-            dict: all weekly comparison fields
-        """
-        cursor = self.conn.cursor()
+        """Get complete weekly comparison data for Niftybees."""
         niftybees_id = self.get_niftybees_id()
         
         weekly_data = self.get_weekly_change_for_week(week_start_date, week_end_date)
         
-        # Calculate 3W return as of week end date
         three_week_return = None
         if niftybees_id:
             three_week_return = self.calculate_three_week_return(niftybees_id, week_end_date)
@@ -175,17 +141,11 @@ class NiftybeesHelper:
         }
     
     def get_monthly_comparison(self, month_start_date, month_end_date):
-        """Get complete monthly comparison data for Niftybees.
-        
-        Returns:
-            dict: all monthly comparison fields
-        """
-        cursor = self.conn.cursor()
+        """Get complete monthly comparison data for Niftybees."""
         niftybees_id = self.get_niftybees_id()
         
         monthly_data = self.get_monthly_change_for_month(month_start_date, month_end_date)
         
-        # Calculate 3M return as of month end date
         three_month_return = None
         if niftybees_id:
             three_month_return = self.calculate_three_month_return(niftybees_id, month_end_date)

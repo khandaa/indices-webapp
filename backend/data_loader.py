@@ -4,13 +4,18 @@ Data loading script for Indices Web Application
 Loads historical data from yfinance for all indices in the database
 """
 
-import sqlite3
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# os.environ['DB_TYPE'] = 'mysql'
+
 import yfinance as yf
 import pandas as pd
-import os
 import logging
 from datetime import datetime, timedelta
 from typing import List, Optional, Dict, Any
+
+from db import Database
 
 # Configure logging
 log_dir = os.path.join(os.path.dirname(__file__), '..', 'logs')
@@ -28,44 +33,44 @@ logger = logging.getLogger(__name__)
 class DataLoader:
     """Handles loading of index data from yfinance"""
     
-    def __init__(self, db_path: str = None):
-        """Initialize DataLoader with database path"""
-        if db_path is None:
-            db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'index-database.db')
-        
-        self.db_path = db_path
-        self.conn = None
+    def __init__(self, db_type: str = 'mysql'):
+        """Initialize DataLoader with database"""
+        self.db_type = db_type
+        self.db = Database(db_type)
+        self._conn = None  # Legacy compatibility
+    
+    @property
+    def conn(self):
+        """Legacy property for backward compatibility"""
+        return self.db._conn
         
     def connect(self):
         """Connect to database"""
         try:
-            self.conn = sqlite3.connect(self.db_path)
-            logger.info(f"Connected to database: {self.db_path}")
+            self.db.connect()
+            logger.info(f"Connected to MySQL database")
         except Exception as e:
             logger.error(f"Failed to connect to database: {e}")
             raise
     
     def disconnect(self):
         """Disconnect from database"""
-        if self.conn:
-            self.conn.close()
-            logger.info("Disconnected from database")
+        self.db.close()
+        logger.info("Disconnected from database")
     
     def get_all_indices(self) -> List[Dict[str, Any]]:
         """Get all active indices from database"""
         query = "SELECT id, symbol, name FROM indices_master WHERE is_active = 1"
         
         try:
-            cursor = self.conn.cursor()
-            cursor.execute(query)
-            indices = cursor.fetchall()
+            results = self.db.fetch_all(query)
             
             indices_list = []
-            for index in indices:
+            for row in results:
                 indices_list.append({
-                    'id': index[0],
-                    'symbol': index[1],
-                    'name': index[2]
+                    'id': row['id'],
+                    'symbol': row['symbol'],
+                    'name': row['name']
                 })
             
             logger.info(f"Retrieved {len(indices_list)} active indices")
@@ -140,11 +145,16 @@ class DataLoader:
             cursor = self.conn.cursor()
             
             for _, row in data_to_insert.iterrows():
+                params = (
+                    int(row['index_id']), str(row['date']), float(row['open_price']), 
+                    float(row['close_price']), float(row['high_price']), float(row['low_price']),
+                    int(row['volume']), str(row['upload_date'])
+                )
                 cursor.execute('''
                     INSERT OR REPLACE INTO index_data 
                     (index_id, date, open_price, close_price, high_price, low_price, volume, upload_date)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', tuple(row))
+                ''', params)
             
             self.conn.commit()
             logger.info(f"Inserted {len(data_to_insert)} records for index_id {index_id}")

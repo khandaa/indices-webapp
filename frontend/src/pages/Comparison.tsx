@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   LineChart,
@@ -40,7 +40,7 @@ const Comparison: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [chartType, setChartType] = useState<'line' | 'bar'>('line');
   const [comparisonData, setComparisonData] = useState<Record<number, PriceData[]>>({});
-  const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const [dateRange, setDateRange] = useState('30');
   const [sortBy, setSortBy] = useState<SortOption>('weekly');
   const [normalizePrices, setNormalizePrices] = useState(true);
@@ -51,43 +51,20 @@ const Comparison: React.FC = () => {
 
   useEffect(() => {
     const indicesParam = searchParams.get('indices');
-    if (indicesParam) {
+    if (indicesParam && indices.length > 0) {
       const symbols = indicesParam.split(',');
       const selected = indices
         .filter(idx => symbols.includes(idx.symbol))
         .map(idx => idx.id);
       if (selected.length > 0) {
-        setSelectedIndices(prev => Array.from(new Set([...prev, ...selected])));
+        setSelectedIndices(selected);
       }
     }
   }, [searchParams, indices]);
 
-  useEffect(() => {
-    if (selectedIndices.length > 0) {
-      loadComparisonData();
-    }
-  }, [selectedIndices, dateRange]);
-
-  const loadIndices = async () => {
-    try {
-      const data = await apiService.getIndices();
-      const indexData = data.map((i: any) => ({
-        id: i.id,
-        name: i.name,
-        symbol: i.symbol,
-        current_price: i.current_price,
-        weekly_change_percent: i.weekly_change_percent,
-        monthly_change_percent: i.monthly_change_percent,
-        yearly_change_percent: i.yearly_change_percent
-      }));
-      setIndices(indexData);
-    } catch (error) {
-      console.error('Error loading indices:', error);
-    }
-  };
-
-  const loadComparisonData = async () => {
-    setLoading(true);
+  const loadComparisonData = useCallback(async () => {
+    if (selectedIndices.length === 0) return;
+    setDataLoading(true);
     try {
       const limit = parseInt(dateRange);
       const data: Record<number, PriceData[]> = {};
@@ -105,7 +82,31 @@ const Comparison: React.FC = () => {
     } catch (error) {
       console.error('Error loading comparison data:', error);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
+    }
+  }, [selectedIndices, dateRange]);
+
+  useEffect(() => {
+    if (selectedIndices.length > 0 && indices.length > 0) {
+      loadComparisonData();
+    }
+  }, [selectedIndices, dateRange, indices, loadComparisonData]);
+
+  const loadIndices = async () => {
+    try {
+      const data = await apiService.getIndices();
+      const indexData = data.map((i: any) => ({
+        id: i.id,
+        name: i.name,
+        symbol: i.symbol,
+        current_price: i.current_price,
+        weekly_change_percent: i.weekly_change_percent,
+        monthly_change_percent: i.monthly_change_percent,
+        yearly_change_percent: i.yearly_change_percent
+      }));
+      setIndices(indexData);
+    } catch (error) {
+      console.error('Error loading indices:', error);
     }
   };
 
@@ -249,7 +250,7 @@ const Comparison: React.FC = () => {
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-sm font-medium text-gray-700">
-                {viewMode === 'table' ? 'Performance Table' : 'Performance Chart'}
+                {viewMode === 'table' ? 'Performance Table' : viewMode === 'chart' ? 'Performance Chart' : 'Daily Prices'}
               </h3>
               <div className="flex gap-2 items-center">
                 {viewMode === 'chart' && (
@@ -295,54 +296,110 @@ const Comparison: React.FC = () => {
               </div>
             </div>
 
-            {loading ? (
-              <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <p className="mt-2 text-gray-600">Loading...</p>
-              </div>
-            ) : selectedIndices.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
-                Select at least one index to compare
-              </div>
-            ) : viewMode === 'table' ? (
-              <div className="overflow-x-auto">
-                {/* Default Summary Table */}
-                <table className="min-w-full text-sm mb-6">
-                  <thead>
-                    <tr className="border-b bg-gray-50">
-                      <th className="py-2 text-left text-gray-500 font-medium">Instrument</th>
-                      <th className="py-2 text-right text-gray-500 font-medium">This Week</th>
-                      <th className="py-2 text-right text-gray-500 font-medium">This Month</th>
-                      <th className="py-2 text-right text-gray-500 font-medium">This Year</th>
-                    </tr>
-                  </thead>
-<tbody>
-                    {getSortedIndices()
-                      .filter(i => selectedIndices.includes(i.id))
-                      .map(index => (
-                        <tr key={index.id} className="border-b hover:bg-gray-50">
-                          <td className="py-2 font-medium text-gray-900">{index.name}</td>
-                          <td className={`py-2 text-right font-medium ${
-                            (index.weekly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {formatPercent(index.weekly_change_percent)}
-                          </td>
-                          <td className={`py-2 text-right font-medium ${
-                            (index.monthly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {formatPercent(index.monthly_change_percent)}
-                          </td>
-                          <td className={`py-2 text-right font-medium ${
-                            (index.yearly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {formatPercent(index.yearly_change_percent)}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
+            {viewMode === 'table' ? (
+              dataLoading ? (
+                <div className="text-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  <p className="mt-2 text-gray-600">Loading...</p>
+                </div>
+              ) : selectedIndices.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  Select at least one index to compare
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  {dataLoading ? (
+                    <div className="text-center py-8">
+                      <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                      <p className="mt-2 text-gray-500 text-sm">Loading price data...</p>
+                    </div>
+                  ) : (
+                    <>
+                      <table className="min-w-full text-sm mb-6">
+                        <thead>
+                          <tr className="border-b bg-gray-50">
+                            <th className="py-2 text-left text-gray-500 font-medium">Instrument</th>
+                            <th className="py-2 text-right text-gray-500 font-medium">This Week</th>
+                            <th className="py-2 text-right text-gray-500 font-medium">This Month</th>
+                            <th className="py-2 text-right text-gray-500 font-medium">This Year</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getSortedIndices()
+                            .filter(i => selectedIndices.includes(i.id))
+                            .map(index => (
+                              <tr key={index.id} className="border-b hover:bg-gray-50">
+                                <td className="py-2 font-medium text-gray-900">{index.name}</td>
+                                <td className={`py-2 text-right font-medium ${
+                                  (index.weekly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                  {formatPercent(index.weekly_change_percent)}
+                                </td>
+                                <td className={`py-2 text-right font-medium ${
+                                  (index.monthly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                  {formatPercent(index.monthly_change_percent)}
+                                </td>
+                                <td className={`py-2 text-right font-medium ${
+                                  (index.yearly_change_percent || 0) >= 0 ? 'text-green-600' : 'text-red-600'
+                                }`}>
+                                  {formatPercent(index.yearly_change_percent)}
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+
+                      {Object.keys(comparisonData).length > 0 && comparisonData[selectedIndices[0]] && (
+                        <div className="mt-8">
+                          <h4 className="text-sm font-medium text-gray-700 mb-3">Daily Prices ({dateRange} days)</h4>
+                          <table className="min-w-full text-xs">
+                            <thead>
+                              <tr className="border-b bg-gray-50">
+                                <th className="py-2 text-left text-gray-500 font-medium sticky left-0 bg-gray-50">Date</th>
+                                {selectedIndices.map(id => {
+                                  const index = indices.find(i => i.id === id);
+                                  return (
+                                    <th key={id} className="py-2 text-right text-gray-500 font-medium" style={{ color: colors[selectedIndices.indexOf(id) % colors.length] }}>
+                                      {index?.symbol}
+                                    </th>
+                                  );
+                                })}
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {(() => {
+                                const dates = comparisonData[selectedIndices[0]]?.map(d => d.date).reverse() || [];
+                                return dates.map(date => (
+                                  <tr key={date} className="border-b hover:bg-gray-50">
+                                    <td className="py-2 text-left text-gray-600 font-medium sticky left-0 bg-white">{date}</td>
+                                    {selectedIndices.map(id => {
+                                      const data = comparisonData[id] || [];
+                                      const dayData = data.find(d => d.date === date);
+                                      const closePrice = dayData?.close_price || 0;
+                                      const startPrice = data.length > 0 ? data[data.length - 1].close_price : closePrice;
+                                      const percentChange = startPrice !== 0 ? ((closePrice - startPrice) / startPrice) * 100 : 0;
+                                      return (
+                                        <td key={id} className="py-2 text-right">
+                                          <span className="font-medium">{closePrice.toFixed(2)}</span>
+                                          <span className={`ml-1 ${percentChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                            ({percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}%)
+                                          </span>
+                                        </td>
+                                      );
+                                    })}
+                                  </tr>
+                                ));
+                              })()}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )
+            ) : viewMode === 'chart' ? (
               <div className="h-96">
                 <ResponsiveContainer width="100%" height="100%">
                   {chartType === 'line' ? (
@@ -387,7 +444,7 @@ const Comparison: React.FC = () => {
                   )}
                 </ResponsiveContainer>
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import os
 import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# os.environ['DB_TYPE'] = 'mysql'  # Comment out to allow environment variable control
+
 from datetime import datetime
 
 # Add parent directory to path for importing backend modules
@@ -17,7 +20,7 @@ from date_utils import (
 )
 from niftybees_helper import NiftybeesHelper
 from whatif_simulator import WhatIfSimulator
-import sqlite3
+from db import Database
 from fastapi.responses import StreamingResponse
 import csv
 import io
@@ -30,7 +33,7 @@ app = FastAPI(
 
 # Environment-based configuration
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001,http://localhost:3050,http://127.0.0.1:3000").split(",")
-DB_PATH = os.getenv("DB_PATH", os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'database', 'index-database.db')))
+DB_TYPE = os.getenv('DB_TYPE', 'mysql')
 
 # Configure CORS
 app.add_middleware(
@@ -53,8 +56,8 @@ async def health_check():
 async def get_all_indices():
     """Get all indices with their latest performance data including momentum metrics"""
     try:
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
         calculator.connect()
         momentum_calc.connect()
         
@@ -127,7 +130,7 @@ async def get_all_indices():
 async def get_index_details(index_id: int):
     """Get detailed information for a specific index"""
     try:
-        calculator = DataCalculator(DB_PATH)
+        calculator = DataCalculator()
         calculator.connect()
         
         cursor = calculator.conn.cursor()
@@ -170,7 +173,7 @@ async def get_index_details(index_id: int):
 async def get_weekly_top_performers():
     """Get top 3 weekly performers based on weekly change percent"""
     try:
-        calculator = DataCalculator(DB_PATH)
+        calculator = DataCalculator()
         calculator.connect()
         
         cursor = calculator.conn.cursor()
@@ -220,7 +223,7 @@ async def get_weekly_top_performers():
 async def get_index_momentum(index_id: int):
     """Get momentum metrics for a specific index"""
     try:
-        momentum_calc = MomentumCalculator(DB_PATH)
+        momentum_calc = MomentumCalculator()
         momentum_calc.connect()
         
         momentum_data = momentum_calc.get_latest_momentum_data(index_id)
@@ -238,7 +241,7 @@ async def get_index_momentum(index_id: int):
 async def calculate_momentum_metrics():
     """Calculate and update momentum metrics for all indices"""
     try:
-        momentum_calc = MomentumCalculator(DB_PATH)
+        momentum_calc = MomentumCalculator()
         momentum_calc.connect()
         
         updated_count = momentum_calc.update_momentum_data_for_all_indices()
@@ -256,7 +259,7 @@ async def calculate_momentum_metrics():
 async def get_daily_prices(index_id: int, limit: int = 100):
     """Get daily price data for a specific index"""
     try:
-        calculator = DataCalculator(DB_PATH)
+        calculator = DataCalculator()
         calculator.connect()
         
         cursor = calculator.conn.cursor()
@@ -313,7 +316,7 @@ async def get_daily_prices(index_id: int, limit: int = 100):
 async def get_monthly_top_performers():
     """Get top 3 monthly performers based on monthly change percent"""
     try:
-        calculator = DataCalculator(DB_PATH)
+        calculator = DataCalculator()
         calculator.connect()
         
         cursor = calculator.conn.cursor()
@@ -373,8 +376,6 @@ from date_utils import (
     format_week_display, format_month_display, get_week_from_date, get_month_from_date
 )
 from niftybees_helper import NiftybeesHelper
-import sqlite3
-
 
 @app.get("/api/recommendations/weekly")
 async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool = True):
@@ -385,9 +386,9 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
         include_upcoming: Include upcoming week (default: true)
     """
     try:
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
-        niftybees_helper = NiftybeesHelper(DB_PATH)
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
+        niftybees_helper = NiftybeesHelper()
         
         calculator.connect()
         momentum_calc.connect()
@@ -524,9 +525,9 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
         include_upcoming: Include upcoming month (default: true)
     """
     try:
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
-        niftybees_helper = NiftybeesHelper(DB_PATH)
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
+        niftybees_helper = NiftybeesHelper()
         
         calculator.connect()
         momentum_calc.connect()
@@ -655,114 +656,13 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
 
 
 @app.get("/api/recommendations/selected")
-async def get_selected_indices():
-    """Get all selected indices for recommendations (Task 2.6)"""
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            SELECT 
-                ir.index_id,
-                im.name,
-                im.symbol,
-                ir.is_selected,
-                ir.created_at
-            FROM index_recommendations ir
-            JOIN indices_master im ON ir.index_id = im.id
-            ORDER BY im.name
-        """)
-        
-        results = cursor.fetchall()
-        conn.close()
-        
-        selected = [{"index_id": row[0], "name": row[1], "symbol": row[2], "is_selected": bool(row[3]), "created_at": row[4]} for row in results]
-        
-        return {"selected_indices": selected, "count": len(selected)}
-        
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Failed to fetch selected indices: {str(e)}"}
-        )
-
-
-@app.post("/api/recommendations/selected")
-async def add_selected_index(index_id: int, is_selected: bool = True):
-    """Add index to recommendations selection (Task 2.6)"""
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            INSERT OR REPLACE INTO index_recommendations (index_id, is_selected, created_at)
-            VALUES (?, ?, datetime('now'))
-        """, (index_id, is_selected))
-        
-        conn.commit()
-        conn.close()
-        
-        return {"message": f"Index {index_id} {'selected' if is_selected else 'unselected'}"}
-        
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Failed to update selection: {str(e)}"}
-        )
-
-
-@app.delete("/api/recommendations/selected/{index_id}")
-async def remove_selected_index(index_id: int):
-    """Remove index from recommendations selection (Task 2.6)"""
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        cursor.execute("DELETE FROM index_recommendations WHERE index_id = ?", (index_id,))
-        
-        conn.commit()
-        conn.close()
-        
-        return {"message": f"Index {index_id} removed from selection"}
-        
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Failed to remove selection: {str(e)}"}
-        )
-
-
-@app.put("/api/recommendations/selected/bulk")
-async def bulk_update_selections(index_ids: list[int], is_selected: bool = True):
-    """Bulk update index selections (Task 2.6)"""
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        for index_id in index_ids:
-            cursor.execute("""
-                INSERT OR REPLACE INTO index_recommendations (index_id, is_selected, created_at)
-                VALUES (?, ?, datetime('now'))
-            """, (index_id, is_selected))
-        
-        conn.commit()
-        conn.close()
-        
-        return {"message": f"Updated {len(index_ids)} indices"}
-        
-    except Exception as e:
-        return JSONResponse(
-            status_code=500,
-            content={"error": f"Failed to bulk update: {str(e)}"}
-        )
-
 
 @app.get("/api/recommendations/upcoming/weekly")
 async def get_upcoming_weekly_recommendation():
     """Get upcoming week recommendation (Task 2.7)"""
     try:
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
         
         calculator.connect()
         momentum_calc.connect()
@@ -828,8 +728,8 @@ async def get_upcoming_weekly_recommendation():
 async def get_upcoming_monthly_recommendation():
     """Get upcoming month recommendation (Task 2.7)"""
     try:
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
         
         calculator.connect()
         momentum_calc.connect()
@@ -895,26 +795,21 @@ async def get_upcoming_monthly_recommendation():
 async def check_data_freshness():
     """Check data freshness - when each index was last updated (Task 2.8)"""
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            SELECT 
-                im.id,
-                im.name,
-                im.symbol,
-                MAX(id.date) as last_data_date,
-                MAX(icd.calculation_date) as last_calc_date
-            FROM indices_master im
-            LEFT JOIN index_data id ON im.id = id.index_id
-            LEFT JOIN index_calculated_data icd ON im.id = icd.index_id
-            WHERE im.is_active = 1
-            GROUP BY im.id
-            ORDER BY im.name
-        """)
-        
-        results = cursor.fetchall()
-        conn.close()
+        with Database('mysql') as db:
+            results = db.fetch_all("""
+                SELECT 
+                    im.id,
+                    im.name,
+                    im.symbol,
+                    MAX(id.date) as last_data_date,
+                    MAX(icd.calculation_date) as last_calc_date
+                FROM indices_master im
+                LEFT JOIN index_data id ON im.id = id.index_id
+                LEFT JOIN index_calculated_data icd ON im.id = icd.index_id
+                WHERE im.is_active = 1
+                GROUP BY im.id
+                ORDER BY im.name
+            """)
         
         today = datetime.now().strftime('%Y-%m-%d')
         freshness = []
@@ -962,9 +857,9 @@ async def refresh_data(range: str = "all"):
     try:
         from datetime import timedelta
         
-        loader = DataLoader(DB_PATH)
-        calculator = DataCalculator(DB_PATH)
-        momentum_calc = MomentumCalculator(DB_PATH)
+        loader = DataLoader()
+        calculator = DataCalculator()
+        momentum_calc = MomentumCalculator()
         
         loader.connect()
         calculator.connect()
@@ -1036,7 +931,7 @@ async def run_simulation(
 ):
     """Run investment simulation"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         
         # Run simulation
@@ -1084,7 +979,7 @@ async def run_simulation(
 async def get_scenarios():
     """Get all saved scenarios"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         scenarios = simulator.get_scenarios()
         simulator.disconnect()
@@ -1100,7 +995,7 @@ async def get_scenarios():
 async def get_scenario(scenario_id: int):
     """Get a specific scenario with simulation results"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         scenario = simulator.get_scenario(scenario_id)
         results = simulator.get_simulation_results(scenario_id)
@@ -1131,7 +1026,7 @@ async def create_scenario(
 ):
     """Create a new scenario"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         scenario_id = simulator.save_scenario(
             name=name, description=description, initial_amount=initial_amount,
@@ -1152,7 +1047,7 @@ async def create_scenario(
 async def update_scenario(scenario_id: int, **kwargs):
     """Update a scenario"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         simulator.update_scenario(scenario_id, **kwargs)
         scenario = simulator.get_scenario(scenario_id)
@@ -1169,7 +1064,7 @@ async def update_scenario(scenario_id: int, **kwargs):
 async def delete_scenario(scenario_id: int):
     """Delete a scenario"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         simulator.delete_scenario(scenario_id)
         simulator.disconnect()
@@ -1185,7 +1080,7 @@ async def delete_scenario(scenario_id: int):
 async def export_scenario_csv(scenario_id: int):
     """Export simulation results as CSV"""
     try:
-        simulator = WhatIfSimulator(DB_PATH)
+        simulator = WhatIfSimulator()
         simulator.connect()
         scenario = simulator.get_scenario(scenario_id)
         results = simulator.get_simulation_results(scenario_id)
