@@ -33,10 +33,9 @@ logger = logging.getLogger(__name__)
 class DataLoader:
     """Handles loading of index data from yfinance"""
     
-    def __init__(self, db_type: str = 'mysql'):
+    def __init__(self):
         """Initialize DataLoader with database"""
-        self.db_type = db_type
-        self.db = Database(db_type)
+        self.db = Database()
         self._conn = None  # Legacy compatibility
     
     @property

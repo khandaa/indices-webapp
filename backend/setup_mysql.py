@@ -12,7 +12,7 @@ import os
 def read_config():
     """Read database configuration from db.config"""
     config = {}
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config_path = os.path.join(project_root, 'db.config')
     
     with open(config_path, 'r') as f:

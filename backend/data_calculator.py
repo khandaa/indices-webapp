@@ -32,10 +32,9 @@ logger = logging.getLogger(__name__)
 class DataCalculator:
     """Handles calculation of index performance metrics"""
     
-    def __init__(self, db_type: str = 'mysql'):
+    def __init__(self, db_type=None):
         """Initialize DataCalculator with database"""
-        self.db_type = db_type
-        self.db = Database(db_type)
+        self.db = Database()
         self._conn = None  # Legacy compatibility
     
     @property
