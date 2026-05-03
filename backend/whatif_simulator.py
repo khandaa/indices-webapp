@@ -1,12 +1,13 @@
 import os
 import sys
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # os.environ['DB_TYPE'] = 'mysql'
 
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 
 from db import Database
+from config import get_backend_url
 
 
 class WhatIfSimulator:
@@ -143,13 +144,14 @@ class WhatIfSimulator:
         if not end_date:
             end_date = datetime.now().strftime('%Y-%m-%d')
         
-        recommendations_endpoint = f"http://localhost:5050/api/recommendations/{frequency}" if frequency == "weekly" else f"http://localhost:5050/api/recommendations/monthly"
+        backend_url = get_backend_url()
+        recommendations_endpoint = f"{backend_url}/api/recommendations/{frequency}" if frequency == "weekly" else f"{backend_url}/api/recommendations/monthly"
         
         try:
             if frequency == "weekly":
-                resp = req.get(f"http://localhost:5050/api/recommendations/weekly?past_weeks=52&include_upcoming=false")
+                resp = req.get(f"{backend_url}/api/recommendations/weekly?past_weeks=52&include_upcoming=false")
             else:
-                resp = req.get(f"http://localhost:5050/api/recommendations/monthly?past_months=12&include_upcoming=False")
+                resp = req.get(f"{backend_url}/api/recommendations/monthly?past_months=12&include_upcoming=False")
             recommendations_data = resp.json()
         except Exception as e:
             return {'error': f'Failed to fetch recommendations: {str(e)}', 'results': []}

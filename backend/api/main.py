@@ -32,7 +32,8 @@ app = FastAPI(
 )
 
 # Environment-based configuration
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://localhost:3001,http://localhost:3050,http://127.0.0.1:3000").split(",")
+from config import get_allowed_origins
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", ",".join(get_allowed_origins())).split(",")
 DB_TYPE = os.getenv('DB_TYPE', 'mysql')
 
 # Configure CORS
@@ -364,7 +365,9 @@ async def get_monthly_top_performers():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5050)
+    from config import get_app_config
+    cfg = get_app_config()
+    uvicorn.run(app, host=cfg['backend_host'], port=cfg['backend_port'])
 
 
 # ============================================================================
