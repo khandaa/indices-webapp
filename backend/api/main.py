@@ -142,7 +142,7 @@ async def get_index_details(index_id: int):
                 im.description,
                 im.is_active
             FROM indices_master im
-            WHERE im.id = ?
+            WHERE im.id = %s
         """, (index_id,))
         
         result = cursor.fetchone()
@@ -274,7 +274,7 @@ async def get_daily_prices(index_id: int, limit: int = 100):
                 low_price,
                 volume
             FROM index_data
-            WHERE index_id = ? AND close_price IS NOT NULL
+            WHERE index_id = %s AND close_price IS NOT NULL
             ORDER BY date ASC
         """, (index_id,))
         
@@ -426,7 +426,7 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
                     cursor.execute("""
                         SELECT MAX(weekly_change_percent) as max_weekly
                         FROM index_calculated_data
-                        WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
+                        WHERE index_id = %s AND calculation_date >= %s AND calculation_date <= %s
                     """, (index_id, week_start, week_end))
                     result = cursor.fetchone()
                     weekly_change = result[0] if result else None
@@ -446,7 +446,7 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
                 cursor.execute("""
                     SELECT id, name, symbol
                     FROM indices_master
-                    WHERE id = ? AND is_active = 1
+                    WHERE id = %s AND is_active = 1
                 """, (index_id,))
                 row = cursor.fetchone()
                 if row:
@@ -472,6 +472,10 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
                         VALUES ({calc_params[0]}, '{calc_params[1]}', '{calc_params[2]}', {calc_params[3]}, 
                                 {calc_params[4] if calc_params[4] else 'NULL'}, 
                                 {calc_params[5] if calc_params[5] else 'NULL'}, NOW())
+                        ON DUPLICATE KEY UPDATE 
+                            weekly_change_percent = VALUES(weekly_change_percent),
+                            three_week_cumulative_return = VALUES(three_week_cumulative_return),
+                            recommendation_date = VALUES(recommendation_date)
                     """)
             
             calculator.conn.commit()
@@ -487,8 +491,8 @@ async def get_weekly_recommendations(past_weeks: int = 6, include_upcoming: bool
                 for rec in recommendations:
                     cursor.execute("""
                         UPDATE weekly_recommendations 
-                        SET niftybees_weekly_change_percent = ?, niftybees_three_week_cumulative_return = ?
-                        WHERE index_id = ? AND week_start_date = ? AND rank = ?
+                        SET niftybees_weekly_change_percent = %s, niftybees_three_week_cumulative_return = %s
+                        WHERE index_id = %s AND week_start_date = %s AND rank = %s
                     """, (niftybees_weekly, niftybees_3w, rec['index_id'], week_start, rec['rank']))
                 calculator.conn.commit()
             
@@ -571,7 +575,7 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
                     cursor.execute("""
                         SELECT MAX(monthly_change_percent) as max_monthly
                         FROM index_calculated_data
-                        WHERE index_id = ? AND calculation_date >= ? AND calculation_date <= ?
+                        WHERE index_id = %s AND calculation_date >= %s AND calculation_date <= %s
                     """, (index_id, month_start, month_end))
                     result = cursor.fetchone()
                     monthly_change = result[0] if result else None
@@ -591,7 +595,7 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
                 cursor.execute("""
                     SELECT id, name, symbol
                     FROM indices_master
-                    WHERE id = ? AND is_active = 1
+                    WHERE id = %s AND is_active = 1
                 """, (index_id,))
                 row = cursor.fetchone()
                 if row:
@@ -606,12 +610,16 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
                     
                     # Store in monthly_recommendations table
                     cursor.execute("""
-                        INSERT OR REPLACE INTO monthly_recommendations 
+                        INSERT INTO monthly_recommendations 
                         (index_id, month_start_date, month_end_date, rank, monthly_change_percent, 
                          three_month_cumulative_return, recommendation_date)
-                        VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
-                    """, (index_id, month_start, month_end, rank + 1, index_data['monthly_change_percent'],
-                         index_data['three_month_cumulative_return']))
+                        VALUES (%s, %s, %s, %s, %s, %s, NOW())
+                        ON DUPLICATE KEY UPDATE 
+                            monthly_change_percent = VALUES(monthly_change_percent),
+                            three_month_cumulative_return = VALUES(three_month_cumulative_return),
+                            recommendation_date = VALUES(recommendation_date)
+                    """, (index_id, month_start, month_end, rank + 1, index_data.get('monthly_change_percent'),
+                         index_data.get('three_month_cumulative_return')))
             
             calculator.conn.commit()
             max_results = top_indices  # For data_available check
@@ -626,8 +634,8 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
                 for rec in recommendations:
                     cursor.execute("""
                         UPDATE monthly_recommendations 
-                        SET niftybees_monthly_change_percent = ?, niftybees_three_month_cumulative_return = ?
-                        WHERE index_id = ? AND month_start_date = ? AND rank = ?
+                        SET niftybees_monthly_change_percent = %s, niftybees_three_month_cumulative_return = %s
+                        WHERE index_id = %s AND month_start_date = %s AND rank = %s
                     """, (niftybees_monthly, niftybees_3m, rec['index_id'], month_start, rec['rank']))
                 calculator.conn.commit()
             
@@ -662,6 +670,9 @@ async def get_monthly_recommendations(past_months: int = 4, include_upcoming: bo
 
 
 @app.get("/api/recommendations/selected")
+async def get_selected_recommendations():
+    """Get selected recommendations (placeholder)"""
+    return {"recommendations": [], "message": "Selected recommendations feature not yet implemented"}
 
 @app.get("/api/recommendations/upcoming/weekly")
 async def get_upcoming_weekly_recommendation():
@@ -692,7 +703,7 @@ async def get_upcoming_weekly_recommendation():
                 icd.weekly_change_percent
             FROM indices_master im
             LEFT JOIN index_calculated_data icd ON im.id = icd.index_id 
-                AND icd.calculation_date >= ? AND icd.calculation_date <= ?
+                AND icd.calculation_date >= %s AND icd.calculation_date <= %s
             WHERE im.is_active = 1 AND icd.weekly_change_percent IS NOT NULL
             ORDER BY icd.weekly_change_percent DESC
             LIMIT 3
@@ -759,7 +770,7 @@ async def get_upcoming_monthly_recommendation():
                 icd.monthly_change_percent
             FROM indices_master im
             LEFT JOIN index_calculated_data icd ON im.id = icd.index_id 
-                AND icd.calculation_date >= ? AND icd.calculation_date <= ?
+                AND icd.calculation_date >= %s AND icd.calculation_date <= %s
             WHERE im.is_active = 1 AND icd.monthly_change_percent IS NOT NULL
             ORDER BY icd.monthly_change_percent DESC
             LIMIT 3
@@ -884,7 +895,7 @@ async def refresh_data(range: str = "all"):
         
         for index_id, symbol in indices:
             # Check if data exists
-            cursor.execute("SELECT MAX(date) FROM index_data WHERE index_id = ?", (index_id,))
+            cursor.execute("SELECT MAX(date) FROM index_data WHERE index_id = %s", (index_id,))
             last_date = cursor.fetchone()[0]
             
             # Fetch missing data if needed

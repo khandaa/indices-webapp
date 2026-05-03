@@ -66,6 +66,7 @@ setup_venv() {
     source $VENV_DIR/bin/activate
     
     print_status "Installing backend dependencies..."
+    pip install --upgrade pip
     pip install -r backend/api/requirements.txt
     pip install pandas yfinance  # Additional dependencies
     print_success "Backend dependencies installed"
@@ -258,9 +259,9 @@ main() {
     echo ""
     
     # Setup and start services
-    setup_venv
-    setup_database
-    setup_frontend
+    # setup_venv
+    # setup_database
+    # setup_frontend
     
     echo ""
     print_status "Starting application services..."
