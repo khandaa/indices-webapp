@@ -41,6 +41,16 @@ class WhatIfSimulator:
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, (name, description, initial_amount, frequency, allocation_1, allocation_2, allocation_3, start_date))
     
+    def save_scenario(self, name: str, description: str = "", initial_amount: float = 100000,
+                   frequency: str = "weekly", allocation_1: float = 50, allocation_2: float = 30,
+                   allocation_3: float = 20, start_date: str = None, end_date: str = None) -> int:
+        """Create a new scenario (alias for create_scenario)"""
+        return self.db.execute("""
+            INSERT INTO whatif_scenarios 
+            (name, description, initial_amount, frequency, allocation_1, allocation_2, allocation_3, start_date, end_date)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (name, description, initial_amount, frequency, allocation_1, allocation_2, allocation_3, start_date, end_date))
+    
     def update_scenario(self, scenario_id: int, **kwargs) -> bool:
         """Update a scenario"""
         if not kwargs:
@@ -121,3 +131,111 @@ class WhatIfSimulator:
             'niftybees_return': ((nifty_final - nifty_initial) / nifty_initial * 100) if nifty_initial > 0 else None,
             'num_periods': results.get('num_periods', 0)
         }
+    
+    def simulate(self, initial_amount: float = 100000, start_date: str = None, end_date: str = None,
+              frequency: str = "weekly", allocation_1: float = 50, allocation_2: float = 30,
+              allocation_3: float = 20) -> Dict[str, Any]:
+        """Run investment simulation based on recommendations"""
+        import requests as req
+        
+        if not start_date:
+            start_date = datetime.now().strftime('%Y-%m-%d')
+        if not end_date:
+            end_date = datetime.now().strftime('%Y-%m-%d')
+        
+        recommendations_endpoint = f"http://localhost:5050/api/recommendations/{frequency}" if frequency == "weekly" else f"http://localhost:5050/api/recommendations/monthly"
+        
+        try:
+            if frequency == "weekly":
+                resp = req.get(f"http://localhost:5050/api/recommendations/weekly?past_weeks=52&include_upcoming=false")
+            else:
+                resp = req.get(f"http://localhost:5050/api/recommendations/monthly?past_months=12&include_upcoming=False")
+            recommendations_data = resp.json()
+        except Exception as e:
+            return {'error': f'Failed to fetch recommendations: {str(e)}', 'results': []}
+        
+        results = []
+        periods = recommendations_data.get('weeks' if frequency == 'weekly' else 'months', [])
+        
+        niftybees_cursor = self.db.fetch_one("""
+            SELECT close_price FROM index_data 
+            WHERE index_id = (SELECT id FROM indices_master WHERE symbol = 'NIFTYBEES')
+            AND date <= %s ORDER BY date DESC LIMIT 1
+        """, (start_date,))
+        niftybees_price_start = niftybees_cursor.get('close_price', 0) if niftybees_cursor else 0
+        
+        niftybees_cursor = self.db.fetch_one("""
+            SELECT close_price FROM index_data 
+            WHERE index_id = (SELECT id FROM indices_master WHERE symbol = 'NIFTYBEES')
+            AND date <= %s ORDER BY date DESC LIMIT 1
+        """, (end_date,))
+        niftybees_price_end = niftybees_cursor.get('close_price', 0) if niftybees_cursor else 0
+        
+        strategy_value = initial_amount
+        niftybees_value = initial_amount
+        
+        for period in periods[:10]:
+            period_key = 'week' if frequency == 'weekly' else 'month'
+            period_info = period.get(period_key, '')
+            recs = period.get('recommendations', [])
+            
+            if not recs:
+                continue
+                
+            rec_1 = recs[0] if len(recs) > 0 else {}
+            rec_2 = recs[1] if len(recs) > 1 else {}
+            rec_3 = recs[2] if len(recs) > 2 else {}
+            
+            rec_1_return = rec_1.get('three_week_cumulative_return', 0) or rec_1.get('three_month_cumulative_return', 0) or 0
+            rec_2_return = rec_2.get('three_week_cumulative_return', 0) or rec_2.get('three_month_cumulative_return', 0) or 0
+            rec_3_return = rec_3.get('three_week_cumulative_return', 0) or rec_3.get('three_month_cumulative_return', 0) or 0
+            
+            strategy_return_pct = (rec_1_return * allocation_1 + rec_2_return * allocation_2 + rec_3_return * allocation_3) / 100
+            
+            strategy_value = strategy_value * (1 + strategy_return_pct / 100)
+            niftybees_return = ((niftybees_price_end - niftybees_price_start) / niftybees_price_start * 100) if niftybees_price_start > 0 else 0
+            niftybees_value = niftybees_value * (1 + niftybees_return / 100)
+            
+            results.append({
+                'period': period_info,
+                'recommendations': [
+                    {'symbol': rec_1.get('symbol', ''), 'return': rec_1_return},
+                    {'symbol': rec_2.get('symbol', ''), 'return': rec_2_return},
+                    {'symbol': rec_3.get('symbol', ''), 'return': rec_3_return}
+                ],
+                'strategy_value': strategy_value,
+                'niftybees_value': niftybees_value,
+                'strategy_return': strategy_return_pct
+            })
+            
+            niftybees_price_start = niftybees_price_end
+        
+        return {
+            'initial_amount': initial_amount,
+            'final_strategy_value': strategy_value,
+            'final_niftybees_value': niftybees_value,
+            'strategy_return': ((strategy_value - initial_amount) / initial_amount * 100) if initial_amount > 0 else 0,
+            'niftybees_return': ((niftybees_value - initial_amount) / initial_amount * 100) if initial_amount > 0 else 0,
+            'results': results
+        }
+    
+    def save_simulation_results(self, scenario_id: int, results: List[Dict[str, Any]]) -> bool:
+        """Save simulation results for a scenario"""
+        for i, result in enumerate(results):
+            self.add_simulation_result(
+                scenario_id=scenario_id,
+                period_number=i + 1,
+                period_start_date=result.get('period', ''),
+                period_end_date=result.get('period', ''),
+                recommendation_1_symbol=result.get('recommendations', [{}])[0].get('symbol', ''),
+                recommendation_2_symbol=result.get('recommendations', [{}])[1].get('symbol', ''),
+                recommendation_3_symbol=result.get('recommendations', [{}])[2].get('symbol', ''),
+                allocation_1_percent=50,
+                allocation_2_percent=30,
+                allocation_3_percent=20,
+                strategy_value_start=result.get('strategy_value', 0),
+                strategy_value_end=result.get('strategy_value', 0),
+                niftybees_value_start=result.get('niftybees_value', 0),
+                niftybees_value_end=result.get('niftybees_value', 0)
+            )
+        return True
